@@ -1,0 +1,1429 @@
+{
+  "AL": {
+    "name": "Alabama",
+    "code": "AL",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": {
+        "single": [
+          { "min": 0, "max": 500, "rate": 2 },
+          { "min": 500, "max": 3000, "rate": 4 },
+          { "min": 3000, "max": null, "rate": 5 }
+        ],
+        "married-joint": [
+          { "min": 0, "max": 1000, "rate": 2 },
+          { "min": 1000, "max": 6000, "rate": 4 },
+          { "min": 6000, "max": null, "rate": 5 }
+        ],
+        "married-separate": [
+          { "min": 0, "max": 500, "rate": 2 },
+          { "min": 500, "max": 3000, "rate": 4 },
+          { "min": 3000, "max": null, "rate": 5 }
+        ],
+        "head-of-household": [
+          { "min": 0, "max": 500, "rate": 2 },
+          { "min": 500, "max": 3000, "rate": 4 },
+          { "min": 3000, "max": null, "rate": 5 }
+        ]
+      }
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 6000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.41,
+      "medianAnnualTax": 587
+    },
+    "salesTax": {
+      "stateRate": 4,
+      "averageLocalRate": 5.22,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 1.5,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Based on year, make, model at county level. Rates vary by county."
+    },
+    "costOfLivingIndex": 87.9,
+    "lifestyleTags": ["lake", "beach"]
+  },
+  "AK": {
+    "name": "Alaska",
+    "code": "AK",
+    "incomeTax": {
+      "type": "none",
+      "hasTax": false,
+      "brackets": []
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.19,
+      "medianAnnualTax": 3117
+    },
+    "salesTax": {
+      "stateRate": 0,
+      "averageLocalRate": 1.76,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No statewide vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 125.8,
+    "lifestyleTags": ["mountain", "lake"]
+  },
+  "AZ": {
+    "name": "Arizona",
+    "code": "AZ",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 27272, "rate": 2.59 },
+        { "min": 27272, "max": 54544, "rate": 3.34 },
+        { "min": 54544, "max": 163632, "rate": 4.17 },
+        { "min": 163632, "max": null, "rate": 4.5 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 2500
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.62,
+      "medianAnnualTax": 1356
+    },
+    "salesTax": {
+      "stateRate": 5.6,
+      "averageLocalRate": 2.8,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 1.8,
+      "hasRelief": false,
+      "specialAssessmentRules": "Vehicle License Tax (VLT) based on 60% of MSRP with 16.25% depreciation each year."
+    },
+    "costOfLivingIndex": 102.2,
+    "lifestyleTags": ["city", "mountain"]
+  },
+  "AR": {
+    "name": "Arkansas",
+    "code": "AR",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 4300, "rate": 2 },
+        { "min": 4300, "max": 8500, "rate": 4 },
+        { "min": 8500, "max": null, "rate": 5.5 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 6000
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.62,
+      "medianAnnualTax": 721
+    },
+    "salesTax": {
+      "stateRate": 6.5,
+      "averageLocalRate": 2.93,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual registration fee based on vehicle weight instead of property tax."
+    },
+    "costOfLivingIndex": 86.9,
+    "lifestyleTags": ["lake", "mountain"]
+  },
+  "CA": {
+    "name": "California",
+    "code": "CA",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 10099, "rate": 1 },
+        { "min": 10099, "max": 23942, "rate": 2 },
+        { "min": 23942, "max": 37788, "rate": 4 },
+        { "min": 37788, "max": 52455, "rate": 6 },
+        { "min": 52455, "max": 66295, "rate": 8 },
+        { "min": 66295, "max": 338639, "rate": 9.3 },
+        { "min": 338639, "max": 406364, "rate": 10.3 },
+        { "min": 406364, "max": 677275, "rate": 11.3 },
+        { "min": 677275, "max": null, "rate": 12.3 }
+      ],
+      "specialRates": {
+        "capitalGains": 12.3
+      }
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.73,
+      "medianAnnualTax": 3617
+    },
+    "salesTax": {
+      "stateRate": 7.25,
+      "averageLocalRate": 1.31,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0.65,
+      "hasRelief": false,
+      "specialAssessmentRules": "Vehicle License Fee (VLF) based on purchase price with depreciation schedule."
+    },
+    "costOfLivingIndex": 142.2,
+    "lifestyleTags": ["city", "mountain", "lake", "beach"]
+  },
+  "CO": {
+    "name": "Colorado",
+    "code": "CO",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 4.55 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 24000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.51,
+      "medianAnnualTax": 1756
+    },
+    "salesTax": {
+      "stateRate": 2.9,
+      "averageLocalRate": 4.73,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 2.1,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Specific Ownership Tax based on vehicle value and age, decreasing over time."
+    },
+    "costOfLivingIndex": 105.6,
+    "lifestyleTags": ["city", "mountain"]
+  },
+  "CT": {
+    "name": "Connecticut",
+    "code": "CT",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 10000, "rate": 3 },
+        { "min": 10000, "max": 50000, "rate": 5 },
+        { "min": 50000, "max": 100000, "rate": 5.5 },
+        { "min": 100000, "max": 200000, "rate": 6 },
+        { "min": 200000, "max": 250000, "rate": 6.5 },
+        { "min": 250000, "max": 500000, "rate": 6.9 },
+        { "min": 500000, "max": null, "rate": 6.99 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 24000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 2.14,
+      "medianAnnualTax": 5898
+    },
+    "salesTax": {
+      "stateRate": 6.35,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 45,
+      "hasRelief": false,
+      "isCountyBased": false,
+      "specialAssessmentRules": "Mill rate system with statewide cap of 45 mills ($45 per $1,000 of assessed value)."
+    },
+    "costOfLivingIndex": 127.7,
+    "lifestyleTags": ["city", "beach"]
+  },
+  "DE": {
+    "name": "Delaware",
+    "code": "DE",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 2000, "rate": 0 },
+        { "min": 2000, "max": 5000, "rate": 2.2 },
+        { "min": 5000, "max": 10000, "rate": 3.9 },
+        { "min": 10000, "max": 20000, "rate": 4.8 },
+        { "min": 20000, "max": 25000, "rate": 5.2 },
+        { "min": 25000, "max": 60000, "rate": 5.55 },
+        { "min": 60000, "max": null, "rate": 6.6 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 12500,
+      "retirementIncomeExemptionAgeRequirement": 60
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.57,
+      "medianAnnualTax": 1274
+    },
+    "salesTax": {
+      "stateRate": 0,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 102.6,
+    "lifestyleTags": ["beach"]
+  },
+  "FL": {
+    "name": "Florida",
+    "code": "FL",
+    "incomeTax": {
+      "type": "none",
+      "hasTax": false,
+      "brackets": []
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.83,
+      "medianAnnualTax": 1752
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 1.05,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 97.9,
+    "lifestyleTags": ["city", "lake", "beach"]
+  },
+  "GA": {
+    "name": "Georgia",
+    "code": "GA",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 750, "rate": 1 },
+        { "min": 750, "max": 2250, "rate": 2 },
+        { "min": 2250, "max": 3750, "rate": 3 },
+        { "min": 3750, "max": 5250, "rate": 4 },
+        { "min": 5250, "max": 7000, "rate": 5 },
+        { "min": 7000, "max": null, "rate": 5.75 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 65000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.92,
+      "medianAnnualTax": 1771
+    },
+    "salesTax": {
+      "stateRate": 4,
+      "averageLocalRate": 3.29,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual ad valorem tax (TAVT) of 6.6% paid once at time of purchase or transfer."
+    },
+    "costOfLivingIndex": 93.4,
+    "lifestyleTags": ["city", "lake", "beach"]
+  },
+  "HI": {
+    "name": "Hawaii",
+    "code": "HI",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 2400, "rate": 1.4 },
+        { "min": 2400, "max": 4800, "rate": 3.2 },
+        { "min": 4800, "max": 9600, "rate": 5.5 },
+        { "min": 9600, "max": 14400, "rate": 6.4 },
+        { "min": 14400, "max": 19200, "rate": 6.8 },
+        { "min": 19200, "max": 24000, "rate": 7.2 },
+        { "min": 24000, "max": 36000, "rate": 7.6 },
+        { "min": 36000, "max": 48000, "rate": 7.9 },
+        { "min": 48000, "max": 150000, "rate": 8.25 },
+        { "min": 150000, "max": 175000, "rate": 9 },
+        { "min": 175000, "max": 200000, "rate": 10 },
+        { "min": 200000, "max": null, "rate": 11 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.28,
+      "medianAnnualTax": 1715
+    },
+    "salesTax": {
+      "stateRate": 4,
+      "averageLocalRate": 0.44,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Weight tax based on vehicle weight, not value."
+    },
+    "costOfLivingIndex": 193.3,
+    "lifestyleTags": ["beach"]
+  },
+  "ID": {
+    "name": "Idaho",
+    "code": "ID",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 1568, "rate": 1 },
+        { "min": 1568, "max": 3136, "rate": 3.1 },
+        { "min": 3136, "max": 4704, "rate": 4.5 },
+        { "min": 4704, "max": 6272, "rate": 5.5 },
+        { "min": 6272, "max": null, "rate": 6.5 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.69,
+      "medianAnnualTax": 1616
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0.03,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Registration fees based on vehicle age and type."
+    },
+    "costOfLivingIndex": 97.7,
+    "lifestyleTags": ["mountain", "lake"]
+  },
+  "IL": {
+    "name": "Illinois",
+    "code": "IL",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 4.95 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 2.27,
+      "medianAnnualTax": 4419
+    },
+    "salesTax": {
+      "stateRate": 6.25,
+      "averageLocalRate": 2.49,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 94.5,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "IN": {
+    "name": "Indiana",
+    "code": "IN",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 3.23 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.85,
+      "medianAnnualTax": 1263
+    },
+    "salesTax": {
+      "stateRate": 7,
+      "averageLocalRate": 0,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Excise tax based on vehicle value and age, not property tax."
+    },
+    "costOfLivingIndex": 90.4,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "IA": {
+    "name": "Iowa",
+    "code": "IA",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 1743, "rate": 0.33 },
+        { "min": 1743, "max": 3486, "rate": 0.67 },
+        { "min": 3486, "max": 6972, "rate": 2.25 },
+        { "min": 6972, "max": 15687, "rate": 4.14 },
+        { "min": 15687, "max": 26145, "rate": 5.63 },
+        { "min": 26145, "max": 34860, "rate": 5.96 },
+        { "min": 34860, "max": 52290, "rate": 6.25 },
+        { "min": 52290, "max": 78435, "rate": 7.44 },
+        { "min": 78435, "max": null, "rate": 8.53 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 6000,
+      "retirementIncomeExemptionAgeRequirement": 55
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.53,
+      "medianAnnualTax": 2219
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0.82,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual registration fee based on vehicle weight and value."
+    },
+    "costOfLivingIndex": 90.1,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "KS": {
+    "name": "Kansas",
+    "code": "KS",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 15000, "rate": 3.1 },
+        { "min": 15000, "max": 30000, "rate": 5.25 },
+        { "min": 30000, "max": null, "rate": 5.7 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.41,
+      "medianAnnualTax": 2235
+    },
+    "salesTax": {
+      "stateRate": 6.5,
+      "averageLocalRate": 2.17,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 3.5,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Annual tax based on vehicle value with 20% depreciation per year."
+    },
+    "costOfLivingIndex": 86.5,
+    "lifestyleTags": ["city"]
+  },
+  "KY": {
+    "name": "Kentucky",
+    "code": "KY",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 5 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 31110
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.86,
+      "medianAnnualTax": 1257
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 1.5,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Annual property tax on vehicles based on assessed value."
+    },
+    "costOfLivingIndex": 90.9,
+    "lifestyleTags": ["lake"]
+  },
+  "LA": {
+    "name": "Louisiana",
+    "code": "LA",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 12500, "rate": 2 },
+        { "min": 12500, "max": 50000, "rate": 4 },
+        { "min": 50000, "max": null, "rate": 6 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 6000
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.55,
+      "medianAnnualTax": 795
+    },
+    "salesTax": {
+      "stateRate": 4.45,
+      "averageLocalRate": 5.07,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 93.9,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "ME": {
+    "name": "Maine",
+    "code": "ME",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 23000, "rate": 5.8 },
+        { "min": 23000, "max": 54450, "rate": 6.75 },
+        { "min": 54450, "max": null, "rate": 7.15 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 10000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.3,
+      "medianAnnualTax": 2435
+    },
+    "salesTax": {
+      "stateRate": 5.5,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Excise tax based on MSRP and vehicle age, not property tax."
+    },
+    "costOfLivingIndex": 117.5,
+    "lifestyleTags": ["lake", "beach"]
+  },
+  "MD": {
+    "name": "Maryland",
+    "code": "MD",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 1000, "rate": 2 },
+        { "min": 1000, "max": 2000, "rate": 3 },
+        { "min": 2000, "max": 3000, "rate": 4 },
+        { "min": 3000, "max": 100000, "rate": 4.75 },
+        { "min": 100000, "max": 125000, "rate": 5 },
+        { "min": 125000, "max": 150000, "rate": 5.25 },
+        { "min": 150000, "max": 250000, "rate": 5.5 },
+        { "min": 250000, "max": null, "rate": 5.75 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 31100,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.09,
+      "medianAnnualTax": 3142
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 129.7,
+    "lifestyleTags": ["city", "beach"]
+  },
+  "MA": {
+    "name": "Massachusetts",
+    "code": "MA",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 5 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.23,
+      "medianAnnualTax": 4309
+    },
+    "salesTax": {
+      "stateRate": 6.25,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Excise tax of $25 per $1,000 of vehicle value, with depreciation schedule."
+    },
+    "costOfLivingIndex": 131.6,
+    "lifestyleTags": ["city", "beach"]
+  },
+  "MI": {
+    "name": "Michigan",
+    "code": "MI",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 4.25 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 20000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.54,
+      "medianAnnualTax": 2706
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 90.9,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "MN": {
+    "name": "Minnesota",
+    "code": "MN",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 28080, "rate": 5.35 },
+        { "min": 28080, "max": 92230, "rate": 6.8 },
+        { "min": 92230, "max": 171220, "rate": 7.85 },
+        { "min": 171220, "max": null, "rate": 9.85 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.15,
+      "medianAnnualTax": 2464
+    },
+    "salesTax": {
+      "stateRate": 6.875,
+      "averageLocalRate": 0.55,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 97.2,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "MS": {
+    "name": "Mississippi",
+    "code": "MS",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 5000, "rate": 3 },
+        { "min": 5000, "max": 10000, "rate": 4 },
+        { "min": 10000, "max": null, "rate": 5 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.65,
+      "medianAnnualTax": 879
+    },
+    "salesTax": {
+      "stateRate": 7,
+      "averageLocalRate": 0.07,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual ad valorem tax based on vehicle value."
+    },
+    "costOfLivingIndex": 84.8,
+    "lifestyleTags": ["lake"]
+  },
+  "MO": {
+    "name": "Missouri",
+    "code": "MO",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 107, "rate": 0 },
+        { "min": 107, "max": 1073, "rate": 1.5 },
+        { "min": 1073, "max": 2146, "rate": 2 },
+        { "min": 2146, "max": 3219, "rate": 2.5 },
+        { "min": 3219, "max": 4292, "rate": 3 },
+        { "min": 4292, "max": 5365, "rate": 3.5 },
+        { "min": 5365, "max": 6438, "rate": 4 },
+        { "min": 6438, "max": 7511, "rate": 4.5 },
+        { "min": 7511, "max": 8584, "rate": 5 },
+        { "min": 8584, "max": null, "rate": 5.4 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 6000,
+      "retirementIncomeExemptionAgeRequirement": 62
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.97,
+      "medianAnnualTax": 1435
+    },
+    "salesTax": {
+      "stateRate": 4.225,
+      "averageLocalRate": 3.9,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Annual personal property tax based on vehicle value."
+    },
+    "costOfLivingIndex": 89.8,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "MT": {
+    "name": "Montana",
+    "code": "MT",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 3100, "rate": 1 },
+        { "min": 3100, "max": 5500, "rate": 2 },
+        { "min": 5500, "max": 8400, "rate": 3 },
+        { "min": 8400, "max": 11400, "rate": 4 },
+        { "min": 11400, "max": 14600, "rate": 5 },
+        { "min": 14600, "max": 18800, "rate": 6 },
+        { "min": 18800, "max": null, "rate": 6.9 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 4370,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.84,
+      "medianAnnualTax": 1957
+    },
+    "salesTax": {
+      "stateRate": 0,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual registration fee based on vehicle age, not value."
+    },
+    "costOfLivingIndex": 94.0,
+    "lifestyleTags": ["mountain", "lake"]
+  },
+  "NE": {
+    "name": "Nebraska",
+    "code": "NE",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 3340, "rate": 2.46 },
+        { "min": 3340, "max": 19990, "rate": 3.51 },
+        { "min": 19990, "max": 32210, "rate": 5.01 },
+        { "min": 32210, "max": null, "rate": 6.84 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.73,
+      "medianAnnualTax": 2813
+    },
+    "salesTax": {
+      "stateRate": 5.5,
+      "averageLocalRate": 1.43,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Motor vehicle tax based on MSRP with depreciation schedule."
+    },
+    "costOfLivingIndex": 90.8,
+    "lifestyleTags": ["city"]
+  },
+  "NV": {
+    "name": "Nevada",
+    "code": "NV",
+    "incomeTax": {
+      "type": "none",
+      "hasTax": false,
+      "brackets": []
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.69,
+      "medianAnnualTax": 1660
+    },
+    "salesTax": {
+      "stateRate": 6.85,
+      "averageLocalRate": 1.29,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Governmental Services Tax based on vehicle value with depreciation."
+    },
+    "costOfLivingIndex": 108.5,
+    "lifestyleTags": ["city", "mountain", "lake"]
+  },
+  "NH": {
+    "name": "New Hampshire",
+    "code": "NH",
+    "incomeTax": {
+      "type": "none",
+      "hasTax": false,
+      "brackets": []
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 2.18,
+      "medianAnnualTax": 5768
+    },
+    "salesTax": {
+      "stateRate": 0,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual municipal registration fee based on weight and age."
+    },
+    "costOfLivingIndex": 105.4,
+    "lifestyleTags": ["mountain", "lake"]
+  },
+  "NJ": {
+    "name": "New Jersey",
+    "code": "NJ",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 20000, "rate": 1.4 },
+        { "min": 20000, "max": 35000, "rate": 1.75 },
+        { "min": 35000, "max": 40000, "rate": 3.5 },
+        { "min": 40000, "max": 75000, "rate": 5.525 },
+        { "min": 75000, "max": 500000, "rate": 6.37 },
+        { "min": 500000, "max": 1000000, "rate": 8.97 },
+        { "min": 1000000, "max": null, "rate": 10.75 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 100000,
+      "retirementIncomeExemptionAgeRequirement": 62
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 2.49,
+      "medianAnnualTax": 8432
+    },
+    "salesTax": {
+      "stateRate": 6.625,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 125.1,
+    "lifestyleTags": ["city", "beach"]
+  },
+  "NM": {
+    "name": "New Mexico",
+    "code": "NM",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 5500, "rate": 1.7 },
+        { "min": 5500, "max": 11000, "rate": 3.2 },
+        { "min": 11000, "max": 16000, "rate": 4.7 },
+        { "min": 16000, "max": 210000, "rate": 4.9 },
+        { "min": 210000, "max": null, "rate": 5.9 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 8000,
+      "retirementIncomeExemptionAgeRequirement": 65
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.78,
+      "medianAnnualTax": 1403
+    },
+    "salesTax": {
+      "stateRate": 5.125,
+      "averageLocalRate": 2.69,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 87.5,
+    "lifestyleTags": ["mountain"]
+  },
+  "NY": {
+    "name": "New York",
+    "code": "NY",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 8500, "rate": 4 },
+        { "min": 8500, "max": 11700, "rate": 4.5 },
+        { "min": 11700, "max": 13900, "rate": 5.25 },
+        { "min": 13900, "max": 80650, "rate": 5.9 },
+        { "min": 80650, "max": 215400, "rate": 6.33 },
+        { "min": 215400, "max": 1077550, "rate": 6.85 },
+        { "min": 1077550, "max": 5000000, "rate": 9.65 },
+        { "min": 5000000, "max": 25000000, "rate": 10.3 },
+        { "min": 25000000, "max": null, "rate": 10.9 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 20000,
+      "retirementIncomeExemptionAgeRequirement": 59.5
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.69,
+      "medianAnnualTax": 5734
+    },
+    "salesTax": {
+      "stateRate": 4,
+      "averageLocalRate": 4.52,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 139.1,
+    "lifestyleTags": ["city", "lake", "beach"]
+  },
+  "NC": {
+    "name": "North Carolina",
+    "code": "NC",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 5.25 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.85,
+      "medianAnnualTax": 1646
+    },
+    "salesTax": {
+      "stateRate": 4.75,
+      "averageLocalRate": 2.22,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "isCountyBased": true,
+      "specialAssessmentRules": "Annual property tax based on vehicle value."
+    },
+    "costOfLivingIndex": 94.9,
+    "lifestyleTags": ["city", "mountain", "beach"]
+  },
+  "ND": {
+    "name": "North Dakota",
+    "code": "ND",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 40525, "rate": 1.1 },
+        { "min": 40525, "max": 98100, "rate": 2.04 },
+        { "min": 98100, "max": 204675, "rate": 2.27 },
+        { "min": 204675, "max": 445000, "rate": 2.64 },
+        { "min": 445000, "max": null, "rate": 2.9 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": true,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.98,
+      "medianAnnualTax": 2166
+    },
+    "salesTax": {
+      "stateRate": 5,
+      "averageLocalRate": 1.85,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 98.8,
+    "lifestyleTags": ["lake"]
+  },
+  "OH": {
+    "name": "Ohio",
+    "code": "OH",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 22150, "rate": 0 },
+        { "min": 22150, "max": 44250, "rate": 2.765 },
+        { "min": 44250, "max": 88450, "rate": 3.226 },
+        { "min": 88450, "max": 110650, "rate": 3.688 },
+        { "min": 110650, "max": null, "rate": 3.99 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 200
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.56,
+      "medianAnnualTax": 2271
+    },
+    "salesTax": {
+      "stateRate": 5.75,
+      "averageLocalRate": 1.42,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 90.8,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "OK": {
+    "name": "Oklahoma",
+    "code": "OK",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 1000, "rate": 0.25 },
+        { "min": 1000, "max": 2500, "rate": 0.75 },
+        { "min": 2500, "max": 3750, "rate": 1.75 },
+        { "min": 3750, "max": 4900, "rate": 2.75 },
+        { "min": 4900, "max": 7200, "rate": 3.75 },
+        { "min": 7200, "max": null, "rate": 4.75 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 10000
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.9,
+      "medianAnnualTax": 1278
+    },
+    "salesTax": {
+      "stateRate": 4.5,
+      "averageLocalRate": 4.42,
+      "groceriesTaxed": true,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "Annual excise tax based on vehicle value."
+    },
+    "costOfLivingIndex": 86.8,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "OR": {
+    "name": "Oregon",
+    "code": "OR",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0, "max": 3650, "rate": 4.75 },
+        { "min": 3650, "max": 9200, "rate": 6.75 },
+        { "min": 9200, "max": 125000, "rate": 8.75 },
+        { "min": 125000, "max": null, "rate": 9.9 }
+      ]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExemption": 7500,
+      "retirementIncomeExemptionAgeRequirement": 62
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 0.97,
+      "medianAnnualTax": 2707
+    },
+    "salesTax": {
+      "stateRate": 0,
+      "averageLocalRate": 0,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 113.1,
+    "lifestyleTags": ["city", "mountain", "lake", "beach"]
+  },
+  "PA": {
+    "name": "Pennsylvania",
+    "code": "PA",
+    "incomeTax": {
+      "type": "flat",
+      "hasTax": true,
+      "brackets": [{ "min": 0, "max": null, "rate": 3.07 }]
+    },
+    "retirementIncome": {
+      "socialSecurityTaxed": false,
+      "pensionsTaxed": false,
+      "iraDistributionsTaxed": false
+    },
+    "propertyTax": {
+      "averageEffectiveRate": 1.58,
+      "medianAnnualTax": 2767
+    },
+    "salesTax": {
+      "stateRate": 6,
+      "averageLocalRate": 0.34,
+      "groceriesTaxed": false,
+      "prescriptionDrugsTaxed": false
+    },
+    "vehicleTax": {
+      "rate": 0,
+      "hasRelief": false,
+      "specialAssessmentRules": "No vehicle property tax. Only registration fees apply."
+    },
+    "costOfLivingIndex": 102.5,
+    "lifestyleTags": ["city", "lake"]
+  },
+  "RI": {
+    "name": "Rhode Island",
+    "code": "RI",
+    "incomeTax": {
+      "type": "progressive",
+      "hasTax": true,
+      "brackets": [
+        { "min": 0,
+
+"Let"'s continue with the rest of the states:
