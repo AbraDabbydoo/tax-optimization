@@ -1,0 +1,81 @@
+{
+  "original_file": "data\\raw\\state-tax-data-original.csv",
+  "cleaned_csv_file": "data\\processed\\state-tax-data-cleaned.csv",
+  "cleaned_json_file": "data\\processed\\state-tax-data-cleaned.json",
+  "processing_date": "2025-05-24T10:37:59.445Z",
+  "record_count": 51,
+  "columns": [
+    "State Code",
+    "State Name",
+    "Sales Tax Rate",
+    "Avg Local Rate",
+    "Groceries Taxable",
+    "Groceries Rate",
+    "Groceries Exemptions",
+    "Prepared Food Taxable",
+    "Prepared Food Rate",
+    "Prepared Food Exemptions",
+    "Utilities Taxable",
+    "Utilities Rate",
+    "Utilities Exemptions",
+    "Services Taxable",
+    "Services Rate",
+    "Services Exemptions",
+    "Digital Goods Taxable",
+    "Digital Goods Rate",
+    "Digital Goods Exemptions",
+    "Medicine Taxable",
+    "Medicine Rate",
+    "Medicine Exemptions",
+    "Streaming Taxable",
+    "Streaming Rate",
+    "Streaming Exemptions",
+    "Last Updated"
+  ],
+  "data_types": {
+    "boolean_columns": [
+      "Groceries Taxable",
+      "Prepared Food Taxable",
+      "Utilities Taxable",
+      "Services Taxable",
+      "Digital Goods Taxable",
+      "Medicine Taxable",
+      "Streaming Taxable"
+    ],
+    "numeric_columns": [
+      "Sales Tax Rate",
+      "Avg Local Rate",
+      "Groceries Rate",
+      "Prepared Food Rate",
+      "Utilities Rate",
+      "Services Rate",
+      "Digital Goods Rate",
+      "Medicine Rate",
+      "Streaming Rate"
+    ],
+    "text_columns": [
+      "Groceries Exemptions",
+      "Prepared Food Exemptions",
+      "Utilities Exemptions",
+      "Services Exemptions",
+      "Digital Goods Exemptions",
+      "Medicine Exemptions",
+      "Streaming Exemptions"
+    ],
+    "date_columns": [
+      "Last Updated"
+    ],
+    "code_columns": [
+      "State Code"
+    ]
+  },
+  "cleaning_steps": [
+    "Converted boolean strings to actual booleans",
+    "Converted rate strings to numeric values",
+    "Standardized date format to YYYY-MM-DD",
+    "Normalized state codes to uppercase",
+    "Standardized exemption text (empty/N/A values to \"None\")",
+    "Trimmed whitespace from all fields",
+    "Handled missing values appropriately"
+  ]
+}

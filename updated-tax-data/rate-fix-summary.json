@@ -1,0 +1,151 @@
+{
+  "fixDate": "2025-05-25T12:51:45.404Z",
+  "statesFixed": 20,
+  "fixedStates": [
+    {
+      "state": "IA",
+      "oldStateRate": 0.07,
+      "newStateRate": 0.07,
+      "oldCombinedRate": 0.8899999999999999,
+      "newCombinedRate": 0.0782
+    },
+    {
+      "state": "MN",
+      "oldStateRate": 0.06875,
+      "newStateRate": 0.06875,
+      "oldCombinedRate": 0.61875,
+      "newCombinedRate": 0.07425000000000001
+    },
+    {
+      "state": "NC",
+      "oldStateRate": 0.0475,
+      "newStateRate": 0.0475,
+      "oldCombinedRate": 2.2675,
+      "newCombinedRate": 0.0697
+    },
+    {
+      "state": "ND",
+      "oldStateRate": 0.05,
+      "newStateRate": 0.05,
+      "oldCombinedRate": 1.9000000000000001,
+      "newCombinedRate": 0.0685
+    },
+    {
+      "state": "NM",
+      "oldStateRate": 0.05125,
+      "newStateRate": 0.05125,
+      "oldCombinedRate": 2.74125,
+      "newCombinedRate": 0.07815
+    },
+    {
+      "state": "NY",
+      "oldStateRate": 0.04,
+      "newStateRate": 0.04,
+      "oldCombinedRate": 4.56,
+      "newCombinedRate": 0.0852
+    },
+    {
+      "state": "OH",
+      "oldStateRate": 0.0575,
+      "newStateRate": 0.0575,
+      "oldCombinedRate": 1.4775,
+      "newCombinedRate": 0.0717
+    },
+    {
+      "state": "OK",
+      "oldStateRate": 0.045,
+      "newStateRate": 0.045,
+      "oldCombinedRate": 4.465,
+      "newCombinedRate": 0.0892
+    },
+    {
+      "state": "PA",
+      "oldStateRate": 0.06,
+      "newStateRate": 0.06,
+      "oldCombinedRate": 0.4,
+      "newCombinedRate": 0.0634
+    },
+    {
+      "state": "SC",
+      "oldStateRate": 0.06,
+      "newStateRate": 0.06,
+      "oldCombinedRate": 1.49,
+      "newCombinedRate": 0.0743
+    },
+    {
+      "state": "SD",
+      "oldStateRate": 0.042,
+      "newStateRate": 0.042,
+      "oldCombinedRate": 1.942,
+      "newCombinedRate": 0.061
+    },
+    {
+      "state": "TN",
+      "oldStateRate": 0.07,
+      "newStateRate": 0.07,
+      "oldCombinedRate": 2.6199999999999997,
+      "newCombinedRate": 0.0955
+    },
+    {
+      "state": "TX",
+      "oldStateRate": 0.0625,
+      "newStateRate": 0.0625,
+      "oldCombinedRate": 2.0025,
+      "newCombinedRate": 0.0819
+    },
+    {
+      "state": "UT",
+      "oldStateRate": 0.0485,
+      "newStateRate": 0.0485,
+      "oldCombinedRate": 2.4885,
+      "newCombinedRate": 0.07289999999999999
+    },
+    {
+      "state": "VA",
+      "oldStateRate": 0.043,
+      "newStateRate": 0.043,
+      "oldCombinedRate": 1.043,
+      "newCombinedRate": 0.053
+    },
+    {
+      "state": "VT",
+      "oldStateRate": 0.06,
+      "newStateRate": 0.06,
+      "oldCombinedRate": 0.24,
+      "newCombinedRate": 0.24
+    },
+    {
+      "state": "WA",
+      "oldStateRate": 0.065,
+      "newStateRate": 0.065,
+      "oldCombinedRate": 2.765,
+      "newCombinedRate": 0.092
+    },
+    {
+      "state": "WI",
+      "oldStateRate": 0.05,
+      "newStateRate": 0.05,
+      "oldCombinedRate": 0.49,
+      "newCombinedRate": 0.054400000000000004
+    },
+    {
+      "state": "WV",
+      "oldStateRate": 0.01,
+      "newStateRate": 0.01,
+      "oldCombinedRate": 0.41000000000000003,
+      "newCombinedRate": 0.0041
+    },
+    {
+      "state": "WY",
+      "oldStateRate": 0.04,
+      "newStateRate": 0.04,
+      "oldCombinedRate": 1.4000000000000001,
+      "newCombinedRate": 0.0536
+    }
+  ],
+  "rateStatistics": {
+    "lowestRate": 0,
+    "highestRate": 24,
+    "averageRate": 6.9632
+  }
+}

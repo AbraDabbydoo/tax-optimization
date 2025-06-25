@@ -1,0 +1,52 @@
+State Code,State Name,Sales Tax Rate,Avg Local Rate,Groceries Taxable,Groceries Rate,Groceries Exemptions,Prepared Food Taxable,Prepared Food Rate,Prepared Food Exemptions,Utilities Taxable,Utilities Rate,Utilities Exemptions,Services Taxable,Services Rate,Services Exemptions,Digital Goods Taxable,Digital Goods Rate,Digital Goods Exemptions,Medicine Taxable,Medicine Rate,Medicine Exemptions,Streaming Taxable,Streaming Rate,Streaming Exemptions,Last Updated
+AL,Alabama,0.04,0,true,0.03,None,true,0.04,All prepared food,true,0.04,None,false,0,Most services,true,0.04,None,true,0.04,Prescription only,true,0.04,None,"Monday, May 12, 2025"
+AK,Alaska,0.0182,0.0176,false,0,All food items,true,0.0176,None,false,0,All utilities,false,0,All services,false,0,All digital goods,false,0,All medicine,false,0,All streaming,5/12/2025
+AZ,Arizona,0.056,0.028,false,0,All food items,true,0.084,None,true,0.084,None,false,0,Most services,true,0.084,None,false,0.0560,Prescription only,true,0.084,None,5/12/2025
+AR,Arkansas,0.065,0.0293,true,0.015,Reduced rate,true,0.0943,None,true,0.0943,None,true,0.0943,Some services exempt,true,0.0943,None,false,0.0650,Prescription only,true,0.0943,None,5/12/2025
+CA,California,0.0725,0.0143,false,0,All food items,true,0.0868,None,false,0,Residential utilities,false,0,Most services,true,0.0868,None,false,0.0000,All medicine,true,0.0868,None,5/12/2025
+CO,Colorado,0.029,0.0473,false,0,All food items,true,0.0763,None,true,0.0763,Some utilities exempt,false,0,Most services,true,0.0763,None,false,0.0290,Prescription only,true,0.0763,None,5/12/2025
+CT,Connecticut,0.0635,0,false,0,All food items,true,0.0635,None,true,0.0635,None,true,0.0635,Some services exempt,true,0.0635,None,false,0.0635,Prescription only,true,0.0635,None,5/12/2025
+DE,Delaware,0,0,false,0,All food items,false,0,All prepared food,false,0,All utilities,false,0,All services,false,0,All digital goods,false,0.0000,All medicine,false,0,All streaming,5/12/2025
+FL,Florida,0.06,0.0105,false,0,All food items,true,0.0705,None,true,0.0705,None,false,0,Most services,true,0.0705,None,false,0.0600,Prescription only,true,0.0705,None,5/12/2025
+GA,Georgia,0.04,0.0329,true,0.03,Reduced rate,true,0.0729,None,true,0.0729,None,false,0,Most services,true,0.0729,None,false,0.0400,Prescription only,true,0.0729,None,5/12/2025
+HI,Hawaii,0.04,0.044,true,0.04,None,true,0.0444,None,true,0.0444,None,true,0.0444,Few exemptions,true,0.0444,None,false,0.0400,Prescription only,true,0.0444,None,5/12/2025
+ID,Idaho,0.06,0.03,true,0.06,None,true,0.0603,None,true,0.0603,None,false,0,Most services,true,0.0603,None,false,0.0600,Prescription only,true,0.0603,None,5/12/2025
+IL,Illinois,0.0625,0.0249,true,0.01,Reduced rate,true,0.0874,None,true,0.0874,None,false,0,Most services,true,0.0874,None,false,0.0625,Prescription only,true,0.0874,None,5/12/2025
+IN,Indiana,0.07,0,true,0.07,None,true,0.07,None,true,0.07,None,false,0,Most services,true,0.07,None,false,0.0700,Prescription only,true,0.07,None,5/12/2025
+IA,Iowa,0.07,0.82,false,0,All food items,true,0.0682,None,true,0.0682,None,true,0.0682,Some services exempt,true,0.0682,None,false,0.0700,Prescription only,true,0.0682,None,5/12/2025
+KS,Kansas,0.065,0.0217,true,0.065,None,true,0.0867,None,true,0.0867,None,true,0.0867,Some services exempt,true,0.0867,None,false,0.0650,Prescription only,true,0.0867,None,5/12/2025
+KY,Kentucky,0.06,0,false,0,All food items,true,0.06,None,true,0.06,None,true,0.06,Some services exempt,true,0.06,None,false,0.0600,Prescription only,true,0.06,None,5/12/2025
+LA,Louisiana,0.0445,0.0507,true,0,Local taxes only,true,0.0952,None,true,0.0952,None,false,0,Most services,true,0.0952,None,false,0.0445,Prescription only,true,0.0952,None,5/12/2025
+ME,Maine,0.055,0,false,0,All food items,true,0.055,None,true,0.055,None,false,0,Most services,true,0.055,None,false,0.0550,Prescription only,true,0.055,None,5/12/2025
+MD,Maryland,0.06,0,false,0,All food items,true,0.06,None,true,0.06,None,false,0,Most services,true,0.06,None,false,0.0600,Prescription only,true,0.06,None,5/12/2025
+MA,Massachusetts,0.0625,0,false,0,All food items,true,0.0625,None,true,0.0625,None,false,0,Most services,true,0.0625,None,false,0.0625,Prescription only,true,0.0625,None,5/12/2025
+MI,Michigan,0.06,0,false,0,All food items,true,0.06,None,true,0.06,None,false,0,Most services,true,0.06,None,false,0.0600,Prescription only,true,0.06,None,5/12/2025
+MN,Minnesota,0.06875,0.55,false,0,All food items,true,0.0743,None,true,0.0743,None,false,0,Most services,true,0.0743,None,false,0.0688,Prescription only,true,0.0743,None,5/12/2025
+MS,Mississippi,0.07,0.07,true,0.07,None,true,0.0707,None,true,0.0707,None,false,0,Most services,true,0.0707,None,false,0.0700,Prescription only,true,0.0707,None,5/12/2025
+MO,Missouri,0.04225,0.039,true,0.0123,Reduced rate,true,0.0813,None,true,0.0813,None,false,0,Most services,true,0.0813,None,false,0.0423,Prescription only,true,0.0813,None,5/12/2025
+MT,Montana,0,0,false,0,All food items,false,0,All prepared food,false,0,All utilities,false,0,All services,false,0,All digital goods,false,0.0000,All medicine,false,0,All streaming,5/12/2025
+NE,Nebraska,0.055,0.0143,true,0.055,None,true,0.0693,None,true,0.0693,None,false,0,Most services,true,0.0693,None,false,0.0550,Prescription only,true,0.0693,None,5/12/2025
+NV,Nevada,0.046,0.0129,false,0,All food items,true,0.0814,None,true,0.0814,None,false,0,Most services,true,0.0814,None,false,0.0460,Prescription only,true,0.0814,None,5/12/2025
+NH,New Hampshire,0,0,false,0,All food items,false,0,All prepared food,false,0,All utilities,false,0,All services,false,0,All digital goods,false,0.0000,All medicine,false,0,All streaming,5/12/2025
+NJ,New Jersey,0.06625,0,false,0,All food items,true,0.0663,None,true,0.0663,None,false,0,Most services,true,0.0663,None,false,0.0663,Prescription only,true,0.0663,None,5/12/2025
+NM,New Mexico,0.05125,2.69,true,0,Local taxes only,true,0.0782,None,true,0.0782,None,true,0.0782,Few exemptions,true,0.0782,None,false,0.0513,Prescription only,true,0.0782,None,5/12/2025
+NY,New York,0.04,4.52,false,0,All food items,true,0.0852,None,true,0.04,Residential energy exempt,false,0,Most services,true,0.0852,None,false,0.0400,Prescription only,true,0.0852,None,5/12/2025
+NC,North Carolina,0.0475,2.22,true,0.02,Reduced rate,true,0.0697,None,true,0.0697,None,false,0,Most services,true,0.0697,None,false,0.0475,Prescription only,true,0.0697,None,5/12/2025
+ND,North Dakota,0.05,1.85,true,0.05,None,true,0.0685,None,true,0.0685,None,false,0,Most services,true,0.0685,None,false,0.0500,Prescription only,true,0.0685,None,5/12/2025
+OH,Ohio,0.0575,1.42,false,0,All food items,true,0.0717,None,true,0.0717,None,false,0,Most services,true,0.0717,None,false,0.0575,Prescription only,true,0.0717,None,5/12/2025
+OK,Oklahoma,0.045,4.42,true,0.045,None,true,0.0892,None,true,0.0892,None,false,0,Most services,true,0.0892,None,false,0.0450,Prescription only,true,0.0892,None,5/12/2025
+OR,Oregon,0,0,false,0,All food items,false,0,All prepared food,false,0,All utilities,false,0,All services,false,0,All digital goods,false,0.0000,All medicine,false,0,All streaming,5/12/2025
+PA,Pennsylvania,0.06,0.34,false,0,All food items,true,0.0634,None,true,0.0634,None,false,0,Most services,true,0.0634,None,false,0.0600,Prescription only,true,0.0634,None,5/12/2025
+RI,Rhode Island,0.07,0,false,0,All food items,true,0.07,None,true,0.07,None,false,0,Most services,true,0.07,None,false,0.0700,Prescription only,true,0.07,None,5/12/2025
+SC,South Carolina,0.06,1.43,false,0,All food items,true,0.0743,None,true,0.0743,None,false,0,Most services,true,0.0743,None,false,0.0600,Prescription only,true,0.0743,None,5/12/2025
+SD,South Dakota,0.042,1.9,true,0.045,None,true,0.064,None,true,0.064,None,true,0.064,Few exemptions,true,0.064,None,false,0.0420,Prescription only,true,0.064,None,5/12/2025
+TN,Tennessee,0.07,2.55,true,0.04,Reduced rate,true,0.0955,None,true,0.0955,None,false,0,Most services,true,0.0955,None,false,0.0700,Prescription only,true,0.0955,None,5/12/2025
+TX,Texas,0.0625,1.94,false,0,All food items,true,0.0819,None,true,0.0819,None,false,0,Most services,true,0.0819,None,false,0.0625,Prescription only,true,0.0819,None,5/12/2025
+UT,Utah,0.0485,2.44,true,0.0175,Reduced rate,true,0.0729,None,true,0.0729,None,true,0.0729,Some services exempt,true,0.0729,None,false,0.0485,Prescription only,true,0.0729,None,5/12/2025
+VT,Vermont,0.06,0.18,false,0,All food items,true,0.09,Meals tax higher,true,0.0618,None,false,0,Most services,true,0.0618,None,false,0.0600,Prescription only,true,0.0618,None,5/12/2025
+VA,Virginia,0.043,1,true,0.025,Reduced rate,true,0.053,None,true,0.053,None,false,0,Most services,true,0.053,None,false,0.0430,Prescription only,true,0.053,None,5/12/2025
+WA,Washington,0.065,2.7,false,0,All food items,true,0.092,None,true,0.092,None,false,0,Most services,true,0.092,None,false,0.0650,Prescription only,true,0.092,None,5/12/2025
+WV,West Virginia,0.01,0.4,true,0.06,None,true,0.064,None,true,0.064,None,true,0.064,Some services exempt,true,0.064,None,false,0.0100,Prescription only,true,0.064,None,5/12/2025
+WI,Wisconsin,0.05,0.44,false,0,All food items,true,0.0544,None,true,0.0544,None,false,0,Most services,true,0.0544,None,false,0.0500,Prescription only,true,0.0544,None,5/12/2025
+WY,Wyoming,0.04,1.36,false,0,All food items,true,0.0536,None,true,0.0536,None,false,0,Most services,true,0.0536,None,false,0.0400,Prescription only,true,0.0536,None,5/12/2025
+DC,District of Columbia,0.06,0,false,0,All food items,true,0.1,Higher rate for prepared food,true,0.06,None,true,0.06,Some services exempt,true,0.06,None,false,0.0600,Prescription only,true,0.06,None,5/12/2025

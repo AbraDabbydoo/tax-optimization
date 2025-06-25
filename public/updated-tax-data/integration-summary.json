@@ -1,0 +1,17 @@
+{
+  "integrationDate": "2025-05-24T12:11:10.606Z",
+  "csvStatesProcessed": 51,
+  "stateData1": {
+    "totalStates": 25,
+    "updatedStates": 24
+  },
+  "stateData2": {
+    "totalStates": 25,
+    "updatedStates": 22
+  },
+  "sourceFiles": {
+    "csv": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/state-tax-data-cleaned%20-%20Copy-VTu8KkK3gG62Mz3mhVo2vzHminczIC.csv",
+    "stateData1": "https://blobs.vusercontent.net/blob/state-tax-data-FMCAPbX7bY6RUhtlX32jZQxWumeoDI.json",
+    "stateData2": "https://blobs.vusercontent.net/blob/state-tax-data-2-rqzUSyIf8fqRct5FnOsAR8p6Pt447k.json"
+  }
+}
