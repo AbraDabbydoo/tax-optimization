@@ -27,6 +27,10 @@ export default function AssetsPage() {
   const [vehicleCount, setVehicleCount] = useState("")
   const [vehicleInputs, setVehicleInputs] = useState<VehicleInput[]>([])
   const [vehicleValue, setVehicleValue] = useState("")
+  const [movePlan, setMovePlan] = useState(""); // buy, rent, undecided
+  const [nextHomeValue, setNextHomeValue] = useState("");
+  const [nextHomeValueError, setNextHomeValueError] = useState("");
+  const [propertyTaxError, setPropertyTaxError] = useState("");
 
   // Show/hide fields based on housing status
   const isRenting = housingStatus === "renting"
@@ -47,6 +51,8 @@ export default function AssetsPage() {
         setRegionPreference(parsedData.regionPreference || "")
         setVehicleCount(parsedData.vehicleCount || "")
         setVehicleValue(parsedData.vehicleValue || "")
+        setMovePlan(parsedData.movePlan || "");
+        setNextHomeValue(parsedData.nextHomeValue || "");
 
         // Load vehicle inputs if available
         if (parsedData.vehicleInputs && Array.isArray(parsedData.vehicleInputs)) {
@@ -100,6 +106,8 @@ export default function AssetsPage() {
       vehicleCount,
       vehicleValue,
       vehicleInputs,
+      movePlan,
+      nextHomeValue,
     }
     localStorage.setItem("taxCalculator_assetsInfo", JSON.stringify(formData))
   }, [
@@ -113,6 +121,8 @@ export default function AssetsPage() {
     vehicleCount,
     vehicleValue,
     vehicleInputs,
+    movePlan,
+    nextHomeValue,
   ])
 
   // Reset values when housing status changes
@@ -132,9 +142,20 @@ export default function AssetsPage() {
     setVehicleInputs(newInputs)
   }
 
+  // Update navigation after this page to go to step 4 (expenses)
   const handleNextStep = () => {
     // In a real app, you would validate and save the form data
-    window.location.href = "/calculator/step-4"
+    if (housingStatus === "owning" && !propertyTax) {
+      setPropertyTaxError("Please enter your current property taxes per year.");
+      return;
+    }
+    setPropertyTaxError("");
+    if ((movePlan === "buy" || movePlan === "undecided") && !nextHomeValue) {
+      setNextHomeValueError("Please enter an estimated purchase price.");
+      return;
+    }
+    setNextHomeValueError("");
+    window.location.href = "/calculator/step-4" // route to expenses page next
   }
 
   return (
@@ -155,26 +176,21 @@ export default function AssetsPage() {
         <div className="flex justify-between">
           {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="flex flex-col items-center">
-              <Link
-                href={i < 3 ? (i === 1 ? "/calculator" : `/calculator/step-${i}`) : "#"}
-                className={i < 3 ? "" : "pointer-events-none"}
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
+                  i === 3 ? "border-primary bg-primary text-white" : "border-gray-300 bg-white text-gray-500"
+                }`}
               >
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
-                    i <= 3 ? "border-primary bg-primary text-white" : "border-gray-300 bg-white text-gray-500"
-                  }`}
-                >
-                  {i}
-                </div>
-                <span className="mt-2 text-xs font-medium">
-                  {i === 1 ? "Basic Info" : i === 2 ? "Income" : i === 3 ? "Assets" : i === 4 ? "Expenses" : "Results"}
-                </span>
-              </Link>
+                {i}
+              </div>
+              <span className="mt-2 text-xs font-medium">
+                {i === 1 ? "Basic Info" : i === 2 ? "Income" : i === 3 ? "Assets" : i === 4 ? "Expenses" : "Credits & Deductions"}
+              </span>
             </div>
           ))}
         </div>
         <div className="mt-2 h-2 w-full rounded-full bg-gray-200">
-          <div className="h-2 rounded-full bg-primary transition-all duration-300" style={{ width: "60%" }}></div>
+          <div className="h-2 rounded-full bg-primary transition-all duration-300" style={{ width: "40%" }}></div>
         </div>
       </div>
 
@@ -245,6 +261,7 @@ export default function AssetsPage() {
                 <p className="text-xs text-muted-foreground">
                   This helps us compare property tax burdens across different states.
                 </p>
+                {propertyTaxError && <p className="text-sm text-red-500">{propertyTaxError}</p>}
               </div>
             </>
           )}
@@ -323,36 +340,44 @@ export default function AssetsPage() {
 
           <div className="space-y-2">
             <Label>If you move to a new state, do you plan to:</Label>
-            <RadioGroup value={futurePlans} onValueChange={setFuturePlans}>
+            <RadioGroup value={movePlan} onValueChange={setMovePlan} className="space-y-3">
               <div className="flex items-start space-x-3 rounded-md border p-3">
-                <RadioGroupItem value="buy" id="future-buy" className="mt-1" />
-                <div className="space-y-1">
-                  <Label htmlFor="future-buy" className="font-medium">
-                    Buy a property
-                  </Label>
-                  <p className="text-sm text-muted-foreground">Purchase a home in the new state</p>
+                <RadioGroupItem value="buy" id="move-buy" className="mt-1" />
+                <div>
+                  <Label htmlFor="move-buy" className="font-medium">Buy a property</Label>
                 </div>
               </div>
               <div className="flex items-start space-x-3 rounded-md border p-3">
-                <RadioGroupItem value="rent" id="future-rent" className="mt-1" />
-                <div className="space-y-1">
-                  <Label htmlFor="future-rent" className="font-medium">
-                    Rent a property
-                  </Label>
-                  <p className="text-sm text-muted-foreground">Rent a home in the new state</p>
+                <RadioGroupItem value="rent" id="move-rent" className="mt-1" />
+                <div>
+                  <Label htmlFor="move-rent" className="font-medium">Rent</Label>
                 </div>
               </div>
               <div className="flex items-start space-x-3 rounded-md border p-3">
-                <RadioGroupItem value="undecided" id="future-undecided" className="mt-1" />
-                <div className="space-y-1">
-                  <Label htmlFor="future-undecided" className="font-medium">
-                    Undecided
-                  </Label>
-                  <p className="text-sm text-muted-foreground">Haven't decided yet</p>
+                <RadioGroupItem value="undecided" id="move-undecided" className="mt-1" />
+                <div>
+                  <Label htmlFor="move-undecided" className="font-medium">Undecided</Label>
                 </div>
               </div>
             </RadioGroup>
           </div>
+          {(movePlan === "buy" || movePlan === "undecided") && (
+            <div className="space-y-2">
+              <Label htmlFor="nextHomeValue">Please estimate the purchase price of your next property.</Label>
+              <Input
+                id="nextHomeValue"
+                type="number"
+                min="10000"
+                placeholder="e.g. 350000"
+                value={nextHomeValue}
+                onChange={e => setNextHomeValue(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                We will use this to compare property taxes across states.
+              </p>
+              {nextHomeValueError && <p className="text-sm text-red-500">{nextHomeValueError}</p>}
+            </div>
+          )}
 
           <div className="space-y-4">
             <div className="space-y-2">
@@ -445,7 +470,7 @@ export default function AssetsPage() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
-            <Link href="/calculator/payment">
+            <Link href="/calculator/step-2">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Link>
           </Button>

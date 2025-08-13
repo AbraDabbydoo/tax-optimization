@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { DollarSign } from "lucide-react"
 
 const states = [
   { value: "AL", label: "Alabama" },
@@ -71,12 +72,21 @@ export default function CalculatorPage() {
   const [filingStatus, setFilingStatus] = useState<string>("")
   const [preferredLifestyle, setPreferredLifestyle] = useState<string>("")
   const [dependents, setDependents] = useState<string>("")
+  const [age, setAge] = useState<string>("")
+  const [spouseAge, setSpouseAge] = useState<string>("")
+  const [residencyStatus, setResidencyStatus] = useState<string>("full-year")
   const [errors, setErrors] = useState({
     residenceState: false,
     employmentState: false,
     filingStatus: false,
+    age: false,
+    spouseAge: false,
   })
   const [loadError, setLoadError] = useState<string | null>(null)
+  // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
+
+  // Add to state
+  const [itemizedDeductionsLastYear, setItemizedDeductionsLastYear] = useState<string>("no");
 
   // Load saved form data when component mounts
   useEffect(() => {
@@ -89,6 +99,11 @@ export default function CalculatorPage() {
         setFilingStatus(parsedData.filingStatus || "")
         setPreferredLifestyle(parsedData.preferredLifestyle || "")
         setDependents(parsedData.dependents || "")
+        setAge(parsedData.age || "")
+        setSpouseAge(parsedData.spouseAge || "")
+        setResidencyStatus(parsedData.residencyStatus || "full-year")
+        setItemizedDeductionsLastYear(parsedData.itemizedDeductionsLastYear || "");
+        // Remove Short Term Capital Gains and Long Term Capital Gains from here
       }
     } catch (error) {
       console.error("Error loading saved data:", error)
@@ -105,27 +120,39 @@ export default function CalculatorPage() {
         filingStatus,
         preferredLifestyle,
         dependents,
+        age,
+        spouseAge,
+        residencyStatus,
+        itemizedDeductionsLastYear,
+        // Remove Short Term Capital Gains and Long Term Capital Gains from here
       }
       localStorage.setItem("taxCalculator_basicInfo", JSON.stringify(formData))
     } catch (error) {
       console.error("Error saving form data:", error)
     }
-  }, [residenceState, employmentState, filingStatus, preferredLifestyle, dependents])
+  }, [residenceState, employmentState, filingStatus, preferredLifestyle, dependents, age, spouseAge, residencyStatus, itemizedDeductionsLastYear])
 
+  // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
+  // Update navigation after this page to go to step-2 (income)
   const handleNextStep = () => {
     // Validate form
+    const isMarried = filingStatus.toLowerCase().includes("married");
     const newErrors = {
       residenceState: !residenceState,
       employmentState: !employmentState,
       filingStatus: !filingStatus,
+      age: !age,
+      spouseAge: isMarried && !spouseAge, // Only require spouse age if married
     }
 
     setErrors(newErrors)
 
+    // Removed move plan and next property price from this page; handled on Assets (Step 3)
+
     // If no errors, proceed to next step
-    if (!Object.values(newErrors).some(Boolean)) {
+    if (!Object.values(newErrors).some(Boolean) && residencyStatus === "full-year") {
       // Form data is already saved in localStorage via the useEffect
-      window.location.href = "/calculator/step-2"
+      window.location.href = "/calculator/step-2" // route to income page next
     }
   }
 
@@ -147,7 +174,7 @@ export default function CalculatorPage() {
 
       <div className="mb-8">
         <div className="flex justify-between">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="flex flex-col items-center">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
@@ -157,7 +184,7 @@ export default function CalculatorPage() {
                 {i}
               </div>
               <span className="mt-2 text-xs font-medium">
-                {i === 1 ? "Basic Info" : i === 2 ? "Income" : i === 3 ? "Assets" : "Results"}
+                {i === 1 ? "Basic Info" : i === 2 ? "Income" : i === 3 ? "Assets" : i === 4 ? "Expenses" : "Credits & Deductions"}
               </span>
             </div>
           ))}
@@ -173,6 +200,7 @@ export default function CalculatorPage() {
           <CardDescription>Tell us about your current location and filing status.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Current State of Residence */}
           <div className="space-y-2">
             <Label htmlFor="residenceState">
               Current State of Residence <span className="text-red-500">*</span>
@@ -190,6 +218,30 @@ export default function CalculatorPage() {
               </SelectContent>
             </Select>
             {errors.residenceState && <p className="text-sm text-red-500">Please select your state of residence</p>}
+          </div>
+
+          {/* Residency Status - move this block here */}
+          <div className="space-y-2">
+            <Label htmlFor="residencyStatus">
+              Residency Status <span className="text-red-500">*</span>
+            </Label>
+            <select
+              id="residencyStatus"
+              value={residencyStatus}
+              onChange={e => setResidencyStatus(e.target.value)}
+              className="border p-2 rounded w-full"
+            >
+              <option value="full-year">Full-Year Resident</option>
+              <option value="part-year">Part-Year Resident</option>
+            </select>
+            <p className="text-xs text-muted-foreground">
+              Are you a full-year or part-year resident of your current state?
+            </p>
+            {residencyStatus === "part-year" && (
+              <div className="text-red-600 text-sm mt-1">
+                Consider upgrading to speaking with a CPA on your complex tax situation.
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -285,6 +337,29 @@ export default function CalculatorPage() {
           </div>
 
           <div className="space-y-2">
+            <Label>Did you itemize deductions in the prior year?</Label>
+            <RadioGroup value={itemizedDeductionsLastYear} onValueChange={setItemizedDeductionsLastYear} className="space-y-3">
+              <div className="flex items-start space-x-3 rounded-md border p-3">
+                <RadioGroupItem value="yes" id="itemized-yes" className="mt-1" />
+                <div>
+                  <Label htmlFor="itemized-yes" className="font-medium">Yes</Label>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3 rounded-md border p-3">
+                <RadioGroupItem value="no" id="itemized-no" className="mt-1" />
+                <div>
+                  <Label htmlFor="itemized-no" className="font-medium">No</Label>
+                </div>
+              </div>
+            </RadioGroup>
+            {itemizedDeductionsLastYear === "yes" && (
+              <div className="text-red-600 text-sm mt-1">
+                Please upgrade to speaking with a CPA.
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="dependents">Number of Dependents</Label>
             <Input
               id="dependents"
@@ -352,6 +427,58 @@ export default function CalculatorPage() {
               This helps us recommend states that match your preferred environment.
             </p>
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="age">
+              Age <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="age"
+              type="number"
+              min="18"
+              max="120"
+              placeholder="65"
+              className={errors.age ? "border-red-500" : ""}
+              value={age}
+              onChange={e => {
+                const raw = e.target.value;
+                if (/^\d*$/.test(raw)) setAge(raw);
+              }}
+            />
+            {errors.age && <p className="text-sm text-red-500">Please enter your age</p>}
+            <p className="text-xs text-muted-foreground">
+              This helps us calculate age-specific retirement tax exemptions.
+            </p>
+          </div>
+
+          {filingStatus.toLowerCase().includes("married") && (
+            <div className="space-y-2">
+              <Label htmlFor="spouseAge">
+                Spouse Age <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="spouseAge"
+                type="number"
+                min="18"
+                max="120"
+                placeholder="65"
+                className={errors.spouseAge ? "border-red-500" : ""}
+                value={spouseAge}
+                onChange={e => {
+                  const raw = e.target.value;
+                  if (/^\d*$/.test(raw)) setSpouseAge(raw);
+                }}
+              />
+              {errors.spouseAge && <p className="text-sm text-red-500">Please enter your spouse's age</p>}
+              <p className="text-xs text-muted-foreground">
+                This helps us calculate age-specific retirement tax exemptions for both spouses (e.g., Arkansas requires 59.5+ for IRA exemptions).
+              </p>
+            </div>
+          )}
+
+          {/* Move plan and next property price inputs have been moved to Step 3 (Assets) */}
+
+
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
@@ -359,9 +486,14 @@ export default function CalculatorPage() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Cancel
             </Link>
           </Button>
-          <Button onClick={handleNextStep}>
-            Continue <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex flex-col items-end">
+            <Button
+              onClick={handleNextStep}
+              disabled={residencyStatus === "part-year" || itemizedDeductionsLastYear === "yes"}
+            >
+              Continue <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </div>

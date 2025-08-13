@@ -3692,7 +3692,7 @@
   "SD": {
     "incomeTax": {
       "type": "flat",
-      "hasTax": true,
+      "hasTax": false,
       "brackets": {
         "single": [
           {
@@ -3728,7 +3728,7 @@
   "TN": {
     "incomeTax": {
       "type": "flat",
-      "hasTax": true,
+      "hasTax": false,
       "brackets": {
         "single": [
           {
@@ -3764,7 +3764,7 @@
   "TX": {
     "incomeTax": {
       "type": "flat",
-      "hasTax": true,
+      "hasTax": false,
       "brackets": {
         "single": [
           {

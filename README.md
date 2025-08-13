@@ -1,5 +1,9 @@
 # Tax Optimization Website
 
+## Project Roadmap
+
+See the full roadmap here: [ROADMAP.md](./ROADMAP.md)
+
 ## Updating Tax Bracket Data
 
 To update the tax bracket data from the CSV file:

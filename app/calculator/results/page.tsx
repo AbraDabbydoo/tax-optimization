@@ -135,6 +135,8 @@ export default function ResultsPage() {
         formData.append("filingStatus", basicInfo.filingStatus || "")
         formData.append("preferredLifestyle", basicInfo.preferredLifestyle || "")
         formData.append("dependents", basicInfo.dependents || "0")
+        formData.append("age", basicInfo.age || "65")
+        formData.append("spouseAge", basicInfo.spouseAge || "65")
 
         // Add income info - ensure these are strings
         formData.append("annualIncome", (incomeInfo.annualIncome || "0").toString())
@@ -144,9 +146,15 @@ export default function ResultsPage() {
         formData.append("pensionIncome", (incomeInfo.pensionIncome || "0").toString())
         formData.append("iraDistributions", (incomeInfo.iraDistributions || "0").toString())
         formData.append("investmentIncome", (incomeInfo.investmentIncome || "0").toString())
+        formData.append("interestIncome", (incomeInfo.interestIncome || "0").toString())
+        formData.append("dividendsIncome", (incomeInfo.dividendsIncome || "0").toString())
         formData.append("rentalIncome", (incomeInfo.rentalIncome || "0").toString())
         formData.append("royaltyIncome", (incomeInfo.royaltyIncome || "0").toString())
         formData.append("trustIncome", (incomeInfo.trustIncome || "0").toString())
+        formData.append("privatePensionEmployeeContributionPortion", incomeInfo.privatePensionEmployeeContributionPortion || "")
+        formData.append("kyMilitaryRetiredBefore1998", incomeInfo.kyMilitaryRetiredBefore1998 || "no")
+        formData.append("kyTeacherPoliceFirePre1998Percent", (incomeInfo.kyTeacherPoliceFirePre1998Percent || "0").toString())
+        formData.append("ncBaileyExemption", (incomeInfo.ncBaileyExemption || "no").toString())
 
         // Add assets info
         formData.append("homeValue", assetsInfo.homeValue || "0")

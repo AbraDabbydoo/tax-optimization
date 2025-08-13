@@ -25,7 +25,7 @@ export async function calculateOptimalTaxStates(formData: FormData) {
       royaltyIncome: Number(formData.get("royaltyIncome")) || 0,
       trustIncome: Number(formData.get("trustIncome")) || 0,
       homeValue: Number(formData.get("homeValue")) || 0,
-      currentPropertyTax: Number(formData.get("propertyTax")) || 0,
+      propertyTax: Number(formData.get("propertyTax")) || 0,
       monthlyRent: Number(formData.get("currentRent")) || 0,
       futurePlans: (formData.get("futurePlans") as string) || "",
       housingBudget: Number(formData.get("housingBudget")) || 0,

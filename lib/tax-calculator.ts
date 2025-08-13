@@ -95,13 +95,13 @@ export interface UserTaxInputs {
   iraDistributions: number // Traditional IRA, SEP, Keogh distributions (Roth IRA distributions should be excluded as they are not taxable)
   k401Distributions: number // 401k/403b/457b distributions (separate from traditional IRA/Roth IRA/SEP/Keogh)
   investmentIncome: number
-  rentalIncome: number
+  rentalIncome?: number
   royaltyIncome: number
   trustIncome: number
   interestIncome?: number // Taxable interest income (for NH)
   dividendsIncome?: number // Taxable dividends income (for NH)
   homeValue: number
-  currentPropertyTax: number
+  propertyTax: number
   monthlyRent: number
   futurePlans: string
   housingBudget: number
@@ -129,6 +129,25 @@ export interface UserTaxInputs {
   beganMilitaryBenefitsBeforeMontanaResidency?: boolean
   ncBaileyExemption?: boolean
   annuityIncome?: number // Taxable annuity income (new field for OH and other states)
+  // Alabama homestead exemption fields
+  alHomesteadExemptionType?: 'H-1' | 'H-2' | 'H-3' | 'H-4' // Which exemption type applies
+  alIsDisabled?: boolean // For H-3 exemption (permanently disabled)
+  alIsPrimaryResidence?: boolean // Must be primary residence
+  alPropertyAcres?: number // Must be ≤ 160 acres for single-family
+  // Alabama alimony deduction fields
+  alAlimonyPaid?: number // Annual alimony payments made
+  alDivorceDate?: string // Date of divorce/separation agreement (YYYY-MM-DD format)
+  alIsAlimonyRecipient?: boolean // Whether taxpayer is receiving alimony (for completeness)
+  selfEmploymentIncome?: number
+  unemploymentIncome?: number
+  alimonyReceived?: number
+  alimonyDivorceDate?: string
+  gamblingWinnings?: number
+  capitalGains?: number
+  shortTermCapitalGains?: number
+  longTermCapitalGains?: number
+  selfEmploymentExpenses?: number
+  nextHomeValue?: number // New field for next home value
 }
 
 export interface TaxCalculationResult {
@@ -635,6 +654,174 @@ function calculateRetirementTax(
     );
   }
 
+  // Oklahoma-specific retirement income tax calculation
+  if (stateData.abbreviation === "OK") {
+    return calculateOklahomaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Oregon-specific retirement income tax calculation
+  if (stateData.abbreviation === "OR") {
+    return calculateOregonRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Pennsylvania-specific retirement income tax calculation
+  if (stateData.abbreviation === "PA") {
+    return calculatePennsylvaniaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Rhode Island-specific retirement income tax calculation
+  if (stateData.abbreviation === "RI") {
+    return calculateRhodeIslandRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // South Carolina-specific retirement income tax calculation
+  if (stateData.abbreviation === "SC") {
+    return calculateSouthCarolinaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Utah-specific retirement income tax calculation
+  if (stateData.abbreviation === "UT") {
+    return calculateUtahRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Vermont-specific retirement income tax calculation
+  if (stateData.abbreviation === "VT") {
+    return calculateVermontRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Virginia-specific retirement income tax calculation
+  if (stateData.abbreviation === "VA") {
+    return calculateVirginiaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // West Virginia-specific retirement income tax calculation
+  if (stateData.abbreviation === "WV") {
+    return calculateWestVirginiaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Wisconsin-specific retirement income tax calculation
+  if (stateData.abbreviation === "WI") {
+    return calculateWisconsinRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // District of Columbia-specific retirement income tax calculation
+  if (stateData.abbreviation === "DC") {
+    return calculateDistrictOfColumbiaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
+  // Alabama-specific retirement income tax calculation
+  if (stateData.abbreviation === "AL") {
+    return calculateAlabamaRetirementTax(
+      stateData,
+      socialSecurityIncome,
+      privatePensionIncome,
+      publicPensionIncome,
+      iraDistributions,
+      filingStatus,
+      age,
+      userInputs
+    );
+  }
+
   let taxableRetirementIncome = 0
 
   // Add Social Security income if taxed
@@ -657,19 +844,6 @@ function calculateRetirementTax(
   // Add IRA/401k distributions if taxed
   if (stateData.retirementIncome?.iraDistributionsTaxed) {
     let taxableIra = iraDistributions
-    // Alabama-specific: apply $12,000 exemption per person 65+ for IRA/401k
-    if (
-      stateData.abbreviation === "AL" &&
-      stateData.retirementIncome?.iraAnd401kExemption &&
-      age >= (stateData.retirementIncome.iraAnd401kExemptionAgeRequirement || 65)
-    ) {
-      // Determine exemption amount based on filing status
-      let exemption = stateData.retirementIncome.iraAnd401kExemption
-      if (filingStatus.toLowerCase().includes("married")) {
-        exemption *= 2 // $24,000 for married
-      }
-      taxableIra = Math.max(0, taxableIra - exemption)
-    }
     taxableRetirementIncome += taxableIra
   }
 
@@ -1625,20 +1799,20 @@ function calculateCaliforniaSeniorCredit(userInputs: UserTaxInputs, totalTaxBurd
     return 0;
   }
 
-  // Calculate California AGI (simplified - using total income as proxy)
-  const californiaAGI = 
-    userInputs.annualIncome +
-    userInputs.investmentIncome +
-    userInputs.rentalIncome +
-    userInputs.royaltyIncome +
-    userInputs.trustIncome +
-    userInputs.privatePensionIncome +
-    userInputs.teacherPension +
-    userInputs.policePension +
-    userInputs.firefighterPension +
-    userInputs.otherGovernmentPension +
-    userInputs.iraDistributions +
-    userInputs.militaryRetirementPay;
+  // Calculate California AGI (simplified – using total income as proxy)
+  const californiaAGI =
+    (Number(userInputs.annualIncome) || 0) +
+    (Number(userInputs.investmentIncome) || 0) +
+    (Number(userInputs.rentalIncome) || 0) +
+    (Number(userInputs.royaltyIncome) || 0) +
+    (Number(userInputs.trustIncome) || 0) +
+    (Number(userInputs.privatePensionIncome) || 0) +
+    (Number(userInputs.teacherPension) || 0) +
+    (Number(userInputs.policePension) || 0) +
+    (Number(userInputs.firefighterPension) || 0) +
+    (Number(userInputs.otherGovernmentPension) || 0) +
+    (Number(userInputs.iraDistributions) || 0) +
+    (Number(userInputs.militaryRetirementPay) || 0);
 
   // Maximum credit amount for 2024 (indexed for inflation)
   const maxCredit = 1748;
@@ -1677,6 +1851,131 @@ function calculateCaliforniaSeniorCredit(userInputs: UserTaxInputs, totalTaxBurd
 // Estimate property tax based on home value
 function estimatePropertyTax(stateData: StateTaxData, homeValue: number): number {
   return homeValue * (stateData.propertyTax?.averageEffectiveRate / 100 || 0)
+}
+
+// Alabama-specific property tax calculation with homestead exemption
+function calculateAlabamaPropertyTax(
+  stateData: StateTaxData, 
+  homeValue: number, 
+  userInputs: UserTaxInputs
+): number {
+  console.log("ALABAMA PROPERTY TAX DEBUG:", {
+    homeValue,
+    homesteadType: userInputs.alHomesteadExemptionType,
+    isDisabled: userInputs.alIsDisabled,
+    isPrimaryResidence: userInputs.alIsPrimaryResidence,
+    propertyAcres: userInputs.alPropertyAcres,
+    age: userInputs.age,
+    filingStatus: userInputs.filingStatus
+  });
+
+  // Check eligibility for homestead exemption
+  const isEligible = 
+    userInputs.alIsPrimaryResidence === true && 
+    (userInputs.alPropertyAcres || 0) <= 160;
+
+  if (!isEligible) {
+    console.log("Alabama: Not eligible for homestead exemption - using standard calculation");
+    return homeValue * (stateData.propertyTax?.averageEffectiveRate / 100 || 0);
+  }
+
+  // Calculate AGI for exemption type determination
+  const alAGI = 
+    (userInputs.annualIncome || 0) +
+    (userInputs.investmentIncome || 0) +
+    (userInputs.rentalIncome || 0) +
+    (userInputs.royaltyIncome || 0) +
+    (userInputs.trustIncome || 0) +
+    (userInputs.privatePensionIncome || 0) +
+    (userInputs.teacherPension || 0) +
+    (userInputs.policePension || 0) +
+    (userInputs.firefighterPension || 0) +
+    (userInputs.otherGovernmentPension || 0) +
+    (userInputs.militaryRetirementPay || 0) +
+    (userInputs.iraDistributions || 0) +
+    (userInputs.k401Distributions || 0) +
+    (userInputs.annuityIncome || 0);
+
+  // Determine exemption type if not provided
+  let exemptionType = userInputs.alHomesteadExemptionType;
+  if (!exemptionType) {
+    const age = userInputs.age || 0;
+    const isDisabled = userInputs.alIsDisabled || false;
+    
+    if (age >= 65) {
+      if (isDisabled || alAGI <= 12000) {
+        exemptionType = 'H-3'; // 100% exemption
+      } else {
+        exemptionType = 'H-2'; // Full state exemption, $5,000 county
+      }
+    } else {
+      exemptionType = 'H-1'; // Standard exemption
+    }
+  }
+
+  // Apply homestead exemption based on type
+  let stateExemption = 0;
+  let countyExemption = 0;
+
+  switch (exemptionType) {
+    case 'H-1': // Standard (under 65, not disabled)
+      stateExemption = 4000;
+      countyExemption = 2000;
+      console.log("Alabama: H-1 exemption - $4,000 state, $2,000 county");
+      break;
+      
+    case 'H-2': // Seniors 65+ with AGI ≥ $12,000
+      stateExemption = homeValue; // Full state exemption (no cap)
+      countyExemption = 5000;
+      console.log("Alabama: H-2 exemption - Full state, $5,000 county");
+      break;
+      
+    case 'H-3': // Seniors 65+ with AGI ≤ $12,000 OR permanently disabled
+      stateExemption = homeValue; // 100% state exemption
+      countyExemption = homeValue; // 100% county exemption
+      console.log("Alabama: H-3 exemption - 100% state and county");
+      break;
+      
+    case 'H-4': // Seniors 65+ with AGI > $12,000 (alternative to H-2)
+      stateExemption = homeValue; // Full state exemption
+      countyExemption = 2000;
+      console.log("Alabama: H-4 exemption - Full state, $2,000 county");
+      break;
+      
+    default:
+      console.log("Alabama: No valid exemption type, using standard calculation");
+      return homeValue * (stateData.propertyTax?.averageEffectiveRate / 100 || 0);
+  }
+
+  // Calculate taxable value after exemptions
+  const stateTaxableValue = Math.max(0, homeValue - stateExemption);
+  const countyTaxableValue = Math.max(0, homeValue - countyExemption);
+
+  // Apply tax rates (assuming state and county rates are combined in averageEffectiveRate)
+  // For simplicity, we'll apply the exemption proportionally to the total rate
+  const totalRate = stateData.propertyTax?.averageEffectiveRate / 100 || 0;
+  
+  // Assume 60% state, 40% county split (this may need adjustment based on actual Alabama rates)
+  const stateRate = totalRate * 0.6;
+  const countyRate = totalRate * 0.4;
+  
+  const stateTax = stateTaxableValue * stateRate;
+  const countyTax = countyTaxableValue * countyRate;
+  const totalTax = stateTax + countyTax;
+
+  console.log("Alabama property tax calculation:", {
+    homeValue,
+    exemptionType,
+    stateExemption,
+    countyExemption,
+    stateTaxableValue,
+    countyTaxableValue,
+    stateTax,
+    countyTax,
+    totalTax
+  });
+
+  return totalTax;
 }
 
 // Helper function to calculate category-specific sales tax
@@ -2152,11 +2451,1105 @@ function calculateOhioRetirementTax(
   return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
 }
 
+// Oklahoma-specific retirement income tax calculation
+function calculateOklahomaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security is NOT taxed
+  // Military retirement is NOT taxed
+  // Public pensions (teacher, police, fire, civil service) exempt up to $10,000 per person
+  // Private pensions, IRA, 401k, annuities exempt up to $10,000 per person if age 65+
+  // Amounts above exemption are taxed at state income tax rates
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const spouseAge = userInputs?.spouseAge;
+  let exemptionPerPerson = 10000;
+  let publicPension =
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0);
+  let privatePension = privatePensionIncome;
+  let ira401k = iraDistributions + (userInputs?.k401Distributions || 0) + (userInputs?.annuityIncome || 0);
+  let militaryRetirement = userInputs?.militaryRetirementPay || 0;
+
+  // Exempt all military retirement
+  // Exempt all Social Security
+
+  // Public pension exemption
+  let publicPensionExemption = exemptionPerPerson;
+  let privatePensionExemption = 0;
+  if (isMarried && spouseAge !== undefined) {
+    publicPensionExemption *= 2;
+  }
+  let taxablePublicPension = Math.max(0, publicPension - publicPensionExemption);
+
+  // Private pension/IRA/401k/annuities exemption (only if age 65+ per person)
+  let eligiblePrivateExemption = 0;
+  if (age >= 65) eligiblePrivateExemption += exemptionPerPerson;
+  if (isMarried && spouseAge !== undefined && spouseAge >= 65) eligiblePrivateExemption += exemptionPerPerson;
+  privatePensionExemption = eligiblePrivateExemption;
+  let totalPrivate = privatePension + ira401k;
+  let taxablePrivate = Math.max(0, totalPrivate - privatePensionExemption);
+
+  // Taxable retirement income is taxablePublicPension + taxablePrivate
+  let taxableRetirementIncome = taxablePublicPension + taxablePrivate;
+
+  // Tax at Oklahoma income tax rates
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Oregon-specific retirement income tax calculation
+function calculateOregonRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security and Railroad Retirement are NOT taxed
+  // All pensions and retirement plan distributions are taxed as ordinary income
+  // Exception: Federal-service pensions pre-Oct 1991 may qualify for subtraction (not implemented)
+
+  // Sum all taxable retirement income (exclude Social Security)
+  let taxableRetirementIncome = 0;
+  taxableRetirementIncome += privatePensionIncome;
+  taxableRetirementIncome += publicPensionIncome;
+  taxableRetirementIncome += iraDistributions;
+  taxableRetirementIncome += (userInputs?.k401Distributions || 0);
+  taxableRetirementIncome += (userInputs?.annuityIncome || 0);
+  taxableRetirementIncome += (userInputs?.teacherPension || 0);
+  taxableRetirementIncome += (userInputs?.policePension || 0);
+  taxableRetirementIncome += (userInputs?.firefighterPension || 0);
+  taxableRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  taxableRetirementIncome += (userInputs?.militaryRetirementPay || 0);
+
+  // TODO: Federal-service pension subtraction for pre-Oct 1991 service (not implemented)
+
+  // Calculate base tax
+  let baseTax = calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+
+  // Oregon Retirement Income Credit (official logic)
+  let credit = 0;
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const base = isMarried ? 15000 : 7500;
+  const householdIncomeLimit = isMarried ? 30000 : 15000;
+
+  // Calculate household income (exclude all Social Security)
+  const householdIncome =
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    taxableRetirementIncome;
+
+  // Social Security (taxable + nontaxable)
+  const socialSecurity = (userInputs?.socialSecurityIncome || 0);
+
+  // Reduce base by Social Security and by excess household income
+  let reducedBase = base - socialSecurity;
+  if (householdIncome > householdIncomeLimit) {
+    reducedBase -= (householdIncome - householdIncomeLimit);
+  }
+  reducedBase = Math.max(0, reducedBase);
+
+  // Credit is 9% of the lesser of (a) total retirement income, or (b) reduced base
+  credit = 0.09 * Math.min(taxableRetirementIncome, reducedBase);
+
+  // Final tax after credit, but credit cannot exceed tax liability
+  return Math.max(0, baseTax - Math.min(baseTax, credit));
+}
+
+// Pennsylvania-specific retirement income tax calculation
+function calculatePennsylvaniaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security and Railroad Retirement are NOT taxed
+  // All public and private pension income, 401(k), and IRA distributions are fully exempt for age 60+
+  // Distributions before age 59.5 are taxable
+  // Military retirement and disability pay are always fully exempt
+
+  // If age >= 60, all retirement income is exempt
+  if (age >= 60) {
+    return 0;
+  }
+
+  // If under 59.5, distributions are taxable (except military/disability)
+  let taxableRetirementIncome = 0;
+
+  // Only count distributions if under 59.5
+  if (age < 59.5) {
+    // Pensions and retirement accounts (private, public, IRA, 401k, etc.)
+    taxableRetirementIncome += privatePensionIncome;
+    taxableRetirementIncome += publicPensionIncome;
+    taxableRetirementIncome += iraDistributions;
+    taxableRetirementIncome += (userInputs?.k401Distributions || 0);
+    taxableRetirementIncome += (userInputs?.annuityIncome || 0);
+    taxableRetirementIncome += (userInputs?.teacherPension || 0);
+    taxableRetirementIncome += (userInputs?.policePension || 0);
+    taxableRetirementIncome += (userInputs?.firefighterPension || 0);
+    taxableRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  }
+
+  // Military retirement and disability pay are always exempt
+  // (Do not add userInputs?.militaryRetirementPay or any disability pay fields)
+
+  // PA has a flat income tax rate, but retirement income is not subject to it if age 60+
+  // Use state income tax brackets for any taxable amount (should be rare)
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Rhode Island-specific retirement income tax calculation
+function calculateRhodeIslandRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security is taxable unless AGI is below threshold and at full retirement age
+  // Pension & Annuity Subtraction: If at full retirement age and AGI is below threshold, exclude up to $20,000 ($40,000 joint) of qualifying pension/annuity income
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  // AGI thresholds for Social Security exemption
+  const ssAgiLimit = isMarried ? 126250 : 101000;
+  // AGI thresholds for pension/annuity subtraction
+  const pensionAgiLimit = isMarried ? 130250 : 104200;
+  // Pension/annuity subtraction amount
+  const pensionSubtraction = isMarried ? 40000 : 20000;
+
+  // Calculate federal AGI (approximate: sum all income except Social Security)
+  const federalAGI =
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    (userInputs?.privatePensionIncome || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0) +
+    (userInputs?.iraDistributions || 0);
+
+  // Social Security taxation
+  let taxableSocialSecurity = socialSecurityIncome;
+  // Assume full retirement age is 67 (SSA-defined, could be improved with user input)
+  const fullRetirementAge = 67;
+  if (age >= fullRetirementAge && federalAGI <= ssAgiLimit) {
+    taxableSocialSecurity = 0;
+  }
+
+  // Qualifying pension/annuity income for subtraction (public/private pensions, 401k, 403b, annuities, military retirement)
+  let qualifyingPension =
+    (userInputs?.privatePensionIncome || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0);
+  // IRAs, SEP/SIMPLE, and Social Security are NOT included in the subtraction
+
+  // Apply pension/annuity subtraction if eligible
+  let pensionExclusion = 0;
+  if (age >= fullRetirementAge && federalAGI <= pensionAgiLimit) {
+    pensionExclusion = Math.min(qualifyingPension, pensionSubtraction);
+  }
+
+  // Taxable retirement income
+  let taxableRetirementIncome = 0;
+  // Add taxable Social Security
+  taxableRetirementIncome += taxableSocialSecurity;
+  // Add all pension/annuity/IRA/SEP/SIMPLE/other distributions
+  // (subtract pensionExclusion from qualifying pension/annuity income)
+  taxableRetirementIncome += Math.max(0, qualifyingPension - pensionExclusion);
+  // Add IRA/SEP/SIMPLE distributions (not eligible for subtraction)
+  taxableRetirementIncome += (userInputs?.iraDistributions || 0);
+
+  // Calculate tax using RI income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// South Carolina-specific retirement income tax calculation
+function calculateSouthCarolinaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security and Railroad Retirement are NOT taxed
+  // Military retirement pay is 100% exempt
+  // Retirement Income Deduction: Under 65, deduct up to $3,000; 65+, up to $10,000 per person
+  // Age 65+ Special Deduction: Additional $15,000, reduced by retirement deduction already claimed (max $15,000 per person)
+  // Expanded Pension Deduction: Full deduction of all police, fire, and teacher pension income for eligible first responders/teachers
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const spouseAge = userInputs?.spouseAge;
+
+  // Exclude Social Security and Railroad Retirement
+  // (Assume all socialSecurityIncome is exempt)
+
+  // Exclude all military retirement pay
+  const militaryRetirement = userInputs?.militaryRetirementPay || 0;
+
+  // Expanded Pension Deduction for first responders/teachers (assume eligible if any present)
+  const teacherPension = userInputs?.teacherPension || 0;
+  const policePension = userInputs?.policePension || 0;
+  const firefighterPension = userInputs?.firefighterPension || 0;
+  const totalFirstResponderPension = teacherPension + policePension + firefighterPension;
+  let firstResponderDeduction = totalFirstResponderPension;
+
+  // Standard retirement income (private, public, IRA, 401k, annuities, other gov)
+  let otherRetirementIncome =
+    (privatePensionIncome || 0) +
+    (publicPensionIncome || 0) +
+    (iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0) +
+    (userInputs?.otherGovernmentPension || 0);
+
+  // Remove first responder/teacher pension from otherRetirementIncome (so it's not double-counted)
+  otherRetirementIncome -= totalFirstResponderPension;
+  otherRetirementIncome = Math.max(0, otherRetirementIncome);
+
+  // Retirement Income Deduction
+  let retirementDeduction = 0;
+  let specialDeduction = 0;
+  if (age >= 65) {
+    retirementDeduction = 10000;
+    // Age 65+ Special Deduction: $15,000 minus any retirement deduction already claimed
+    specialDeduction = 15000 - retirementDeduction;
+    if (specialDeduction < 0) specialDeduction = 0;
+    // For married, double both deductions if spouse is 65+
+    if (isMarried && spouseAge && spouseAge >= 65) {
+      retirementDeduction += 10000;
+      specialDeduction += 15000 - 10000;
+    }
+  } else {
+    retirementDeduction = 3000;
+    // For married, double deduction if spouse is also under 65
+    if (isMarried && spouseAge && spouseAge < 65) {
+      retirementDeduction += 3000;
+    }
+  }
+
+  // Total deduction for standard retirement income (cannot exceed income)
+  let totalRetirementDeduction = Math.min(otherRetirementIncome, retirementDeduction + specialDeduction);
+
+  // Taxable retirement income: otherRetirementIncome minus deduction, plus any IRA/401k/annuity not covered, plus any first responder/teacher pension not covered by deduction (should be zero if eligible)
+  let taxableRetirementIncome = Math.max(0, otherRetirementIncome - totalRetirementDeduction);
+  // First responder/teacher pension is fully deductible if eligible
+  taxableRetirementIncome += Math.max(0, totalFirstResponderPension - firstResponderDeduction);
+  // Military retirement is fully exempt (not included)
+
+  // Calculate tax using SC income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Utah-specific retirement income tax calculation
+function calculateUtahRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("UTAH RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const spouseAge = userInputs?.spouseAge;
+
+  // Calculate Utah AGI (simplified - using total income as proxy)
+  const utahAGI = 
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    socialSecurityIncome +
+    privatePensionIncome +
+    publicPensionIncome +
+    (userInputs?.iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.annuityIncome || 0);
+
+  // 1. Social Security is fully taxable in Utah
+  let taxableSocialSecurity = socialSecurityIncome;
+
+  // 2. Calculate Social Security Benefits Credit
+  let socialSecurityCredit = 0;
+  if (socialSecurityIncome > 0) {
+    // Calculate the Utah tax on Social Security benefits
+    const socialSecurityTax = calculateIncomeTax(socialSecurityIncome, stateData.incomeTax.brackets, filingStatus);
+    
+    // Determine AGI thresholds for credit
+    const agiThreshold = isMarried ? 75000 : 45000;
+    const phaseOutThreshold = isMarried ? 95000 : 55000;
+    
+    if (utahAGI <= agiThreshold) {
+      // Full credit up to the amount of Utah tax on Social Security
+      socialSecurityCredit = socialSecurityTax;
+      console.log("Utah: Full Social Security credit applied:", socialSecurityCredit);
+    } else if (utahAGI <= phaseOutThreshold) {
+      // Credit phases out at 2.5 cents per dollar above threshold
+      const excess = utahAGI - agiThreshold;
+      const phaseOutReduction = excess * 0.025;
+      socialSecurityCredit = Math.max(0, socialSecurityTax - phaseOutReduction);
+      console.log("Utah: Partial Social Security credit applied:", socialSecurityCredit, "phase-out reduction:", phaseOutReduction);
+    } else {
+      // Credit fully phased out
+      socialSecurityCredit = 0;
+      console.log("Utah: Social Security credit fully phased out");
+    }
+  }
+
+  // 3. Calculate total retirement income (excluding Social Security for now)
+  let totalRetirementIncome = 0;
+  totalRetirementIncome += privatePensionIncome;
+  totalRetirementIncome += publicPensionIncome;
+  totalRetirementIncome += (userInputs?.teacherPension || 0);
+  totalRetirementIncome += (userInputs?.policePension || 0);
+  totalRetirementIncome += (userInputs?.firefighterPension || 0);
+  totalRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  totalRetirementIncome += (userInputs?.iraDistributions || 0);
+  totalRetirementIncome += (userInputs?.k401Distributions || 0);
+  totalRetirementIncome += (userInputs?.annuityIncome || 0);
+  totalRetirementIncome += (userInputs?.militaryRetirementPay || 0);
+
+  // 4. Calculate Retirement Income Credit
+  let retirementIncomeCredit = 0;
+  if (totalRetirementIncome > 0) {
+    // Determine income limits for retirement income credit
+    let incomeLimit = 0;
+    if (filingStatus.toLowerCase().includes("separate")) {
+      incomeLimit = 25000; // Married filing separately
+    } else if (isMarried) {
+      incomeLimit = 50000; // Married filing jointly
+    } else {
+      incomeLimit = 30000; // Single
+    }
+
+    if (utahAGI <= incomeLimit) {
+      // Calculate credit: up to $450 per person (max $900 joint)
+      let creditPerPerson = 450;
+      let totalCredit = creditPerPerson;
+      
+      if (isMarried && spouseAge !== undefined) {
+        totalCredit = creditPerPerson * 2; // $900 for married couples
+      }
+      
+      retirementIncomeCredit = Math.min(totalCredit, totalRetirementIncome * 0.0455); // Cap at Utah tax rate
+      console.log("Utah: Retirement income credit applied:", retirementIncomeCredit);
+    } else {
+      console.log("Utah: AGI exceeds limit for retirement income credit");
+    }
+  }
+
+  // 5. Calculate Military Retirement Credit
+  let militaryRetirementCredit = 0;
+  const militaryRetirement = userInputs?.militaryRetirementPay || 0;
+  if (militaryRetirement > 0) {
+    // Military retirement credit = taxable military retirement × 4.55%
+    militaryRetirementCredit = militaryRetirement * 0.0455;
+    console.log("Utah: Military retirement credit calculated:", militaryRetirementCredit);
+  }
+
+  // 6. Calculate total taxable retirement income
+  let taxableRetirementIncome = 0;
+  
+  // All retirement income is taxable at 4.55%
+  taxableRetirementIncome += socialSecurityIncome; // Social Security is taxable
+  taxableRetirementIncome += totalRetirementIncome; // All other retirement income
+
+  // 7. Calculate base tax on retirement income
+  const baseRetirementTax = calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+
+  // 8. Apply credits (choose the most beneficial)
+  // Note: You cannot claim both Social Security credit and Retirement Income credit
+  // For military retirement, you cannot claim both Social Security/military credit with Retirement Income credit
+  // TODO: double check UT military and social security
+  let totalCredits = 0;
+  
+  if (militaryRetirement > 0) {
+    // If military retirement present, use military credit + Social Security credit (if applicable)
+    totalCredits = militaryRetirementCredit + socialSecurityCredit;
+    console.log("Utah: Using military credit + Social Security credit:", totalCredits);
+  } else if (socialSecurityIncome > 0 && totalRetirementIncome > 0) {
+    // If both Social Security and other retirement income, choose the more beneficial credit
+    const socialSecurityOption = socialSecurityCredit;
+    const retirementIncomeOption = retirementIncomeCredit;
+    
+    if (socialSecurityOption > retirementIncomeOption) {
+      totalCredits = socialSecurityOption;
+      console.log("Utah: Using Social Security credit (more beneficial):", totalCredits);
+    } else {
+      totalCredits = retirementIncomeOption;
+      console.log("Utah: Using Retirement Income credit (more beneficial):", totalCredits);
+    }
+  } else if (socialSecurityIncome > 0) {
+    // Only Social Security income
+    totalCredits = socialSecurityCredit;
+    console.log("Utah: Using Social Security credit only:", totalCredits);
+  } else if (totalRetirementIncome > 0) {
+    // Only other retirement income
+    totalCredits = retirementIncomeCredit;
+    console.log("Utah: Using Retirement Income credit only:", totalCredits);
+  }
+
+  // 9. Calculate final tax
+  const finalTax = Math.max(0, baseRetirementTax - totalCredits);
+
+  console.log("Utah retirement tax calculation:", {
+    utahAGI,
+    socialSecurityIncome,
+    taxableSocialSecurity,
+    totalRetirementIncome,
+    baseRetirementTax,
+    socialSecurityCredit,
+    retirementIncomeCredit,
+    militaryRetirementCredit,
+    totalCredits,
+    finalTax,
+  });
+
+  return finalTax;
+}
+
+// Vermont-specific retirement income tax calculation
+function calculateVermontRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("VERMONT RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const isMarriedSeparate = filingStatus.toLowerCase().includes("separate");
+  const isHeadOfHousehold = filingStatus.toLowerCase().includes("head");
+
+  // Calculate Vermont AGI (simplified - using total income as proxy)
+  const vermontAGI = 
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    socialSecurityIncome +
+    privatePensionIncome +
+    publicPensionIncome +
+    (userInputs?.iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.annuityIncome || 0);
+
+  // 1. Social Security Taxation with Vermont's tiered exemption system
+  let taxableSocialSecurity = 0;
+  
+  if (socialSecurityIncome > 0) {
+    // First, determine the federally-taxable portion of Social Security
+    // For simplicity, we'll use the full amount, but in practice this would be
+    // the federally-taxable portion from the user's federal return
+    const federallyTaxableSS = socialSecurityIncome; // This should come from federal calculation
+    
+    // Determine AGI thresholds based on filing status
+    let fullExemptionThreshold = 0;
+    let upperBandLimit = 0;
+    let bandWidth = 0;
+    
+    if (isMarried && !isMarriedSeparate) {
+      // Married filing jointly
+      fullExemptionThreshold = 65000;
+      upperBandLimit = 75000;
+      bandWidth = 10000;
+    } else {
+      // Single, Head of Household, or Married Filing Separately
+      fullExemptionThreshold = 50000;
+      upperBandLimit = 60000;
+      bandWidth = 10000;
+    }
+    
+    // Calculate Vermont Social Security exclusion
+    let vermontSSExclusion = 0;
+    
+    if (vermontAGI <= fullExemptionThreshold) {
+      // Full exemption - no Social Security tax
+      vermontSSExclusion = federallyTaxableSS;
+      console.log("Vermont: Full Social Security exemption applied:", vermontSSExclusion);
+    } else if (vermontAGI <= upperBandLimit) {
+      // Phase-out band - partial exclusion using straight-line formula
+      const exclusionRatio = (upperBandLimit - vermontAGI) / bandWidth;
+      vermontSSExclusion = federallyTaxableSS * exclusionRatio;
+      console.log("Vermont: Partial Social Security exclusion applied:", vermontSSExclusion, "ratio:", exclusionRatio);
+    } else {
+      // Above upper band - no exclusion
+      vermontSSExclusion = 0;
+      console.log("Vermont: No Social Security exclusion (AGI above upper band)");
+    }
+    
+    // Calculate taxable Social Security
+    taxableSocialSecurity = Math.max(0, federallyTaxableSS - vermontSSExclusion);
+    console.log("Vermont: Taxable Social Security:", taxableSocialSecurity);
+  }
+
+  // 2. Calculate total retirement income (excluding Social Security for pension deduction)
+  let totalRetirementIncome = 0;
+  totalRetirementIncome += privatePensionIncome;
+  totalRetirementIncome += publicPensionIncome;
+  totalRetirementIncome += (userInputs?.teacherPension || 0);
+  totalRetirementIncome += (userInputs?.policePension || 0);
+  totalRetirementIncome += (userInputs?.firefighterPension || 0);
+  totalRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  totalRetirementIncome += (userInputs?.iraDistributions || 0);
+  totalRetirementIncome += (userInputs?.k401Distributions || 0);
+  totalRetirementIncome += (userInputs?.annuityIncome || 0);
+  totalRetirementIncome += (userInputs?.militaryRetirementPay || 0);
+
+  // 3. Apply $10,000 pension/annuity deduction with AGI-based phase-out
+  let pensionDeduction = 0;
+  if (totalRetirementIncome > 0) {
+    // Determine AGI thresholds for pension deduction (same as Social Security)
+    let fullDeductionThreshold = 0;
+    let upperBandLimit = 0;
+    let bandWidth = 0;
+    
+    if (isMarried && !isMarriedSeparate) {
+      // Married filing jointly
+      fullDeductionThreshold = 65000;
+      upperBandLimit = 75000;
+      bandWidth = 10000;
+    } else {
+      // Single, Head of Household, or Married Filing Separately
+      fullDeductionThreshold = 50000;
+      upperBandLimit = 60000;
+      bandWidth = 10000;
+    }
+    
+    // Calculate pension deduction based on AGI
+    if (vermontAGI <= fullDeductionThreshold) {
+      // Full deduction
+      pensionDeduction = Math.min(10000, totalRetirementIncome);
+      console.log("Vermont: Full pension deduction applied:", pensionDeduction);
+    } else if (vermontAGI <= upperBandLimit) {
+      // Partial deduction using straight-line formula
+      const deductionRatio = (upperBandLimit - vermontAGI) / bandWidth;
+      const maxDeduction = Math.min(10000, totalRetirementIncome);
+      pensionDeduction = maxDeduction * deductionRatio;
+      console.log("Vermont: Partial pension deduction applied:", pensionDeduction, "ratio:", deductionRatio);
+    } else {
+      // No deduction - AGI above upper band
+      pensionDeduction = 0;
+      console.log("Vermont: No pension deduction (AGI above upper band)");
+    }
+  }
+
+  // 4. Calculate taxable retirement income
+  let taxableRetirementIncome = 0;
+  
+  // Add taxable Social Security
+  taxableRetirementIncome += taxableSocialSecurity;
+  
+  // Add other retirement income minus pension deduction
+  taxableRetirementIncome += Math.max(0, totalRetirementIncome - pensionDeduction);
+
+  console.log("Vermont retirement tax calculation:", {
+    vermontAGI,
+    socialSecurityIncome,
+    taxableSocialSecurity,
+    totalRetirementIncome,
+    pensionDeduction,
+    taxableRetirementIncome,
+  });
+
+  // 5. Calculate tax using Vermont income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Virginia-specific retirement income tax calculation
+function calculateVirginiaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("VIRGINIA RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  // 1. Social Security & Tier 1 Railroad: fully exempt
+  // If any portion was taxed federally, subtract it from VA taxable income
+  // For now, assume all Social Security is exempt
+  const taxableSocialSecurity = 0;
+
+  // 2. Calculate AGI (sum of all income fields)
+  const vaAGI =
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    (userInputs?.privatePensionIncome || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0);
+
+  // 3. Military retirement subtraction
+  const militaryRetirement = userInputs?.militaryRetirementPay || 0;
+  const militarySubtraction = Math.min(40000, militaryRetirement);
+
+  // 4. Pensions/IRAs/401k/Annuities: taxable, but age-based deduction
+  // Determine birth year (assume current year is 2024)
+  const birthYear = 2024 - age;
+  let ageDeduction = 0;
+  let deductionPhaseout = 0;
+  let deductionLimit = 0;
+  let phaseoutThreshold = 0;
+  let isMarried = filingStatus.toLowerCase().includes("married");
+
+  if (birthYear <= 1939) {
+    // Born Jan 1, 1939 or earlier: flat $12,000 deduction
+    ageDeduction = 12000;
+  } else if (birthYear > 1939 && birthYear <= 1960 && age >= 65) {
+    // Born Jan 2, 1939–Jan 1, 1960: up to $12,000, phased out if AGI > $50k/$75k
+    ageDeduction = 12000;
+    phaseoutThreshold = isMarried ? 75000 : 50000;
+    if (vaAGI > phaseoutThreshold) {
+      deductionPhaseout = vaAGI - phaseoutThreshold;
+      ageDeduction = Math.max(0, ageDeduction - deductionPhaseout);
+    }
+  }
+  // If not 65+ or not in birth year range, no deduction
+
+  // 5. Calculate total retirement income (excluding Social Security)
+  let totalRetirementIncome = 0;
+  totalRetirementIncome += privatePensionIncome;
+  totalRetirementIncome += publicPensionIncome;
+  totalRetirementIncome += (userInputs?.teacherPension || 0);
+  totalRetirementIncome += (userInputs?.policePension || 0);
+  totalRetirementIncome += (userInputs?.firefighterPension || 0);
+  totalRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  totalRetirementIncome += (userInputs?.iraDistributions || 0);
+  totalRetirementIncome += (userInputs?.k401Distributions || 0);
+  totalRetirementIncome += (userInputs?.annuityIncome || 0);
+  // Subtract military retirement (handled separately)
+  totalRetirementIncome -= militaryRetirement;
+  totalRetirementIncome = Math.max(0, totalRetirementIncome);
+
+  // 6. Apply age-based deduction (cannot exceed total retirement income)
+  const ageDeductionApplied = Math.min(ageDeduction, totalRetirementIncome);
+
+  // 7. Calculate taxable retirement income
+  let taxableRetirementIncome = 0;
+  taxableRetirementIncome += totalRetirementIncome - ageDeductionApplied;
+  // Add back military retirement minus $40,000 subtraction
+  taxableRetirementIncome += Math.max(0, militaryRetirement - militarySubtraction);
+
+  // 8. Calculate tax using Virginia income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// West Virginia-specific retirement income tax calculation
+function calculateWestVirginiaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("WEST VIRGINIA RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  // 1. Calculate AGI (sum of all income fields)
+  const wvAGI =
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    (userInputs?.privatePensionIncome || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0);
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+  const spouseAge = userInputs?.spouseAge;
+  const currentYear = 2024;
+
+  // 2. Social Security Exemption
+  let taxableSocialSecurity = socialSecurityIncome;
+  // NOTE: currentYear is 2024. For 2025/2026, update this logic accordingly.
+  if (currentYear >= 2026) {
+    // 100% exempt
+    taxableSocialSecurity = 0;
+  } else {
+    // Before 2025: 100% exempt if AGI ≤ $50k (single) or $100k (joint)
+    const agiLimit = isMarried ? 100000 : 50000;
+    if (wvAGI <= agiLimit) {
+      taxableSocialSecurity = 0;
+    }
+    // else: taxed as ordinary income
+    // For 2025: 65% exempt for all (add this logic when currentYear === 2025)
+  }
+
+  // 3. Public-Sector & Military Retirement: fully exempt
+  const exemptPublicPension =
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0);
+  // Federal pension plans (civil service, etc.) assumed included in otherGovernmentPension
+
+  // 4. Calculate total retirement income (excluding fully exempt public/military/teacher/firefighter/police/federal pensions)
+  let totalRetirementIncome = 0;
+  totalRetirementIncome += privatePensionIncome;
+  totalRetirementIncome += publicPensionIncome;
+  totalRetirementIncome += (userInputs?.iraDistributions || 0);
+  totalRetirementIncome += (userInputs?.k401Distributions || 0);
+  totalRetirementIncome += (userInputs?.annuityIncome || 0);
+  // Subtract fully exempt public/military/teacher/firefighter/police/federal pensions
+  totalRetirementIncome -= exemptPublicPension;
+  totalRetirementIncome = Math.max(0, totalRetirementIncome);
+
+  // 5. Pension/IRA/Annuity deduction if 65+
+  let pensionDeduction = 0;
+  if (age >= 65) {
+    pensionDeduction += 8000;
+    if (isMarried && spouseAge && spouseAge >= 65) {
+      pensionDeduction += 8000; // $16,000 for married couple both 65+
+    }
+  }
+  pensionDeduction = Math.min(pensionDeduction, totalRetirementIncome);
+
+  // 6. Calculate taxable retirement income
+  let taxableRetirementIncome = 0;
+  taxableRetirementIncome += taxableSocialSecurity;
+  taxableRetirementIncome += Math.max(0, totalRetirementIncome - pensionDeduction);
+
+  console.log("WV retirement tax calculation:", {
+    wvAGI,
+    socialSecurityIncome,
+    taxableSocialSecurity,
+    exemptPublicPension,
+    totalRetirementIncome,
+    pensionDeduction,
+    taxableRetirementIncome,
+  });
+
+  // 7. Calculate tax using WV income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Wisconsin-specific retirement income tax calculation
+function calculateWisconsinRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("WISCONSIN RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  // 1. Social Security & Railroad Retirement: fully exempt
+  const taxableSocialSecurity = 0;
+
+  // 2. Calculate AGI (sum of all income fields)
+  const wiAGI =
+    (userInputs?.annualIncome || 0) +
+    (userInputs?.investmentIncome || 0) +
+    (userInputs?.rentalIncome || 0) +
+    (userInputs?.royaltyIncome || 0) +
+    (userInputs?.trustIncome || 0) +
+    (userInputs?.privatePensionIncome || 0) +
+    (userInputs?.teacherPension || 0) +
+    (userInputs?.policePension || 0) +
+    (userInputs?.firefighterPension || 0) +
+    (userInputs?.otherGovernmentPension || 0) +
+    (userInputs?.militaryRetirementPay || 0) +
+    (userInputs?.iraDistributions || 0) +
+    (userInputs?.k401Distributions || 0) +
+    (userInputs?.annuityIncome || 0);
+
+  const isMarried = filingStatus.toLowerCase().includes("married");
+
+  // 3. Exemptions for certain pensions
+  // Pre-1964 WI public pensions (not tracked in userInputs, so not exempted here unless fields are added)
+  // Military retirement pay and federal civil service (CSRS) benefits are fully exempt
+  const exemptPension = (userInputs?.militaryRetirementPay || 0) + (userInputs?.otherGovernmentPension || 0); // Assume CSRS included in otherGovernmentPension
+
+  // 4. Calculate total retirement income (excluding fully exempt pensions)
+  let totalRetirementIncome = 0;
+  totalRetirementIncome += privatePensionIncome;
+  totalRetirementIncome += publicPensionIncome;
+  totalRetirementIncome += (userInputs?.teacherPension || 0);
+  totalRetirementIncome += (userInputs?.policePension || 0);
+  totalRetirementIncome += (userInputs?.firefighterPension || 0);
+  totalRetirementIncome += (userInputs?.iraDistributions || 0);
+  totalRetirementIncome += (userInputs?.k401Distributions || 0);
+  totalRetirementIncome += (userInputs?.annuityIncome || 0);
+  // Subtract fully exempt pensions
+  totalRetirementIncome -= exemptPension;
+  totalRetirementIncome = Math.max(0, totalRetirementIncome);
+
+  // 5. Age-based retirement income subtraction
+  let ageSubtraction = 0;
+  if (age >= 65) {
+    if (!isMarried && wiAGI < 15000) {
+      ageSubtraction = Math.min(5000, totalRetirementIncome);
+    } else if (isMarried && wiAGI < 30000) {
+      ageSubtraction = Math.min(5000, totalRetirementIncome);
+    }
+  }
+
+  // 6. Calculate taxable retirement income
+  let taxableRetirementIncome = 0;
+  taxableRetirementIncome += taxableSocialSecurity;
+  taxableRetirementIncome += Math.max(0, totalRetirementIncome - ageSubtraction);
+
+  console.log("WI retirement tax calculation:", {
+    wiAGI,
+    socialSecurityIncome,
+    taxableSocialSecurity,
+    exemptPension,
+    totalRetirementIncome,
+    ageSubtraction,
+    taxableRetirementIncome,
+  });
+
+  // 7. Calculate tax using WI income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// District of Columbia-specific retirement income tax calculation
+function calculateDistrictOfColumbiaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  // Social Security and Tier 1 Railroad are fully exempt
+  const taxableSocialSecurity = 0;
+
+  // Military retirement exclusion: up to $3,000 for age 62+
+  let militaryRetirement = userInputs?.militaryRetirementPay || 0;
+  let militaryExclusion = 0;
+  if (age >= 62 && militaryRetirement > 0) {
+    militaryExclusion = Math.min(3000, militaryRetirement);
+  }
+  const taxableMilitaryRetirement = Math.max(0, militaryRetirement - militaryExclusion);
+
+  // In-state public pension exclusion: up to $3,000 for age 65+
+  // We'll treat all publicPensionIncome as in-state for now
+  let publicPensionExclusion = 0;
+  if (age >= 65 && publicPensionIncome > 0) {
+    publicPensionExclusion = Math.min(3000, publicPensionIncome);
+  }
+  const taxablePublicPension = Math.max(0, publicPensionIncome - publicPensionExclusion);
+
+  // All other retirement income is fully taxable
+  let taxableRetirementIncome = 0;
+  taxableRetirementIncome += privatePensionIncome;
+  taxableRetirementIncome += taxablePublicPension;
+  taxableRetirementIncome += iraDistributions;
+  taxableRetirementIncome += taxableMilitaryRetirement;
+  taxableRetirementIncome += (userInputs?.teacherPension || 0);
+  taxableRetirementIncome += (userInputs?.policePension || 0);
+  taxableRetirementIncome += (userInputs?.firefighterPension || 0);
+  taxableRetirementIncome += (userInputs?.otherGovernmentPension || 0);
+  taxableRetirementIncome += (userInputs?.k401Distributions || 0);
+  taxableRetirementIncome += (userInputs?.annuityIncome || 0);
+  // Do NOT add Social Security
+
+  // Calculate tax using DC income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Alabama-specific retirement income tax calculation
+function calculateAlabamaRetirementTax(
+  stateData: StateTaxData,
+  socialSecurityIncome: number,
+  privatePensionIncome: number,
+  publicPensionIncome: number,
+  iraDistributions: number,
+  filingStatus: string,
+  age: number,
+  userInputs?: UserTaxInputs,
+): number {
+  console.log("ALABAMA RETIREMENT TAX DEBUG:", {
+    socialSecurityIncome,
+    privatePensionIncome,
+    publicPensionIncome,
+    iraDistributions,
+    filingStatus,
+    age,
+    userInputs,
+  });
+
+  let taxableRetirementIncome = 0;
+
+  // Social Security is NOT taxed in Alabama
+  const taxableSocialSecurity = 0;
+
+  // Private pension income is taxable
+  taxableRetirementIncome += privatePensionIncome;
+
+  // Specific public pensions are EXEMPT:
+  // - Alabama Teachers' Retirement System
+  // - Alabama Employees' Retirement System  
+  // - Alabama Judicial Retirement
+  // - Federal CSRS
+  // - Railroad Retirement
+  // - Peace Officer & Firefighter pensions
+  // 
+  // For now, we'll exempt all public pension income since we don't have specific fields
+  // to distinguish between exempt and non-exempt public pensions
+  console.log("Alabama: Public pension income exempt:", publicPensionIncome);
+  console.log("Alabama: Teacher/police/firefighter pensions exempt:", 
+    (userInputs?.teacherPension || 0) + 
+    (userInputs?.policePension || 0) + 
+    (userInputs?.firefighterPension || 0));
+  console.log("Alabama: Other government pension exempt:", userInputs?.otherGovernmentPension || 0);
+
+  // IRA/401k distributions are taxable with $12,000 exemption per person 65+
+  let taxableIra = iraDistributions;
+  if (age >= 65) {
+    let exemption = 12000; // $12,000 per person
+    if (filingStatus.toLowerCase().includes("married")) {
+      exemption *= 2; // $24,000 for married
+    }
+    taxableIra = Math.max(0, taxableIra - exemption);
+    console.log("Alabama: IRA exemption applied:", exemption, "taxable IRA:", taxableIra);
+  }
+  taxableRetirementIncome += taxableIra;
+
+  // Military retirement is taxable (no special exemption in Alabama)
+  taxableRetirementIncome += (userInputs?.militaryRetirementPay || 0);
+
+  console.log("Alabama retirement tax calculation:", {
+    taxableSocialSecurity,
+    privatePensionIncome,
+    publicPensionIncome,
+    taxableIra,
+    militaryRetirement: userInputs?.militaryRetirementPay || 0,
+    taxableRetirementIncome,
+  });
+
+  // Calculate tax using Alabama income tax brackets
+  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
 // Main function to calculate tax burden for a specific state
 export async function calculateStateTaxBurden(
   stateCode: string,
   userInputs: UserTaxInputs,
-): Promise<TaxCalculationResult> {
+): Promise<TaxCalculationResult & { nhInterestDividendsTax?: number }> {
   console.log("STATE TAX BURDEN CALCULATION STARTED", stateCode, userInputs);
 
   try {
@@ -2175,40 +3568,102 @@ export async function calculateStateTaxBurden(
     // Get number of dependents (convert from string to number)
     const numDependents = Number.parseInt(userInputs.dependents) || 0
 
-    // Special case: New Hampshire interest & dividends tax
+    // --- NH: Calculate interest & dividends tax as a separate field ---
+    let nhInterestDividendsTax = 0;
     if (stateCode === "NH") {
-      const nhTax = calculateNewHampshireInterestDividendsTax(stateData, userInputs);
-      return {
-        stateCode,
-        stateName: stateData.name || "New Hampshire",
-        totalTaxBurden: nhTax,
-        incomeTaxBurden: 0,
-        retirementTaxBurden: 0,
-        propertyTaxBurden: 0,
-        salesTaxBurden: 0,
-        vehicleTaxBurden: 0,
-        estimatedAnnualSavings: 0,
-        costOfLivingIndex: stateData.costOfLivingIndex || 100,
-        lifestyleMatch: checkLifestyleMatch(stateData, userInputs.preferredLifestyle),
-        regionMatch: checkRegionMatch(stateCode, userInputs.regionPreference),
-      }
+      nhInterestDividendsTax = calculateNewHampshireInterestDividendsTax(stateData, userInputs);
     }
 
     // Calculate total income
-    const totalIncome =
-      userInputs.annualIncome +
-      userInputs.investmentIncome +
-      userInputs.rentalIncome +
-      userInputs.royaltyIncome +
-      userInputs.trustIncome
+    const shortTermGains = Number(userInputs.shortTermCapitalGains) || 0;
+    let longTermGains = Number(userInputs.longTermCapitalGains) || 0;
 
-    console.log(`Total income: ${totalIncome}`)
+    // Apply state-specific long-term capital gains rules
+    if (stateCode === "AZ") {
+      // Arizona: 25% subtraction for long-term capital gains from assets acquired after 2012
+      longTermGains = longTermGains * 0.75;
+    } else if (stateCode === "MT") {
+      // Montana: 50% deduction on net long-term capital gains
+      longTermGains = longTermGains * 0.5;
+    } else if (stateCode === "ND") {
+      // North Dakota: 40% exclusion on net long-term capital gains
+      longTermGains = longTermGains * 0.6;
+    } else if (stateCode === "WI") {
+      // Wisconsin: 30% exclusion on net long-term capital gains
+      longTermGains = longTermGains * 0.7;
+    }
+
+    // Net self-employment income after expenses
+    const netSelfEmploymentIncome = Math.max(
+      0,
+      (userInputs.selfEmploymentIncome || 0) - (userInputs.selfEmploymentExpenses || 0)
+    );
+
+    const totalIncome =
+      (userInputs.annualIncome || 0) +
+      netSelfEmploymentIncome +
+      (userInputs.rentalIncome || 0) +
+      (userInputs.interestIncome || 0) +
+      (userInputs.dividendsIncome || 0) +
+      shortTermGains +
+      longTermGains +
+      (userInputs.unemploymentIncome || 0) +
+      (userInputs.gamblingWinnings || 0)
+      // ...other income sources as needed
+      ;
+
+    // For alimony, apply deduction if Alabama and pre-2019 divorce:
+    let alimonyDeduction = 0
+    if (
+      stateCode === "AL" &&
+      userInputs.alAlimonyPaid &&
+      userInputs.alAlimonyPaid > 0 &&
+      userInputs.alDivorceDate &&
+      new Date(userInputs.alDivorceDate) < new Date("2019-01-01")
+    ) {
+      alimonyDeduction = userInputs.alAlimonyPaid
+    }
+    const adjustedIncome = totalIncome - alimonyDeduction
+
+    console.log(`Total income: ${adjustedIncome}`)
+
+    // Apply state standard deduction (supports flat or bracketed values)
+    let stdDeduction = getStandardDeductionForState(
+      stateData as any,
+      userInputs.filingStatus,
+      adjustedIncome,
+    )
+
+    // Arizona: additional standard deduction for age 65+
+    if (stateCode === "AZ") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+
+      let azAdditional = 0
+      if (filingKey === "married") {
+        // $1,600 per spouse 65+
+        if (taxpayerIs65Plus) azAdditional += 1600
+        if (spouseIs65Plus) azAdditional += 1600
+      } else if (filingKey === "marriedSeparate") {
+        // $1,600 if the filer is 65+
+        if (taxpayerIs65Plus) azAdditional += 1600
+      } else {
+        // single or headOfHousehold: $2,000 if 65+
+        if (taxpayerIs65Plus) azAdditional += 2000
+      }
+
+      stdDeduction += azAdditional
+    }
+
+    const incomeAfterStdDeduction = Math.max(0, adjustedIncome - stdDeduction)
 
     // Calculate income tax
     let incomeTaxBurden = 0
     if (stateData.incomeTax && stateData.incomeTax.hasIncomeTax) {
+      // Use standard income tax calculation for all states with income AFTER std deduction
       incomeTaxBurden = calculateIncomeTax(
-        totalIncome,
+        incomeAfterStdDeduction,
         stateData.incomeTax.brackets,
         userInputs.filingStatus,
         numDependents,
@@ -2237,7 +3692,11 @@ export async function calculateStateTaxBurden(
 
     // Calculate property tax
     let propertyTaxBurden = 0
-    if (userInputs.futurePlans === "buy") {
+    if (stateCode === userInputs.residenceState && userInputs.propertyTax > 0) {
+      // For the home state, use actual property tax if provided
+      propertyTaxBurden = userInputs.propertyTax
+      console.log(`DEBUG: Using actual property tax for home state: ${propertyTaxBurden}`)
+    } else if (userInputs.futurePlans === "buy") {
       // If planning to buy, estimate based on housing budget (converted to home value)
       // Rough estimate: Annual housing budget * 12 * 15 (assuming 15-year mortgage)
       const estimatedHomeValue = userInputs.housingBudget * 12 * 15
@@ -2246,7 +3705,7 @@ export async function calculateStateTaxBurden(
       // If currently a homeowner, use similar home value for comparison
       propertyTaxBurden = estimatePropertyTax(stateData, userInputs.homeValue)
     }
-    console.log(`Property tax burden: ${propertyTaxBurden}`)
+    console.log(`DEBUG: Property tax burden: ${propertyTaxBurden}`)
 
     // Calculate sales tax using the enhanced function with updated data
     const salesTaxBurden = estimateSalesTax(stateData, userInputs)
@@ -2257,7 +3716,11 @@ export async function calculateStateTaxBurden(
     console.log(`Vehicle tax burden: ${vehicleTaxBurden}`)
 
     // Calculate total tax burden
-    const totalTaxBurden = incomeTaxBurden + retirementTaxBurden + propertyTaxBurden + salesTaxBurden + vehicleTaxBurden
+    let totalTaxBurden = incomeTaxBurden + retirementTaxBurden + propertyTaxBurden + salesTaxBurden + vehicleTaxBurden
+    // Add NH interest & dividends tax if applicable
+    if (stateCode === "NH") {
+      totalTaxBurden += nhInterestDividendsTax;
+    }
     console.log(`Total tax burden: ${totalTaxBurden}`)
 
     // Apply California Senior Head of Household Credit if applicable
@@ -2336,6 +3799,7 @@ export async function calculateStateTaxBurden(
       costOfLivingIndex: stateData.costOfLivingIndex || 100,
       lifestyleMatch,
       regionMatch,
+      nhInterestDividendsTax: stateCode === "NH" ? nhInterestDividendsTax : undefined,
     }
   } catch (error) {
     console.error(`Error calculating tax burden for ${stateCode}:`, error)
@@ -2353,6 +3817,7 @@ export async function calculateStateTaxBurden(
       costOfLivingIndex: 100,
       lifestyleMatch: false,
       regionMatch: false,
+      nhInterestDividendsTax: stateCode === "NH" ? 0 : undefined,
     }
   }
 }
@@ -3116,4 +4581,89 @@ function calculateNebraskaRetirementTax(
 
   // Calculate tax using Nebraska income tax brackets
   return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Alabama-specific income tax calculation with alimony deduction
+function calculateAlabamaIncomeTax(
+  income: number,
+  brackets: FilingStatusBrackets | StateTaxBracket[],
+  filingStatus: string,
+  dependents: number,
+  userInputs: UserTaxInputs
+): number {
+  console.log("ALABAMA INCOME TAX DEBUG:", {
+    income,
+    filingStatus,
+    dependents,
+    alimonyPaid: userInputs.alAlimonyPaid,
+    divorceDate: userInputs.alDivorceDate,
+    isAlimonyRecipient: userInputs.alIsAlimonyRecipient
+  });
+
+  // Calculate Alabama AGI (same as federal AGI for alimony purposes)
+  let alabamaAGI = income;
+
+  // Apply alimony deduction if eligible
+  let alimonyDeduction = 0;
+  if (userInputs.alAlimonyPaid && userInputs.alAlimonyPaid > 0) {
+    // Check if divorce agreement was before December 31, 2018
+    if (userInputs.alDivorceDate) {
+      const divorceDate = new Date(userInputs.alDivorceDate);
+      const cutoffDate = new Date('2018-12-31');
+      
+      if (divorceDate <= cutoffDate) {
+        // Pre-2019 agreement: alimony is deductible
+        alimonyDeduction = userInputs.alAlimonyPaid;
+        console.log("Alabama: Pre-2019 divorce agreement, alimony deduction applied:", alimonyDeduction);
+      } else {
+        // Post-2018 agreement: alimony is NOT deductible
+        console.log("Alabama: Post-2018 divorce agreement, no alimony deduction allowed");
+      }
+    } else {
+      // No divorce date provided, assume pre-2019 for deduction
+      alimonyDeduction = userInputs.alAlimonyPaid;
+      console.log("Alabama: No divorce date provided, assuming pre-2019 and applying alimony deduction:", alimonyDeduction);
+    }
+  }
+
+  // Calculate taxable income after alimony deduction
+  const taxableIncome = Math.max(0, alabamaAGI - alimonyDeduction);
+
+  console.log("Alabama income tax calculation:", {
+    originalIncome: income,
+    alimonyDeduction,
+    taxableIncome,
+    divorceDate: userInputs.alDivorceDate
+  });
+
+  // Calculate tax using standard income tax function
+  return calculateIncomeTax(taxableIncome, brackets, filingStatus, dependents);
+}
+
+// Add below the imports at the top of the file
+type StandardDeductionBracket = { agiMin: number; agiMax: number | null; deduction: number };
+
+function normalizeFilingStatus(fs: string): 'single' | 'married' | 'headOfHousehold' | 'marriedSeparate' {
+  const s = (fs || '').toLowerCase().replace(/\s+/g, '');
+  if (s.includes('married') && (s.includes('separate') || s.includes('sep'))) return 'marriedSeparate';
+  if (s.includes('married')) return 'married';
+  if (s.includes('head') || s.includes('hoh')) return 'headOfHousehold';
+  return 'single';
+}
+
+function resolveStandardDeduction(std: number | StandardDeductionBracket[] | undefined, agi: number): number {
+  if (!std) return 0;
+  if (typeof std === 'number') return std || 0;
+  for (const b of std) {
+    const min = b.agiMin ?? 0;
+    const max = b.agiMax == null ? Number.POSITIVE_INFINITY : b.agiMax;
+    if (agi >= min && agi <= max) return b.deduction || 0;
+  }
+  return 0;
+}
+
+export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
+  const key = normalizeFilingStatus(filingStatus);
+  const std = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  return resolveStandardDeduction(std, agi);
 }

@@ -75,8 +75,13 @@ export interface UserTaxInputs {
   preferredLifestyle: string
   regionPreference: string
   dependents: string // Add dependents field
+  age: number // Add this
+  spouseAge?: number // Add this
   annualIncome: number
   retirementIncome: number
+  interestIncome?: number // Add this
+  dividendsIncome?: number // Add this
+  k401Distributions: number // Add this
   socialSecurityIncome: number
   privatePensionIncome: number
   teacherPension: number
@@ -90,7 +95,7 @@ export interface UserTaxInputs {
   royaltyIncome: number
   trustIncome: number
   homeValue: number
-  currentPropertyTax: number
+  propertyTax: number
   monthlyRent: number
   futurePlans: string
   housingBudget: number
@@ -109,6 +114,11 @@ export interface UserTaxInputs {
   digitalGoods?: number
   medicine?: number
   streamingSubscriptions?: number
+  // Additional fields that might be needed
+  privatePensionEmployeeContributionPortion?: string // Add this
+  kyMilitaryRetiredBefore1998?: boolean // Add this
+  kyTeacherPoliceFirePre1998Percent?: number // Add this
+  ncBaileyExemption?: boolean // Add this
 }
 
 export interface TaxCalculationResult {
@@ -385,6 +395,50 @@ function estimateSalesTax(stateData: StateTaxData, userInputs: UserTaxInputs): n
   return totalSalesTax
 }
 
+// Add near top (below imports) — same helpers as main calculator
+type StandardDeductionBracket = { agiMin: number; agiMax: number | null; deduction: number };
+
+function normalizeFilingStatus(fs: string): 'single' | 'married' | 'headOfHousehold' | 'marriedSeparate' {
+  const s = (fs || '').toLowerCase().replace(/\s+/g, '');
+  if (s.includes('married') && (s.includes('separate') || s.includes('sep'))) return 'marriedSeparate';
+  if (s.includes('married')) return 'married';
+  if (s.includes('head') || s.includes('hoh')) return 'headOfHousehold';
+  return 'single';
+}
+
+function resolveStandardDeduction(std: number | StandardDeductionBracket[] | undefined, agi: number): number {
+  if (!std) return 0;
+  if (typeof std === 'number') return std || 0;
+  for (const b of std) {
+    const min = b.agiMin ?? 0;
+    const max = b.agiMax == null ? Number.POSITIVE_INFINITY : b.agiMax;
+    if (agi >= min && agi <= max) {
+      console.log('DEBUG: Matched STD bracket', { agi, bracket: b });
+      return b.deduction || 0;
+    }
+  }
+  return 0;
+}
+
+export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
+  const key = normalizeFilingStatus(filingStatus);
+  const std = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const amount = resolveStandardDeduction(std, agi);
+
+  console.log(
+    `DEBUG: Standard deduction lookup`,
+    {
+      state: stateData?.abbreviation || stateData?.name,
+      filingStatus: key,
+      agi,
+      type: Array.isArray(std) ? 'brackets' : 'flat',
+      amount
+    }
+  );
+
+  return amount;
+}
+
 // Main function to calculate tax burden for a specific state
 export async function calculateStateTaxBurden(
   stateCode: string,
@@ -418,12 +472,40 @@ export async function calculateStateTaxBurden(
 
     console.log(`DEBUG: Total income: ${totalIncome}`)
 
+    // Apply state standard deduction (supports flat or bracketed values like AL)
+    let stdDeduction = getStandardDeductionForState(stateData as any, userInputs.filingStatus, totalIncome)
+
+    // Arizona: additional standard deduction for age 65+
+    if (stateCode === "AZ") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+
+      let azAdditional = 0
+      if (filingKey === "married") {
+        if (taxpayerIs65Plus) azAdditional += 1600
+        if (spouseIs65Plus) azAdditional += 1600
+      } else if (filingKey === "marriedSeparate") {
+        if (taxpayerIs65Plus) azAdditional += 1600
+      } else {
+        if (taxpayerIs65Plus) azAdditional += 2000
+      }
+
+      console.log('DEBUG: AZ additional standard deduction for age 65+/blind:', azAdditional)
+      stdDeduction += azAdditional
+    }
+
+    const incomeAfterStdDeduction = Math.max(0, totalIncome - stdDeduction)
+
+    console.log(`DEBUG: Standard deduction applied (incl. any AZ additions): ${stdDeduction}`)
+    console.log(`DEBUG: Income after standard deduction: ${incomeAfterStdDeduction}`)
+
     // Calculate income tax
     let incomeTaxBurden = 0
     if (stateData.incomeTax && stateData.incomeTax.hasIncomeTax) {
       console.log(`DEBUG: State has income tax, calculating...`)
       incomeTaxBurden = calculateIncomeTax(
-        totalIncome,
+        incomeAfterStdDeduction,
         stateData.incomeTax.brackets,
         userInputs.filingStatus,
         numDependents,

@@ -46,7 +46,14 @@
       "pensionsTaxed": false,
       "iraDistributionsTaxed": false,
       "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "retirementIncomeExemptionAgeRequirement": 0,
+      "interestAndDividendsTaxed": true,
+      "interestAndDividendsThreshold": {
+        "single": 2400,
+        "married": 4800
+      },
+      "interestAndDividendsRate": 2,
+      "interestAndDividendsPhaseOutYear": 2027
     },
     "vehicleTax": {
       "rate": 0,
@@ -166,10 +173,17 @@
     },
     "retirementIncome": {
       "socialSecurityTaxed": false,
-      "pensionsTaxed": false,
-      "iraDistributionsTaxed": false,
-      "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "railroadRetirementTaxed": false,
+      "publicPensionsTaxed": true,
+      "baileyExemption": true,
+      "baileyExemptionDescription": "For NC state/local plans, you had 5+ years of service by Aug 12, 1989",
+      "privatePensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "k401DistributionsTaxed": true,
+      "flatTaxRate2024": 0.045,
+      "flatTaxRate2025": 0.0425,
+      "flatTaxRate2027": 0.0399,
+      "notes": "Social Security and railroad retirement are fully exempt. Public pensions are exempt if Bailey-exempt; otherwise, taxable. Private pensions, IRAs, 401k, and annuities are fully taxable at the flat NC rate. Bailey exemption applies only to NC state/local plans with 5+ years of service by Aug 12, 1989."
     },
     "vehicleTax": {
       "rate": 0,
@@ -269,10 +283,13 @@
     },
     "retirementIncome": {
       "socialSecurityTaxed": false,
-      "pensionsTaxed": false,
-      "iraDistributionsTaxed": false,
-      "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "militaryRetirementTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "k401DistributionsTaxed": true,
+      "peaceOfficerPensionExclusion": true,
+      "peaceOfficerPensionExclusionDescription": "Licensed peace officers (police/firefighters) with 20+ years of service or job disability can fully exclude those pension benefits (from 2023)",
+      "notes": "Social Security and military retirement are fully exempt. All other retirement income is fully taxable. Peace officer/firefighter pension exclusion: TODO for user input/logic."
     },
     "vehicleTax": {
       "rate": 0,
@@ -638,7 +655,14 @@
       "pensionsTaxed": false,
       "iraDistributionsTaxed": false,
       "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "retirementIncomeExemptionAgeRequirement": 0,
+      "interestAndDividendsTaxed": true,
+      "interestAndDividendsThreshold": {
+        "single": 2400,
+        "married": 4800
+      },
+      "interestAndDividendsRate": 2,
+      "interestAndDividendsPhaseOutYear": 2027
     },
     "vehicleTax": {
       "rate": 0,
@@ -738,10 +762,16 @@
     },
     "retirementIncome": {
       "socialSecurityTaxed": false,
-      "pensionsTaxed": false,
-      "iraDistributionsTaxed": false,
-      "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "militaryRetirementTaxed": false,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "retirementIncomeExclusion": { "single": 75000, "married": 100000, "marriedSeparate": 50000 },
+      "retirementIncomeExclusionAgiLimit": 150000,
+      "retirementIncomeExclusionPhaseoutStart": 100000,
+      "retirementIncomeExclusionAge": 62,
+      "retirementIncomeExclusionDisability": true,
+      "retirementIncomeExclusionTypes": ["pensions", "ira", "k401", "annuity", "keogh", "sep"],
+      "notes": "Social Security, Railroad, and Military pensions are fully exempt. Exclusion applies to other retirement income for 62+ or disabled, phased out from $100k to $150k AGI."
     },
     "vehicleTax": {
       "rate": 0,
@@ -970,11 +1000,28 @@
       "lastUpdated": "2025-05-19T14:29:16.723Z"
     },
     "retirementIncome": {
-      "socialSecurityTaxed": false,
-      "pensionsTaxed": false,
-      "iraDistributionsTaxed": false,
-      "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "socialSecurityTaxed": true,
+      "socialSecurityExemption65Plus": true,
+      "socialSecurityExemption65PlusAgiSingle": 100000,
+      "socialSecurityExemption65PlusAgiMarried": 150000,
+      "socialSecurityDeductionUnder65": 2500,
+      "socialSecurityDeductionUnder65AgiSingle": 36667,
+      "socialSecurityDeductionUnder65AgiMarried": 55000,
+      "socialSecurityDeduction65Plus": 8000,
+      "socialSecurityDeduction65PlusAgiSingle": 28500,
+      "socialSecurityDeduction65PlusAgiMarried": 51000,
+      "retirementIncomeDeductionUnder65": 2500,
+      "retirementIncomeDeductionUnder65AgiSingle": 36667,
+      "retirementIncomeDeductionUnder65AgiMarried": 55000,
+      "retirementIncomeDeduction65Plus": 8000,
+      "retirementIncomeDeduction65PlusAgiSingle": 28500,
+      "retirementIncomeDeduction65PlusAgiMarried": 51000,
+      "militaryRetirementExemption": 30000,
+      "pensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "k401DistributionsTaxed": true,
+      "sb114NonSocialSecurityCoveredPension": true,
+      "notes": "Social Security mostly exempt for 65+ if AGI ≤ $100k/$150k. Retirement income deduction $2,500 (under 65) or $8,000 (65+) if AGI within limits. Military retirement exempt up to $30,000. SB114 for non-SS-covered public pensions: TODO."
     },
     "vehicleTax": {
       "rate": 0,
@@ -1236,9 +1283,9 @@
   "NY": {
     "abbreviation": "NY",
     "salesTax": {
-      "stateRate": 0.04,
-      "averageLocalRate": 4.52,
-      "combinedRate": 4.56,
+      "stateRate": 0.06625,
+      "averageLocalRate": 0,
+      "combinedRate": 0.06625,
       "categories": {
         "groceries": {
           "taxable": false,
@@ -1246,11 +1293,11 @@
         },
         "preparedFood": {
           "taxable": true,
-          "rate": 0.0852
+          "rate": 0.0663
         },
         "utilities": {
           "taxable": true,
-          "rate": 0.04
+          "rate": 0.0663
         },
         "services": {
           "taxable": false,
@@ -1258,29 +1305,33 @@
         },
         "digitalGoods": {
           "taxable": true,
-          "rate": 0.0852
+          "rate": 0.0663
         },
         "medicine": {
           "taxable": false,
-          "rate": 0.04
+          "rate": 0.0663
         },
         "streamingSubscriptions": {
           "taxable": true,
-          "rate": 0.0852
+          "rate": 0.0663
         }
       }
     },
     "propertyTax": {
-      "averageEffectiveRate": 1.31,
+      "averageEffectiveRate": 2.23,
       "hasPropertyTax": true,
       "lastUpdated": "2025-05-19T14:29:16.723Z"
     },
     "retirementIncome": {
       "socialSecurityTaxed": false,
-      "pensionsTaxed": false,
-      "iraDistributionsTaxed": false,
-      "retirementIncomeExemption": 0,
-      "retirementIncomeExemptionAgeRequirement": 0
+      "publicPensionsTaxed": false,
+      "privatePensionsTaxed": true,
+      "iraDistributionsTaxed": true,
+      "k401DistributionsTaxed": true,
+      "pensionAnnuitySubtraction": 20000,
+      "pensionAnnuitySubtractionAge": 59.5,
+      "pensionAnnuitySubtractionJoint": 40000,
+      "notes": "Social Security and public (government) pensions are fully exempt. Private pensions, IRAs, 401k, and annuities: up to $20,000 per person (or $40,000 joint) subtraction if age 59½+, remainder taxed at NY rates."
     },
     "vehicleTax": {
       "rate": 0,
@@ -1295,189 +1346,159 @@
         "single": [
           {
             "min": 0,
-            "max": 15000,
-            "rate": 0
+            "max": 20000,
+            "rate": 1.4
           },
           {
-            "min": 15001,
-            "max": 23500,
-            "rate": 4.5
+            "min": 20001,
+            "max": 35000,
+            "rate": 1.75
           },
           {
-            "min": 23501,
-            "max": 26700,
-            "rate": 5.25
+            "min": 35001,
+            "max": 40000,
+            "rate": 3.5
           },
           {
-            "min": 26701,
-            "max": 28900,
-            "rate": 5.5
+            "min": 40001,
+            "max": 75000,
+            "rate": 5.525
           },
           {
-            "min": 28901,
-            "max": 95650,
-            "rate": 6
+            "min": 75001,
+            "max": 500000,
+            "rate": 6.37
           },
           {
-            "min": 95651,
-            "max": 230400,
-            "rate": 6.85
+            "min": 500001,
+            "max": 1000000,
+            "rate": 8.97
           },
           {
-            "min": 230401,
-            "max": 1092550,
-            "rate": 9.65
-          },
-          {
-            "min": 1092551,
-            "max": 5000000,
-            "rate": 10.3
-          },
-          {
-            "min": 5000001,
+            "min": 1000001,
             "max": null,
-            "rate": 10.9
+            "rate": 10.75
           }
         ],
         "married": [
           {
             "min": 0,
-            "max": 24000,
-            "rate": 0
+            "max": 20000,
+            "rate": 1.4
           },
           {
-            "min": 24001,
-            "max": 41150,
-            "rate": 4.5
+            "min": 20001,
+            "max": 50000,
+            "rate": 1.75
           },
           {
-            "min": 41151,
-            "max": 47600,
-            "rate": 5.25
+            "min": 50001,
+            "max": 70000,
+            "rate": 2.45
           },
           {
-            "min": 47601,
-            "max": 51900,
-            "rate": 5.5
+            "min": 70001,
+            "max": 80000,
+            "rate": 3.5
           },
           {
-            "min": 51901,
-            "max": 185550,
-            "rate": 6
+            "min": 80001,
+            "max": 150000,
+            "rate": 5.525
           },
           {
-            "min": 185551,
-            "max": 454800,
-            "rate": 6.85
+            "min": 150001,
+            "max": 500000,
+            "rate": 6.37
           },
           {
-            "min": 454801,
-            "max": 2179350,
-            "rate": 9.65
+            "min": 500001,
+            "max": 1000000,
+            "rate": 8.97
           },
           {
-            "min": 2179351,
-            "max": 5000000,
-            "rate": 10.3
-          },
-          {
-            "min": 5000001,
+            "min": 1000001,
             "max": null,
-            "rate": 10.9
+            "rate": 10.75
           }
         ],
         "headOfHousehold": [
           {
             "min": 0,
-            "max": 15000,
-            "rate": 0
+            "max": 20000,
+            "rate": 1.4
           },
           {
-            "min": 15001,
-            "max": 23500,
-            "rate": 4.5
+            "min": 20001,
+            "max": 50000,
+            "rate": 1.75
           },
           {
-            "min": 23501,
-            "max": 26700,
-            "rate": 5.25
+            "min": 50001,
+            "max": 70000,
+            "rate": 2.45
           },
           {
-            "min": 26701,
-            "max": 28900,
-            "rate": 5.5
+            "min": 70001,
+            "max": 80000,
+            "rate": 3.5
           },
           {
-            "min": 28901,
-            "max": 95650,
-            "rate": 6
+            "min": 80001,
+            "max": 150000,
+            "rate": 5.525
           },
           {
-            "min": 95651,
-            "max": 230400,
-            "rate": 6.85
+            "min": 150001,
+            "max": 500000,
+            "rate": 6.37
           },
           {
-            "min": 230401,
-            "max": 1092550,
-            "rate": 9.65
+            "min": 500001,
+            "max": 1000000,
+            "rate": 8.97
           },
           {
-            "min": 1092551,
-            "max": 5000000,
-            "rate": 10.3
-          },
-          {
-            "min": 5000001,
+            "min": 1000001,
             "max": null,
-            "rate": 10.9
+            "rate": 10.75
           }
         ],
         "marriedSeparate": [
           {
             "min": 0,
-            "max": 12000,
-            "rate": 0
+            "max": 20000,
+            "rate": 1.4
           },
           {
-            "min": 12001,
-            "max": 20500,
-            "rate": 4.5
+            "min": 20001,
+            "max": 35000,
+            "rate": 1.75
           },
           {
-            "min": 20501,
-            "max": 23700,
-            "rate": 5.25
+            "min": 35001,
+            "max": 40000,
+            "rate": 3.5
           },
           {
-            "min": 23701,
-            "max": 25900,
-            "rate": 5.5
+            "min": 40001,
+            "max": 75000,
+            "rate": 5.525
           },
           {
-            "min": 25901,
-            "max": 92650,
-            "rate": 6
+            "min": 75001,
+            "max": 500000,
+            "rate": 6.37
           },
           {
-            "min": 92651,
-            "max": 227400,
-            "rate": 6.85
+            "min": 500001,
+            "max": 1000000,
+            "rate": 8.97
           },
           {
-            "min": 227401,
-            "max": 1089550,
-            "rate": 9.65
-          },
-          {
-            "min": 1089551,
-            "max": 5000000,
-            "rate": 10.3
-          },
-          {
-            "min": 5000001,
+            "min": 1000001,
             "max": null,
-            "rate": 10.9
+            "rate": 10.75
           }
         ]
       },
@@ -2522,7 +2543,7 @@
           }
         ]
       },
-      "hasIncomeTax": true,
+      "hasIncomeTax": false,
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
@@ -2625,7 +2646,7 @@
           }
         ]
       },
-      "hasIncomeTax": true,
+      "hasIncomeTax": false,
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
@@ -2728,7 +2749,7 @@
           }
         ]
       },
-      "hasIncomeTax": true,
+      "hasIncomeTax": false,
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
