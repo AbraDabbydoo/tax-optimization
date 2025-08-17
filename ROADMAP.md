@@ -315,8 +315,8 @@ This roadmap is designed to be flexible. You can:
 The AGI calculation utility (see [lib/utils.ts](lib/utils.ts)) currently does not collect the following IRS "above-the-line" adjustments or income inputs. These should be added to the user input flow in future updates:
 
 ### Missing AGI Inputs/Adjustments
-- Educator expenses
-- Moving expenses for military
+- [x] Educator expenses
+- [x] Moving expenses for military
 - Self-employment tax deduction (50%)
 - Self-employed health insurance deduction
 - Penalty on early withdrawal of savings

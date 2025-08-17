@@ -7,13 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function CreditsDeductionsPage() {
   const [selfEmploymentExpenses, setSelfEmploymentExpenses] = useState("");
   const [k401Contributions, setK401Contributions] = useState("");
   const [hsaContributions, setHsaContributions] = useState("");
   const [iraContributions, setIraContributions] = useState("");
+  const [educatorExpenses, setEducatorExpenses] = useState("");
+  const [militaryMovingExpenses, setMilitaryMovingExpenses] = useState("");
   const [error, setError] = useState("");
+  const [isSelfEmployed, setIsSelfEmployed] = useState(false);
+  const [selfEmployedHealthInsurance, setSelfEmployedHealthInsurance] = useState("");
 
   // Load saved data
   useEffect(() => {
@@ -25,6 +31,10 @@ export default function CreditsDeductionsPage() {
         setK401Contributions(parsed.k401Contributions || "");
         setHsaContributions(parsed.hsaContributions || "");
         setIraContributions(parsed.iraContributions || "");
+        setEducatorExpenses(parsed.educatorExpenses || "");
+        setMilitaryMovingExpenses(parsed.militaryMovingExpenses || "");
+        setIsSelfEmployed(parsed.isSelfEmployed || false);
+        setSelfEmployedHealthInsurance(parsed.selfEmployedHealthInsurance || "");
       }
     } catch (e) {}
   }, []);
@@ -34,10 +44,19 @@ export default function CreditsDeductionsPage() {
     try {
       localStorage.setItem(
         "taxCalculator_creditsDeductions",
-        JSON.stringify({ selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions })
+        JSON.stringify({
+          selfEmploymentExpenses,
+          k401Contributions,
+          hsaContributions,
+          iraContributions,
+          educatorExpenses,
+          militaryMovingExpenses,
+          isSelfEmployed,
+          selfEmployedHealthInsurance,
+        })
       );
     } catch (e) {}
-  }, [selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions]);
+  }, [selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions, educatorExpenses, militaryMovingExpenses, isSelfEmployed, selfEmployedHealthInsurance]);
 
   const handleContinue = () => {
     setError("");
@@ -79,6 +98,46 @@ export default function CreditsDeductionsPage() {
           <CardDescription>Enter any credits or deductions you want to claim.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="educatorExpenses">Educator Expenses</Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="educatorExpenses"
+                className="pl-9"
+                placeholder="0"
+                value={educatorExpenses ? Number(educatorExpenses.replace(/,/g, "")).toLocaleString() : ""}
+                onChange={e => {
+                  const raw = e.target.value.replace(/,/g, "");
+                  if (/^\d*$/.test(raw)) setEducatorExpenses(raw);
+                }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Qualified expenses paid by eligible educators for classroom materials (max $300).
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="militaryMovingExpenses">Military Moving Expenses</Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="militaryMovingExpenses"
+                className="pl-9"
+                placeholder="0"
+                value={militaryMovingExpenses ? Number(militaryMovingExpenses.replace(/,/g, "")).toLocaleString() : ""}
+                onChange={e => {
+                  const raw = e.target.value.replace(/,/g, "");
+                  if (/^\d*$/.test(raw)) setMilitaryMovingExpenses(raw);
+                }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Moving expenses for active duty military members required to relocate due to military orders.
+            </p>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="selfEmploymentExpenses">Self-Employment Expenses</Label>
             <div className="relative">
@@ -147,6 +206,59 @@ export default function CreditsDeductionsPage() {
             </div>
             <p className="text-xs text-muted-foreground">Annual contributions to an Individual Retirement Account.</p>
           </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="isSelfEmployed"
+                checked={isSelfEmployed}
+                onCheckedChange={setIsSelfEmployed}
+              />
+              <Label htmlFor="isSelfEmployed">I was self-employed during this tax year</Label>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              By selecting this, you attest that you were self-employed and are eligible for the self-employment tax deduction.
+            </p>
+            {isSelfEmployed && (
+              <Alert>
+                <AlertDescription>
+                  Your self-employment tax deduction will be automatically calculated as 50% of your self-employment tax 
+                  (15.3% of your net self-employment income).
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+
+          {isSelfEmployed && (
+            <div className="space-y-2">
+              <Label htmlFor="selfEmployedHealthInsurance">Self-Employed Health Insurance Premiums</Label>
+              <div className="relative">
+                <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="selfEmployedHealthInsurance"
+                  className="pl-9"
+                  placeholder="0"
+                  value={selfEmployedHealthInsurance ? Number(selfEmployedHealthInsurance.replace(/,/g, "")).toLocaleString() : ""}
+                  onChange={e => {
+                    const raw = e.target.value.replace(/,/g, "");
+                    if (/^\d*$/.test(raw)) setSelfEmployedHealthInsurance(raw);
+                  }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Enter total premiums paid for medical, dental, qualified long-term care insurance, and marketplace plans for you, 
+                your spouse, and dependents. Cannot exceed your net self-employment income.
+              </p>
+              <Alert>
+                <AlertDescription>
+                  Eligible if: 
+                  • You have net earnings from self-employment
+                  • Your business shows a net profit
+                  • You were not eligible for employer-subsidized health plans
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
           {error && <p className="text-sm text-red-500">{error}</p>}
         </CardContent>
         <CardFooter className="flex justify-end">
