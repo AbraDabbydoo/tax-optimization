@@ -7,6 +7,7 @@ import {
   type FilingStatusBrackets,
   type SalesTaxCategory,
 } from "./state-tax-data"
+import { calculateConnecticutPersonalExemption } from "./utils"
 
 // Define regions for states
 const stateRegions: Record<string, string> = {
@@ -3633,6 +3634,17 @@ export async function calculateStateTaxBurden(
       userInputs.filingStatus,
       adjustedIncome,
     )
+
+    // Apply Connecticut personal exemption if applicable
+    if (stateCode === "CT") {
+      const ctPersonalExemption = calculateConnecticutPersonalExemption(
+        adjustedIncome,
+        userInputs.filingStatus,
+        stateData
+      );
+      console.log(`Connecticut personal exemption: $${ctPersonalExemption}`);
+      stdDeduction += ctPersonalExemption;
+    }
 
     // Arizona: additional standard deduction for age 65+
     if (stateCode === "AZ") {

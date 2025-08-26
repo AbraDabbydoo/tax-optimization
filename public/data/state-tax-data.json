@@ -92,11 +92,11 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "married": 30000,
-        "marriedSeparate": 15000,
-        "single": 15000,
-        "headOfHousehold": 22500
-      },
+        "married": 0,
+        "marriedSeparate": 0,
+        "single": 0,
+        "headOfHousehold": 0
+              },
       "taxCredits": {
         "childTaxCredit": 0,
         "childCareTaxCredit": 0,
@@ -641,10 +641,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "married": 0,
-        "marriedSeparate": 0,
-        "single": 0,
-        "headOfHousehold": 0
+        "married": 30000,
+        "marriedSeparate": 15000,
+        "single": 15000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -968,7 +968,32 @@
         ]
       },
       "hasIncomeTax": true,
-      "personalExemption": 0,
+      "personalExemption": {
+        "single": {
+          "maxExemption": 15000,
+          "maxExemptionThreshold": 30000,
+          "noExemptionThreshold": 44000,
+          "phaseOutIncrement": 1000
+        },
+        "marriedSeparate": {
+          "maxExemption": 12000,
+          "maxExemptionThreshold": 24000,
+          "noExemptionThreshold": 35000,
+          "phaseOutIncrement": 1000
+        },
+        "headOfHousehold": {
+          "maxExemption": 19000,
+          "maxExemptionThreshold": 38000,
+          "noExemptionThreshold": 56000,
+          "phaseOutIncrement": 1000
+        },
+        "married": {
+          "maxExemption": 24000,
+          "maxExemptionThreshold": 48000,
+          "noExemptionThreshold": 71000,
+          "phaseOutIncrement": 1000
+        }
+      },
       "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,

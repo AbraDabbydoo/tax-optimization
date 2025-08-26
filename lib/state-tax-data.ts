@@ -94,22 +94,33 @@ async function loadStateTaxData(): Promise<StateTaxDataRecord> {
     
     // Check if we're running on the server or client
     if (typeof window === 'undefined') {
-      // Server-side: use file system path
+      // Server-side: prefer updated files with fallback to legacy paths
       const fs = require('fs');
       const path = require('path');
       
+      const updatedPath1 = path.join(process.cwd(), 'public', 'updated-tax-data', 'state-tax-data-updated.json');
+      const updatedPath2 = path.join(process.cwd(), 'public', 'updated-tax-data', 'state-tax-data-2-updated.json');
       const dataPath1 = path.join(process.cwd(), 'public', 'data', 'state-tax-data.json');
       const dataPath2 = path.join(process.cwd(), 'public', 'data', 'state-tax-data-2.json');
       
-      data1 = JSON.parse(fs.readFileSync(dataPath1, 'utf8'));
-      data2 = JSON.parse(fs.readFileSync(dataPath2, 'utf8'));
-    } else {
-      // Client-side: use fetch
-      const response1 = await fetch("/data/state-tax-data.json");
-      data1 = await response1.json();
+      const file1 = fs.existsSync(updatedPath1) ? updatedPath1 : dataPath1;
+      const file2 = fs.existsSync(updatedPath2) ? updatedPath2 : dataPath2;
       
-      const response2 = await fetch("/data/state-tax-data-2.json");
-      data2 = await response2.json();
+      data1 = JSON.parse(fs.readFileSync(file1, 'utf8'));
+      data2 = JSON.parse(fs.readFileSync(file2, 'utf8'));
+    } else {
+      // Client-side: prefer updated files with fallback to legacy paths
+      async function fetchWithFallback(primary: string, fallback: string) {
+        try {
+          const r = await fetch(primary);
+          if (r && r.ok) return await r.json();
+        } catch (_) {}
+        const r2 = await fetch(fallback);
+        return await r2.json();
+      }
+      
+      data1 = await fetchWithFallback('/updated-tax-data/state-tax-data-updated.json', '/data/state-tax-data.json');
+      data2 = await fetchWithFallback('/updated-tax-data/state-tax-data-2-updated.json', '/data/state-tax-data-2.json');
     }
 
     // Combine the data

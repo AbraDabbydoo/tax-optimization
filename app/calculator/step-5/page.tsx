@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function CreditsDeductionsPage() {
@@ -20,6 +21,13 @@ export default function CreditsDeductionsPage() {
   const [error, setError] = useState("");
   const [isSelfEmployed, setIsSelfEmployed] = useState(false);
   const [selfEmployedHealthInsurance, setSelfEmployedHealthInsurance] = useState("");
+  const [hasEarlyWithdrawal, setHasEarlyWithdrawal] = useState(false);
+  const [earlyWithdrawalAmount, setEarlyWithdrawalAmount] = useState("");
+  const [hasStudentLoan, setHasStudentLoan] = useState(false);
+  const [studentLoanInterest, setStudentLoanInterest] = useState("");
+  const [hasEducationCredits, setHasEducationCredits] = useState("no");
+  const [educationCreditType, setEducationCreditType] = useState("");
+  const [educationExpenses, setEducationExpenses] = useState("");
 
   // Load saved data
   useEffect(() => {
@@ -35,6 +43,13 @@ export default function CreditsDeductionsPage() {
         setMilitaryMovingExpenses(parsed.militaryMovingExpenses || "");
         setIsSelfEmployed(parsed.isSelfEmployed || false);
         setSelfEmployedHealthInsurance(parsed.selfEmployedHealthInsurance || "");
+        setHasEarlyWithdrawal(parsed.hasEarlyWithdrawal || false);
+        setEarlyWithdrawalAmount(parsed.earlyWithdrawalAmount || "");
+        setHasStudentLoan(parsed.hasStudentLoan || false);
+        setStudentLoanInterest(parsed.studentLoanInterest || "");
+        setHasEducationCredits(parsed.hasEducationCredits || "no");
+        setEducationCreditType(parsed.educationCreditType || "");
+        setEducationExpenses(parsed.educationExpenses || "");
       }
     } catch (e) {}
   }, []);
@@ -53,10 +68,17 @@ export default function CreditsDeductionsPage() {
           militaryMovingExpenses,
           isSelfEmployed,
           selfEmployedHealthInsurance,
+          hasEarlyWithdrawal,
+          earlyWithdrawalAmount,
+          hasStudentLoan,
+          studentLoanInterest,
+          hasEducationCredits,
+          educationCreditType,
+          educationExpenses,
         })
       );
     } catch (e) {}
-  }, [selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions, educatorExpenses, militaryMovingExpenses, isSelfEmployed, selfEmployedHealthInsurance]);
+  }, [selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions, educatorExpenses, militaryMovingExpenses, isSelfEmployed, selfEmployedHealthInsurance, hasEarlyWithdrawal, earlyWithdrawalAmount, hasStudentLoan, studentLoanInterest, hasEducationCredits, educationCreditType, educationExpenses]);
 
   const handleContinue = () => {
     setError("");
@@ -210,6 +232,42 @@ export default function CreditsDeductionsPage() {
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <Switch
+                id="hasEarlyWithdrawal"
+                checked={hasEarlyWithdrawal}
+                onCheckedChange={setHasEarlyWithdrawal}
+              />
+              <Label htmlFor="hasEarlyWithdrawal">I took an early withdrawal from a Traditional IRA/401(k)</Label>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Early withdrawals are generally subject to a 10% penalty if taken before age 59½, unless an exception applies.
+            </p>
+            {hasEarlyWithdrawal && (
+              <>
+                <div className="relative mt-2">
+                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="earlyWithdrawalAmount"
+                    className="pl-9"
+                    placeholder="0"
+                    value={earlyWithdrawalAmount ? Number(earlyWithdrawalAmount.replace(/,/g, "")).toLocaleString() : ""}
+                    onChange={e => {
+                      const raw = e.target.value.replace(/,/g, "");
+                      if (/^\d*$/.test(raw)) setEarlyWithdrawalAmount(raw);
+                    }}
+                  />
+                </div>
+                <Alert>
+                  <AlertDescription>
+                    The withdrawn amount will be added to your Adjusted Gross Income (AGI) and may be subject to a 10% early withdrawal penalty.
+                  </AlertDescription>
+                </Alert>
+              </>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch
                 id="isSelfEmployed"
                 checked={isSelfEmployed}
                 onCheckedChange={setIsSelfEmployed}
@@ -259,6 +317,139 @@ export default function CreditsDeductionsPage() {
               </Alert>
             </div>
           )}
+
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="hasStudentLoan"
+                checked={hasStudentLoan}
+                onCheckedChange={setHasStudentLoan}
+              />
+              <Label htmlFor="hasStudentLoan">I had qualified student loan interest during this tax year</Label>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              You can deduct up to $2,500 of qualified student loan interest you paid during the year, which directly reduces your AGI.
+            </p>
+            {hasStudentLoan && (
+              <>
+                <div className="relative mt-2">
+                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="studentLoanInterest"
+                    className="pl-9"
+                    placeholder="0"
+                    value={studentLoanInterest ? Number(studentLoanInterest.replace(/,/g, "")).toLocaleString() : ""}
+                    onChange={e => {
+                      const raw = e.target.value.replace(/,/g, "");
+                      if (/^\d*$/.test(raw)) setStudentLoanInterest(raw);
+                    }}
+                  />
+                </div>
+                <Alert>
+                  <AlertDescription>
+                    The deduction amount may be reduced or eliminated based on your income level. 
+                    Maximum deduction is $2,500, but it phases out for higher income levels.
+                  </AlertDescription>
+                </Alert>
+              </>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Did you or your dependents qualify for education tax credits during this tax year?</Label>
+            <RadioGroup value={hasEducationCredits} onValueChange={setHasEducationCredits}>
+              <div className="flex items-start space-x-3 rounded-md border p-3">
+                <RadioGroupItem value="yes" id="education-yes" className="mt-1" />
+                <div className="space-y-1">
+                  <Label htmlFor="education-yes" className="font-medium">
+                    Yes
+                  </Label>
+                  <p className="text-sm text-muted-foreground">I qualified for education tax credits</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3 rounded-md border p-3">
+                <RadioGroupItem value="no" id="education-no" className="mt-1" />
+                <div className="space-y-1">
+                  <Label htmlFor="education-no" className="font-medium">
+                    No
+                  </Label>
+                  <p className="text-sm text-muted-foreground">I did not qualify for education tax credits</p>
+                </div>
+              </div>
+            </RadioGroup>
+            <p className="text-xs text-muted-foreground">
+              Education tax credits help offset the cost of higher education expenses for you or your dependents.
+            </p>
+            {hasEducationCredits === "yes" && (
+              <>
+                <div className="space-y-2 mt-4">
+                  <Label>Which education credit did you qualify for?</Label>
+                  <RadioGroup value={educationCreditType} onValueChange={setEducationCreditType}>
+                    <div className="flex items-start space-x-3 rounded-md border p-3">
+                      <RadioGroupItem value="aotc" id="credit-aotc" className="mt-1" />
+                      <div className="space-y-1">
+                        <Label htmlFor="credit-aotc" className="font-medium">
+                          American Opportunity Tax Credit (AOTC)
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          For students in the first 4 years of postsecondary education. Up to $2,500 credit, 40% refundable.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3 rounded-md border p-3">
+                      <RadioGroupItem value="llc" id="credit-llc" className="mt-1" />
+                      <div className="space-y-1">
+                        <Label htmlFor="credit-llc" className="font-medium">
+                          Lifetime Learning Credit (LLC)
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          For any level of education with no year limit. Up to $2,000 credit, non-refundable.
+                        </p>
+                      </div>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                {educationCreditType && (
+                  <div className="space-y-2 mt-4">
+                    <Label htmlFor="educationExpenses">Qualified Education Expenses</Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="educationExpenses"
+                        className="pl-9"
+                        placeholder="0"
+                        value={educationExpenses ? Number(educationExpenses.replace(/,/g, "")).toLocaleString() : ""}
+                        onChange={e => {
+                          const raw = e.target.value.replace(/,/g, "");
+                          if (/^\d*$/.test(raw)) setEducationExpenses(raw);
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Enter the total qualified education expenses paid during the tax year (tuition, fees, required course materials).
+                    </p>
+                    <Alert>
+                      <AlertDescription>
+                        {educationCreditType === "aotc" ? (
+                          <>
+                            <strong>AOTC Details:</strong> 100% of first $2,000 + 25% of next $2,000 = max $2,500 credit.
+                            40% refundable (up to $1,000). Phaseout: $80k-$90k (single), $160k-$180k (MFJ).
+                          </>
+                        ) : (
+                          <>
+                            <strong>LLC Details:</strong> 20% of up to $10,000 = max $2,000 credit.
+                            Non-refundable. Phaseout: $80k-$90k (single), $160k-$180k (MFJ). No year limit.
+                          </>
+                        )}
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
           {error && <p className="text-sm text-red-500">{error}</p>}
         </CardContent>
         <CardFooter className="flex justify-end">

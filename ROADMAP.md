@@ -12,15 +12,15 @@ This roadmap outlines the planned phases and workstreams for the Tax Optimizatio
 - [x] Add filing status variations for each state
 - [ ] Document standard deductions by state and filing status (No. The data files include standardDeduction, but the calculator doesn’t subtract it anywhere. Income tax is computed on adjustedIncome without applying a state filing-status standard deduction. Want me to wire it in next?)
 - [ ] Research and add personal exemptions by state
-- [ ] Document property tax rates and assessment methods by state
-- [ ] Research sales tax rates (state and average local) for all states
-- [ ] Add special tax treatments (retirement, investment income, etc.)
+- [x] Document property tax rates and assessment methods by state
+- [x] Research sales tax rates (state and average local) for all states
+- [x] Add special tax treatments (retirement, investment income, etc.)
 - [ ] Document state-specific tax credits and deductions
 - [x] Loading screen before results
 
 ### 3. Lifestyle & Regional Data
 
-- [ ] Complete lifestyle tags for all states
+- [x] Complete lifestyle tags for all states
 - [ ] Add climate data (temperature ranges, precipitation, etc.)
 - [ ] Include cost of living data by city/region within states
 - [ ] Add home insurance rates per state
@@ -37,14 +37,14 @@ This roadmap outlines the planned phases and workstreams for the Tax Optimizatio
 - [ ] Incorporate state-specific tax credits
 - [ ] Implement phase-outs for deductions and credits
 - [ ] Add AMT (Alternative Minimum Tax) calculations where applicable
-- [ ] Create more sophisticated property tax estimations
-- [ ] Refine sales tax calculations based on spending patterns
-- [ ] Add local income tax calculations for applicable jurisdictions
+- [x] Create more sophisticated property tax estimations
+- [x] Refine sales tax calculations based on spending patterns
+- [N/a] Add local income tax calculations for applicable jurisdictions
 
 ### 5. Advanced Scenarios
 
-- [ ] Implement multi-state income calculations N/A
-- [ ] Add part-year resident tax calculations N/A
+- [N/A] Implement multi-state income calculations N/A
+- [N/A] Add part-year resident tax calculations N/A
 - [ ] Create retirement income specialized calculations
 - [ ] Implement investment income tax treatments N/A
 - [ ] Add business income pass-through calculations N/A
@@ -317,15 +317,306 @@ The AGI calculation utility (see [lib/utils.ts](lib/utils.ts)) currently does no
 ### Missing AGI Inputs/Adjustments
 - [x] Educator expenses
 - [x] Moving expenses for military
-- Self-employment tax deduction (50%)
-- Self-employed health insurance deduction
-- Penalty on early withdrawal of savings
-- Student loan interest deduction
-- Tuition and fees deduction
+- [x] Self-employment tax deduction (50%)
+- [x] Self-employed health insurance deduction
+- [x]Penalty on early withdrawal of savings
+- [x] Student loan interest deduction
+- [x] Tuition and fees deduction
 - Other less common adjustments (e.g., jury duty pay given to employer)
 
 **Note:**
 - These fields are set to `0` in the AGI calculation until user input is collected.
 - See the implementation in [lib/utils.ts](lib/utils.ts) for details and update points.
 
+## **Annual Tax Update System Design**
 
+### **1. Core Update Framework**
+
+**Create a new `tax-update-system/` directory** with the following structure:
+
+```
+tax-update-system/
+├── config/
+│   ├── tax-year-config.json       # Current tax year settings
+│   └── update-schedule.json       # Annual update timeline
+├── sources/
+│   ├── official/                  # IRS and state government sources
+│   └── third-party/               # Additional data sources
+├── processors/
+│   ├── federal-processor.js       # Federal tax updates
+│   ├── state-processor.js         # State tax updates
+│   └── validation-processor.js    # Data validation
+├── templates/
+│   ├── changelog-template.md      # For documenting changes
+│   └── migration-template.json    # For data migrations
+└── output/
+    ├── changes-summary.json       # Summary of changes made
+    └── backup/                    # Previous versions
+```
+
+### **2. Automated Update Process**
+
+**Add these npm scripts to `package.json`:**
+
+```json
+{
+  "scripts": {
+    "update-tax-data": "node tax-update-system/main.js",
+    "update-federal": "node tax-update-system/processors/federal-processor.js",
+    "update-states": "node tax-update-system/processors/state-processor.js",
+    "validate-updates": "node tax-update-system/processors/validation-processor.js",
+    "backup-data": "node tax-update-system/backup.js",
+    "generate-changelog": "node tax-update-system/changelog-generator.js"
+  }
+}
+```
+
+### **3. Version Control for Tax Data**
+
+**Implement a version tracking system:**
+
+```typescript
+// lib/tax-version-manager.ts
+interface TaxDataVersion {
+  taxYear: number;
+  effectiveDate: string;
+  federal: {
+    brackets: object;
+    standardDeduction: object;
+    credits: object[];
+  };
+  states: Record<string, StateTaxData>;
+  changelog: string[];
+  validated: boolean;
+  lastUpdated: string;
+}
+```
+
+### **4. Federal Tax Update Processor**
+
+**Create `tax-update-system/processors/federal-processor.js`:**
+
+```javascript
+// Handles federal tax law changes
+const federalUpdates = {
+  async updateBrackets(taxYear) {
+    // Update federal income tax brackets
+    // Update capital gains brackets
+    // Update standard deductions
+    // Update personal exemptions
+  },
+  
+  async updateCredits(taxYear) {
+    // Update EITC amounts and thresholds
+    // Update CTC amounts and phaseouts
+    // Update AOTC/LLC amounts
+    // Update other federal credits
+  },
+  
+  async updateDeductions(taxYear) {
+    // Update standard deduction amounts
+    // Update itemized deduction limits
+    // Update phase-out thresholds
+  }
+};
+```
+
+### **5. State Tax Update Processor**
+
+**Create `tax-update-system/processors/state-processor.js`:**
+
+```javascript
+// Handles state-specific tax changes
+const stateUpdates = {
+  async updateStateBrackets(state, taxYear) {
+    // Update income tax brackets by filing status
+    // Update standard deductions
+    // Update personal exemptions
+  },
+  
+  async updateStateCredits(state, taxYear) {
+    // Update state-specific credits
+    // Update refundability rules
+    // Update phase-out amounts
+  },
+  
+  async updatePropertyTax(state, taxYear) {
+    // Update property tax rates
+    // Update assessment methods
+    // Update exemptions
+  }
+};
+```
+
+### **6. Change Documentation System**
+
+**Implement automatic changelog generation:**
+
+```javascript
+// tax-update-system/changelog-generator.js
+const generateChangelog = async (changes) => {
+  const changelog = {
+    taxYear: changes.taxYear,
+    effectiveDate: changes.effectiveDate,
+    sections: {
+      federal: {
+        brackets: changes.federal.brackets,
+        credits: changes.federal.credits,
+        deductions: changes.federal.deductions
+      },
+      states: changes.states,
+      impact: {
+        averageTaxChange: calculateAverageImpact(changes),
+        affectedFilers: estimateAffectedFilers(changes)
+      }
+    }
+  };
+  
+  // Generate markdown version for human reading
+  const markdown = generateMarkdownChangelog(changelog);
+  
+  return { json: changelog, markdown };
+};
+```
+
+### **7. Data Validation & Testing**
+
+**Create comprehensive validation system:**
+
+```javascript
+// tax-update-system/processors/validation-processor.js
+const validators = {
+  async validateFederalData(data) {
+    // Validate bracket structure
+    // Validate rate calculations
+    // Cross-reference with IRS publications
+  },
+  
+  async validateStateData(state, data) {
+    // Validate against state revenue department data
+    // Check bracket consistency
+    // Validate calculation results
+  },
+  
+  async runRegressionTests() {
+    // Test sample tax calculations
+    // Compare against previous year results
+    // Flag significant changes for review
+  }
+};
+```
+
+### **8. Historical Comparison Features**
+
+**Add comparison capabilities to your existing calculator:**
+
+```typescript
+// lib/historical-tax-comparator.ts
+export const compareTaxYears = (currentYear, previousYear, userData) => {
+  const currentTax = calculateTax(currentYear, userData);
+  const previousTax = calculateTax(previousYear, userData);
+  
+  return {
+    taxDifference: currentTax - previousTax,
+    percentageChange: ((currentTax - previousTax) / previousTax) * 100,
+    bracketChanges: identifyBracketImpacts(userData),
+    deductionChanges: identifyDeductionImpacts(userData),
+    creditChanges: identifyCreditImpacts(userData)
+  };
+};
+```
+
+### **9. User Interface for Updates**
+
+**Create an admin interface for managing updates:**
+
+```typescript
+// app/admin/tax-updates/page.tsx
+const TaxUpdatesAdmin = () => {
+  const [currentVersion, setCurrentVersion] = useState(null);
+  const [pendingChanges, setPendingChanges] = useState([]);
+  
+  const handleUpdate = async (updateType) => {
+    // Trigger appropriate update processor
+    // Show progress and results
+    // Generate documentation
+  };
+  
+  return (
+    <div>
+      <h1>Tax Update Management</h1>
+      <VersionStatus currentVersion={currentVersion} />
+      <UpdateButtons onUpdate={handleUpdate} />
+      <ChangeLog changes={pendingChanges} />
+    </div>
+  );
+};
+```
+
+### **10. Integration with Existing System**
+
+**Update your `lib/utils.ts` to support versioning:**
+
+```typescript
+// Add version awareness to tax calculations
+export function calculateAndStoreAGI(basicInfo, income, creditsDeductions, taxYear = new Date().getFullYear()) {
+  // Load tax data for specific year
+  const taxData = loadTaxDataForYear(taxYear);
+  
+  // Use versioned calculation logic
+  // Store version information with results
+}
+```
+
+### **11. Annual Update Workflow**
+
+**Create a standardized annual update process:**
+
+1. **Pre-Update Phase (January-February):**
+   - Monitor legislative changes
+   - Collect IRS/state announcements
+   - Plan update timeline
+
+2. **Update Phase (March-April):**
+   - Run federal update processor
+   - Update state data individually
+   - Validate all changes
+
+3. **Testing Phase (April-May):**
+   - Run comprehensive regression tests
+   - Compare calculations across years
+   - Validate with tax professionals
+
+4. **Documentation Phase (May-June):**
+   - Generate changelog
+   - Update user guides
+   - Create version documentation
+
+5. **Deployment Phase (June-July):**
+   - Deploy updates
+   - Monitor for issues
+   - Provide user notifications
+
+### **12. Implementation Priority**
+
+**Phase 1 (High Priority - Next 2 weeks):**
+- Create basic update framework
+- Implement federal tax update processor
+- Add version control system
+- Create change documentation system
+
+**Phase 2 (Medium Priority - Next 4 weeks):**
+- Implement state update processor
+- Add comprehensive validation system
+- Create admin interface
+- Implement historical comparison features
+
+**Phase 3 (Lower Priority - Next 6 weeks):**
+- Add automated monitoring for tax law changes
+- Implement rollback capabilities
+- Create user notification system
+- Add advanced testing frameworks
+
+This design leverages your existing infrastructure while providing a robust, scalable system for annual tax updates. The modular approach allows for incremental implementation, and the version control system ensures you can track changes and maintain data integrity over time.
+
+Would you like me to start implementing any specific part of this system?
