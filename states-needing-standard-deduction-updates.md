@@ -5,9 +5,6 @@ The calculator now prefers the updated files in `public/updated-tax-data/` (with
 Each entry shows the state code and the file to edit.
 
 - **AK**: `public/updated-tax-data/state-tax-data-updated.json` (zeros; missing `marriedSeparate`)
--
--
-- **AZ**: `public/updated-tax-data/state-tax-data-updated.json` (zeros; missing `marriedSeparate`)
 - **CO**: `public/updated-tax-data/state-tax-data-updated.json` (zeros; missing `marriedSeparate`)
 - **CT**: `public/updated-tax-data/state-tax-data-updated.json` (zeros; missing `marriedSeparate`)
 - **DE**: `public/updated-tax-data/state-tax-data-updated.json` (zeros; missing `marriedSeparate`)

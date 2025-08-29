@@ -629,9 +629,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "married": 30000,
+        "marriedSeparate": 15000,
+        "single": 15000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -892,9 +893,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 5540,
+        "married": 11080,
+        "headOfHousehold": 11080,
+        "marriedSeparate": 5540
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -1231,6 +1233,13 @@
   },
   "DE": {
     "abbreviation": "DE",
+    "standardDeduction": {
+      "single": 5700,
+      "married": 11400,
+      "marriedSeparate": 5700,
+      "headOfHousehold": 5700,
+      "seniorBenefitAmount": 2500
+    },
     "salesTax": {
       "stateRate": 0,
       "averageLocalRate": 0,
@@ -1747,9 +1756,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 12000,
+        "married": 24000,
+        "headOfHousehold": 12000,
+        "marriedSeparate": 12000
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2067,12 +2077,14 @@
         ]
       },
       "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
+      "personalExemption": 1144,
+      "dependentExemption": 1144,
+      "additionalPersonalExemption65Plus": 1144,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 4400,
+        "married": 8800,
+        "marriedSeparate": 4400,
+        "headOfHousehold": 6424
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2276,9 +2288,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500,
+        "marriedSeparate": 15000
       },
       "taxCredits": {
         "childTaxCredit": 0,

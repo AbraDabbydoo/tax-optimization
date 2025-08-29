@@ -88,9 +88,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -255,9 +252,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": [
           { "agiMin": 0, "agiMax": 25999, "deduction": 8500 },
@@ -529,9 +523,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 4820,
         "marriedSeparate": 2410,
@@ -637,9 +628,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 30000,
         "marriedSeparate": 15000,
@@ -742,9 +730,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -1217,9 +1202,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -1322,9 +1304,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -1527,9 +1506,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -1852,9 +1828,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -1957,9 +1930,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2062,9 +2032,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2167,9 +2134,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2272,9 +2236,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2396,9 +2357,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2500,9 +2458,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2604,9 +2559,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2728,9 +2680,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -2972,9 +2921,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -3116,9 +3062,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -3220,9 +3163,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -3384,9 +3324,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -3628,9 +3565,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,
@@ -3732,9 +3666,6 @@
           }
         ]
       },
-      "hasIncomeTax": true,
-      "personalExemption": 0,
-      "dependentExemption": 0,
       "standardDeduction": {
         "married": 0,
         "marriedSeparate": 0,

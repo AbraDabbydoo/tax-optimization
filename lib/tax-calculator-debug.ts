@@ -422,7 +422,9 @@ function resolveStandardDeduction(std: number | StandardDeductionBracket[] | und
 
 export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
   const key = normalizeFilingStatus(filingStatus);
-  const std = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const std = (stdInIncomeTax ?? stdTopLevel) as number | StandardDeductionBracket[] | undefined;
   const amount = resolveStandardDeduction(std, agi);
 
   console.log(
@@ -493,6 +495,31 @@ export async function calculateStateTaxBurden(
 
       console.log('DEBUG: AZ additional standard deduction for age 65+/blind:', azAdditional)
       stdDeduction += azAdditional
+    }
+
+    // Delaware: additional standard deduction for age 65+ (ignore blind per requirements)
+    if (stateCode === "DE") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+
+      const seniorBenefitAmount: number =
+        ((stateData as any)?.standardDeduction?.seniorBenefitAmount) ??
+        ((stateData as any)?.incomeTax?.standardDeduction?.seniorBenefitAmount) ??
+        2500
+
+      let deAdditional = 0
+      if (filingKey === "married") {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+        if (spouseIs65Plus) deAdditional += seniorBenefitAmount
+      } else if (filingKey === "marriedSeparate") {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+      } else {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+      }
+
+      console.log('DEBUG: DE additional standard deduction for age 65+:', deAdditional)
+      stdDeduction += deAdditional
     }
 
     const incomeAfterStdDeduction = Math.max(0, totalIncome - stdDeduction)

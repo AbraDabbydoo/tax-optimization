@@ -401,6 +401,7 @@ function calculateRetirementTax(
   }
 
   // Idaho-specific retirement income calculation
+  // Note: Idaho calculates income tax from federal AGI with additions/subtractions
   if (stateData.abbreviation === "ID") {
     return calculateIdahoRetirementTax(
       stateData,
@@ -1620,6 +1621,45 @@ function calculateHawaiiRetirementTax(
   // All other retirement income (investment, rental, royalty, trust, etc.) is taxed as regular income elsewhere
   // Only tax the taxableRetirementIncome here
   return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+}
+
+// Hawaii-specific personal exemption calculation
+function calculateHawaiiPersonalExemptions(
+  stateData: StateTaxData,
+  filingStatus: string,
+  numDependents: number,
+  age: number,
+  spouseAge?: number
+): number {
+  const baseExemption = 1144; // Base personal exemption per person
+  const additionalExemption65Plus = 1144; // Additional exemption for 65+
+  
+  let totalExemptions = 0;
+  
+  // Personal exemption for taxpayer
+  totalExemptions += baseExemption;
+  
+  // Additional exemption if taxpayer is 65+
+  if (age >= 65) {
+    totalExemptions += additionalExemption65Plus;
+  }
+  
+  // For married filing jointly, add spouse exemptions
+  if (filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint")) {
+    totalExemptions += baseExemption; // Spouse base exemption
+    
+    // Additional exemption if spouse is 65+
+    if (spouseAge && spouseAge >= 65) {
+      totalExemptions += additionalExemption65Plus;
+    }
+  }
+  
+  // Dependent exemptions
+  totalExemptions += numDependents * baseExemption;
+  
+  console.log(`Hawaii personal exemptions: Base (${baseExemption}) + Age 65+ bonus (${age >= 65 ? additionalExemption65Plus : 0}) + Spouse (${filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint") ? baseExemption : 0}) + Spouse 65+ (${spouseAge && spouseAge >= 65 ? additionalExemption65Plus : 0}) + Dependents (${numDependents} × ${baseExemption}) = ${totalExemptions}`);
+  
+  return totalExemptions;
 }
 
 // Idaho-specific retirement income tax calculation
@@ -3628,11 +3668,20 @@ export async function calculateStateTaxBurden(
 
     console.log(`Total income: ${adjustedIncome}`)
 
+    // Georgia, Hawaii, and Idaho-specific: Use federal AGI as starting point instead of total income
+    let incomeForDeduction = adjustedIncome;
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID") {
+      // Calculate federal AGI using a similar approach
+      const federalAGI = calculateFederalAGI(userInputs);
+      incomeForDeduction = federalAGI;
+      console.log(`${stateCode}: Using federal AGI of ${federalAGI} instead of total income ${adjustedIncome}`);
+    }
+
     // Apply state standard deduction (supports flat or bracketed values)
     let stdDeduction = getStandardDeductionForState(
       stateData as any,
       userInputs.filingStatus,
-      adjustedIncome,
+      incomeForDeduction,
     )
 
     // Apply Connecticut personal exemption if applicable
@@ -3644,6 +3693,19 @@ export async function calculateStateTaxBurden(
       );
       console.log(`Connecticut personal exemption: $${ctPersonalExemption}`);
       stdDeduction += ctPersonalExemption;
+    }
+
+    // Apply Hawaii personal exemptions if applicable
+    if (stateCode === "HI") {
+      const hiPersonalExemptions = calculateHawaiiPersonalExemptions(
+        stateData,
+        userInputs.filingStatus,
+        numDependents,
+        userInputs.age || 0,
+        userInputs.spouseAge
+      );
+      console.log(`Hawaii personal exemptions: $${hiPersonalExemptions}`);
+      stdDeduction += hiPersonalExemptions;
     }
 
     // Arizona: additional standard deduction for age 65+
@@ -3668,7 +3730,38 @@ export async function calculateStateTaxBurden(
       stdDeduction += azAdditional
     }
 
-    const incomeAfterStdDeduction = Math.max(0, adjustedIncome - stdDeduction)
+    // Delaware: additional standard deduction for age 65+ (ignore blind per requirements)
+    if (stateCode === "DE") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+
+      // Prefer reading from data if present, default to $2,500
+      const seniorBenefitAmount: number =
+        ((stateData as any)?.standardDeduction?.seniorBenefitAmount) ??
+        ((stateData as any)?.incomeTax?.standardDeduction?.seniorBenefitAmount) ??
+        2500
+
+      let deAdditional = 0
+      if (filingKey === "married") {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+        if (spouseIs65Plus) deAdditional += seniorBenefitAmount
+      } else if (filingKey === "marriedSeparate") {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+      } else {
+        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
+      }
+
+      stdDeduction += deAdditional
+    }
+
+    // Georgia, Hawaii, and Idaho-specific: Calculate income after deduction using federal AGI
+    let incomeBeforeStdDeduction = adjustedIncome;
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID") {
+      incomeBeforeStdDeduction = incomeForDeduction;
+    }
+    
+    const incomeAfterStdDeduction = Math.max(0, incomeBeforeStdDeduction - stdDeduction)
 
     // Calculate income tax
     let incomeTaxBurden = 0
@@ -4676,6 +4769,53 @@ function resolveStandardDeduction(std: number | StandardDeductionBracket[] | und
 
 export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
   const key = normalizeFilingStatus(filingStatus);
-  const std = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const std = (stdInIncomeTax ?? stdTopLevel) as number | StandardDeductionBracket[] | undefined;
   return resolveStandardDeduction(std, agi);
+}
+
+// Calculate federal AGI (Adjusted Gross Income) for Georgia tax purposes
+function calculateFederalAGI(userInputs: UserTaxInputs): number {
+  // Calculate total income (similar to totalIncome calculation in main function)
+  const shortTermGains = Number(userInputs.shortTermCapitalGains) || 0;
+  const longTermGains = Number(userInputs.longTermCapitalGains) || 0;
+  
+  // Net self-employment income after expenses
+  const netSelfEmploymentIncome = Math.max(
+    0,
+    (userInputs.selfEmploymentIncome || 0) - (userInputs.selfEmploymentExpenses || 0)
+  );
+
+  const totalIncome =
+    (userInputs.annualIncome || 0) +
+    netSelfEmploymentIncome +
+    (userInputs.rentalIncome || 0) +
+    (userInputs.interestIncome || 0) +
+    (userInputs.dividendsIncome || 0) +
+    shortTermGains +
+    longTermGains +
+    (userInputs.unemploymentIncome || 0) +
+    (userInputs.gamblingWinnings || 0);
+
+  // Apply basic federal adjustments to get AGI
+  // This is a simplified federal AGI calculation - in reality it would include more adjustments
+  let adjustments = 0;
+  
+  // Self-employment tax deduction (half of SE tax)
+  if (netSelfEmploymentIncome > 0) {
+    const seTax = netSelfEmploymentIncome * 0.153; // 15.3% SE tax rate
+    adjustments += seTax * 0.5; // Half is deductible
+  }
+  
+  // Note: We don't include IRA distributions here as they are retirement income, not AGI adjustments
+  // In a full implementation, we would include IRA contributions/deductions, but this is simplified
+  
+  // Other common federal adjustments could be added here if needed in the userInputs interface
+  
+  const federalAGI = Math.max(0, totalIncome - adjustments);
+  
+  console.log(`Federal AGI calculation: Total Income ${totalIncome} - Adjustments ${adjustments} = AGI ${federalAGI}`);
+  
+  return federalAGI;
 }
