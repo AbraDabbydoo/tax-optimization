@@ -11,7 +11,7 @@ This roadmap outlines the planned phases and workstreams for the Tax Optimizatio
 - [x] Research and document income tax brackets for all 50 states + DC
 - [x] Add filing status variations for each state
 - [ ] Document standard deductions by state and filing status (No. The data files include standardDeduction, but the calculator doesn’t subtract it anywhere. Income tax is computed on adjustedIncome without applying a state filing-status standard deduction. Want me to wire it in next?)
-- [ ] Research and add personal exemptions by state
+- [x] Research and add personal exemptions by state (Illinois completed - see Missing Tax Status Inputs section for blind exemption notes)
 - [x] Document property tax rates and assessment methods by state
 - [x] Research sales tax rates (state and average local) for all states
 - [x] Add special tax treatments (retirement, investment income, etc.)
@@ -620,3 +620,19 @@ export function calculateAndStoreAGI(basicInfo, income, creditsDeductions, taxYe
 This design leverages your existing infrastructure while providing a robust, scalable system for annual tax updates. The modular approach allows for incremental implementation, and the version control system ensures you can track changes and maintain data integrity over time.
 
 Would you like me to start implementing any specific part of this system?
+
+### Missing Tax Status Inputs
+
+#### Illinois Personal Exemptions - Blind Status (Implemented but not exposed)
+- **Backend Implementation**: ✅ Complete
+  - Illinois personal exemption calculation includes support for blind taxpayer exemptions (+$1,000 per blind taxpayer/spouse)
+  - Function: `calculateIllinoisPersonalExemptions()` in `lib/tax-calculator.ts`
+  - Data structure: `additionalPersonalExemptionBlind` field in state tax data
+- **Frontend Fields**: ❌ Missing
+  - [ ] Add "Taxpayer is legally blind" checkbox to tax input form
+  - [ ] Add "Spouse is legally blind" checkbox for married filing jointly
+  - [ ] Update `UserTaxInputs` interface to include `isBlind?: boolean` and `spouseIsBlind?: boolean`
+- **Current Behavior**: All taxpayers default to "not blind" (blind exemptions = $0)
+- **Future Enhancement**: Add frontend fields when blind exemption support is prioritized
+
+**Note**: The blind exemption is relatively uncommon and can be added later if there's user demand. The current implementation correctly calculates all other Illinois exemptions (base $2,850 + age 65+ bonus $1,000).

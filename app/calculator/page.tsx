@@ -72,6 +72,7 @@ export default function CalculatorPage() {
   const [filingStatus, setFilingStatus] = useState<string>("")
   const [preferredLifestyle, setPreferredLifestyle] = useState<string>("")
   const [dependents, setDependents] = useState<string>("")
+  const [qualifyingChildren, setQualifyingChildren] = useState<string>("")
   const [age, setAge] = useState<string>("")
   const [spouseAge, setSpouseAge] = useState<string>("")
   const [residencyStatus, setResidencyStatus] = useState<string>("full-year")
@@ -99,6 +100,7 @@ export default function CalculatorPage() {
         setFilingStatus(parsedData.filingStatus || "")
         setPreferredLifestyle(parsedData.preferredLifestyle || "")
         setDependents(parsedData.dependents || "")
+        setQualifyingChildren(parsedData.qualifyingChildren || "")
         setAge(parsedData.age || "")
         setSpouseAge(parsedData.spouseAge || "")
         setResidencyStatus(parsedData.residencyStatus || "full-year")
@@ -120,6 +122,7 @@ export default function CalculatorPage() {
         filingStatus,
         preferredLifestyle,
         dependents,
+        qualifyingChildren,
         age,
         spouseAge,
         residencyStatus,
@@ -130,7 +133,7 @@ export default function CalculatorPage() {
     } catch (error) {
       console.error("Error saving form data:", error)
     }
-  }, [residenceState, employmentState, filingStatus, preferredLifestyle, dependents, age, spouseAge, residencyStatus, itemizedDeductionsLastYear])
+  }, [residenceState, employmentState, filingStatus, preferredLifestyle, dependents, qualifyingChildren, age, spouseAge, residencyStatus, itemizedDeductionsLastYear])
 
   // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
   // Update navigation after this page to go to step-2 (income)
@@ -371,6 +374,21 @@ export default function CalculatorPage() {
             />
             <p className="text-xs text-muted-foreground">
               This helps us calculate tax credits and deductions related to dependents.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="qualifyingChildren">Number of Qualifying Children</Label>
+            <Input
+              id="qualifyingChildren"
+              value={qualifyingChildren ? Number(qualifyingChildren.replace(/,/g, "")).toLocaleString() : ""}
+              onChange={e => {
+                const raw = e.target.value.replace(/,/g, "");
+                if (/^\d*$/.test(raw)) setQualifyingChildren(raw);
+              }}
+            />
+            <p className="text-xs text-muted-foreground">
+              For states like Indiana, qualifying children may have additional exemption benefits. Usually a subset of your dependents.
             </p>
           </div>
 

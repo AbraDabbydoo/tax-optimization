@@ -75,13 +75,12 @@ export interface UserTaxInputs {
   preferredLifestyle: string
   regionPreference: string
   dependents: string // Add dependents field
-  age: number // Add this
-  spouseAge?: number // Add this
+  qualifyingChildren?: string // Number of qualifying children for additional exemptions (Indiana, etc.)
+  age: number // Primary taxpayer age
+  spouseAge?: number // Spouse age for married filing jointly
+  spouseIncome?: number // Spouse's income for states that need it (Indiana exemptions, etc.)
   annualIncome: number
   retirementIncome: number
-  interestIncome?: number // Add this
-  dividendsIncome?: number // Add this
-  k401Distributions: number // Add this
   socialSecurityIncome: number
   privatePensionIncome: number
   teacherPension: number
@@ -89,11 +88,14 @@ export interface UserTaxInputs {
   firefighterPension: number
   militaryRetirementPay: number
   otherGovernmentPension: number
-  iraDistributions: number
+  iraDistributions: number // Traditional IRA, SEP, Keogh distributions (Roth IRA distributions should be excluded as they are not taxable)
+  k401Distributions: number // 401k/403b/457b distributions (separate from traditional IRA/Roth IRA/SEP/Keogh)
   investmentIncome: number
-  rentalIncome: number
+  rentalIncome?: number
   royaltyIncome: number
   trustIncome: number
+  interestIncome?: number // Taxable interest income (for NH)
+  dividendsIncome?: number // Taxable dividends income (for NH)
   homeValue: number
   propertyTax: number
   monthlyRent: number
@@ -114,11 +116,34 @@ export interface UserTaxInputs {
   digitalGoods?: number
   medicine?: number
   streamingSubscriptions?: number
-  // Additional fields that might be needed
-  privatePensionEmployeeContributionPortion?: string // Add this
-  kyMilitaryRetiredBefore1998?: boolean // Add this
-  kyTeacherPoliceFirePre1998Percent?: number // Add this
-  ncBaileyExemption?: boolean // Add this
+  privatePensionEmployeeContributionPortion?: string
+  // Kentucky-specific fields for pre-1998 service
+  kyMilitaryRetiredBefore1998?: boolean
+  kyTeacherPoliceFirePre1998Percent?: number
+  // Montana-specific fields for military retirement residency requirements
+  becameMontanaResidentBeforeJuly2023?: boolean
+  beganMilitaryBenefitsBeforeMontanaResidency?: boolean
+  ncBaileyExemption?: boolean
+  annuityIncome?: number // Taxable annuity income (new field for OH and other states)
+  // Alabama homestead exemption fields
+  alHomesteadExemptionType?: 'H-1' | 'H-2' | 'H-3' | 'H-4' // Which exemption type applies
+  alIsDisabled?: boolean // For H-3 exemption (permanently disabled)
+  alIsPrimaryResidence?: boolean // Must be primary residence
+  alPropertyAcres?: number // Must be ≤ 160 acres for single-family
+  // Alabama alimony deduction fields
+  alAlimonyPaid?: number // Annual alimony payments made
+  alDivorceDate?: string // Date of divorce/separation agreement (YYYY-MM-DD format)
+  alIsAlimonyRecipient?: boolean // Whether taxpayer is receiving alimony (for completeness)
+  selfEmploymentIncome?: number
+  unemploymentIncome?: number
+  alimonyReceived?: number
+  alimonyDivorceDate?: string
+  gamblingWinnings?: number
+  capitalGains?: number
+  shortTermCapitalGains?: number
+  longTermCapitalGains?: number
+  selfEmploymentExpenses?: number
+  nextHomeValue?: number // New field for next home value
 }
 
 export interface TaxCalculationResult {
@@ -420,7 +445,142 @@ function resolveStandardDeduction(std: number | StandardDeductionBracket[] | und
   return 0;
 }
 
+/**
+ * Maine standard deduction configuration by year
+ */
+const ME_STANDARD_DEDUCTION: Record<number, {
+  base: Record<string, number>,
+  threshold: Record<string, number>,
+  reductionDivisor: number
+}> = {
+  2025: {
+    base: {
+      SINGLE: 15000,
+      MFS: 15000,
+      MFJ: 30000,
+      HOH: 22500,
+    },
+    threshold: {
+      SINGLE: 100000,
+      MFS: 100000,
+      MFJ: 200000,
+      HOH: 200000,
+    },
+    reductionDivisor: 40,
+  },
+};
+
+/**
+ * Compute Maine standard deduction after phase-out.
+ * @param {number} maineTaxableIncome - Income used for Maine phase-out test.
+ * @param {"SINGLE"|"MFS"|"MFJ"|"HOH"} filingStatus
+ * @param {number} taxYear - e.g., 2024
+ * @returns {number} deduction in whole dollars
+ */
+function maineStandardDeduction(maineTaxableIncome: number, filingStatus: string, taxYear: number): number {
+  const yr = ME_STANDARD_DEDUCTION[taxYear];
+  if (!yr) {
+    console.log(`DEBUG: No Maine standard deduction config for tax year ${taxYear}, using 2025`);
+    const fallbackYear = ME_STANDARD_DEDUCTION[2025];
+    if (!fallbackYear) throw new Error(`No Maine standard deduction config available`);
+    return maineStandardDeduction(maineTaxableIncome, filingStatus, 2025);
+  }
+
+  // Normalize filing status
+  const normalizedStatus = normalizeFilingStatusForMaine(filingStatus);
+  const base = yr.base[normalizedStatus];
+  const threshold = yr.threshold[normalizedStatus];
+  
+  if (base == null || threshold == null) {
+    throw new Error(`Unsupported filing status ${filingStatus} for Maine standard deduction in ${taxYear}`);
+  }
+
+  const result = maineTaxableIncome <= threshold ? 
+    base : 
+    Math.max(0, base - Math.max(0, Math.floor((maineTaxableIncome - threshold) / yr.reductionDivisor)));
+
+  console.log(
+    `DEBUG: Maine standard deduction calculation`,
+    {
+      filingStatus,
+      normalizedStatus,
+      taxYear,
+      maineTaxableIncome,
+      base,
+      threshold,
+      reductionDivisor: yr.reductionDivisor,
+      over: maineTaxableIncome > threshold ? maineTaxableIncome - threshold : 0,
+      reduction: maineTaxableIncome > threshold ? Math.floor((maineTaxableIncome - threshold) / yr.reductionDivisor) : 0,
+      result
+    }
+  );
+
+  return result;
+}
+
+/**
+ * Normalize filing status for Maine standard deduction lookup
+ */
+function normalizeFilingStatusForMaine(filingStatus: string): string {
+  const s = filingStatus.toLowerCase();
+  if (s.includes('married') && s.includes('joint')) return 'MFJ';
+  if (s.includes('married') && s.includes('separate')) return 'MFS';
+  if (s.includes('head') || s.includes('hoh')) return 'HOH';
+  return 'SINGLE';
+}
+
 export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
+  // Handle Maine's special standard deduction calculation
+  if (stateData?.abbreviation === "ME") {
+    // Check if Maine data has the new structure with base/threshold/reductionDivisor
+    const key = normalizeFilingStatus(filingStatus);
+    const maineStd = stateData?.incomeTax?.standardDeduction?.[key];
+    
+    if (maineStd && typeof maineStd === 'object' && 'base' in maineStd && 'threshold' in maineStd) {
+      // Use the new structure directly from JSON
+      const base = maineStd.base;
+      const threshold = maineStd.threshold;
+      const reductionDivisor = maineStd.reductionDivisor || 40;
+      
+      const amount = agi <= threshold ? base : Math.max(0, base - Math.max(0, Math.floor((agi - threshold) / reductionDivisor)));
+      
+      console.log(
+        `DEBUG: Maine standard deduction calculation (from JSON)`,
+        {
+          state: stateData?.abbreviation || stateData?.name,
+          filingStatus,
+          normalizedStatus: key,
+          agi,
+          base,
+          threshold,
+          reductionDivisor,
+          over: agi > threshold ? agi - threshold : 0,
+          reduction: agi > threshold ? Math.floor((agi - threshold) / reductionDivisor) : 0,
+          amount,
+          type: 'maine-phaseout-json'
+        }
+      );
+      
+      return amount;
+    }
+    
+    // Fallback to hardcoded values if JSON doesn't have the new structure
+    const amount = maineStandardDeduction(agi, filingStatus, 2025);
+    
+    console.log(
+      `DEBUG: Maine standard deduction lookup (fallback)`,
+      {
+        state: stateData?.abbreviation || stateData?.name,
+        filingStatus,
+        agi,
+        type: 'maine-phaseout-fallback',
+        amount
+      }
+    );
+    
+    return amount;
+  }
+
   const key = normalizeFilingStatus(filingStatus);
   const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
   const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
@@ -468,7 +628,7 @@ export async function calculateStateTaxBurden(
     const totalIncome =
       userInputs.annualIncome +
       userInputs.investmentIncome +
-      userInputs.rentalIncome +
+      (userInputs.rentalIncome || 0) +
       userInputs.royaltyIncome +
       userInputs.trustIncome
 
@@ -476,6 +636,15 @@ export async function calculateStateTaxBurden(
 
     // Apply state standard deduction (supports flat or bracketed values like AL)
     let stdDeduction = getStandardDeductionForState(stateData as any, userInputs.filingStatus, totalIncome)
+
+    // Georgia, Hawaii, Idaho, Illinois, Iowa, Kansas, Kentucky, and Louisiana-specific: Use federal AGI as starting point instead of total income
+    let incomeForDeduction = totalIncome;
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID" || stateCode === "IL" || stateCode === "IA" || stateCode === "KS" || stateCode === "KY" || stateCode === "LA") {
+      // Calculate federal AGI using a similar approach
+      const federalAGI = calculateFederalAGI(userInputs);
+      incomeForDeduction = federalAGI;
+      console.log(`${stateCode}: Using federal AGI of ${federalAGI} instead of total income ${totalIncome}`);
+    }
 
     // Arizona: additional standard deduction for age 65+
     if (stateCode === "AZ") {
@@ -522,7 +691,43 @@ export async function calculateStateTaxBurden(
       stdDeduction += deAdditional
     }
 
-    const incomeAfterStdDeduction = Math.max(0, totalIncome - stdDeduction)
+    // Kansas: additional standard deduction for age 65+ and/or blind
+    if (stateCode === "KS") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+      // Note: blindness fields are not yet available in userInputs, defaulting to false
+      const taxpayerIsBlind = false  // userInputs.isBlind || false
+      const spouseIsBlind = false    // userInputs.spouseIsBlind || false
+
+      let ksAdditional = 0
+      if (filingKey === "married") {
+        // Married Filing Jointly: $700 per spouse for 65+ and/or blind
+        if (taxpayerIs65Plus) ksAdditional += 700
+        if (taxpayerIsBlind) ksAdditional += 700
+        if (spouseIs65Plus) ksAdditional += 700
+        if (spouseIsBlind) ksAdditional += 700
+      } else if (filingKey === "marriedSeparate") {
+        // Married Filing Separately: $700 per taxpayer for 65+ and/or blind
+        if (taxpayerIs65Plus) ksAdditional += 700
+        if (taxpayerIsBlind) ksAdditional += 700
+      } else {
+        // Single or Head of Household: $850 for 65+ and/or $850 for blind
+        if (taxpayerIs65Plus) ksAdditional += 850
+        if (taxpayerIsBlind) ksAdditional += 850
+      }
+
+      console.log('DEBUG: KS additional standard deduction for age 65+/blind:', ksAdditional)
+      stdDeduction += ksAdditional
+    }
+
+    // Use federal AGI for income calculation if applicable, otherwise use total income
+    let incomeBeforeStdDeduction = totalIncome;
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID" || stateCode === "IL" || stateCode === "IA" || stateCode === "KS" || stateCode === "KY") {
+      incomeBeforeStdDeduction = incomeForDeduction;
+    }
+    
+    const incomeAfterStdDeduction = Math.max(0, incomeBeforeStdDeduction - stdDeduction)
 
     console.log(`DEBUG: Standard deduction applied (incl. any AZ additions): ${stdDeduction}`)
     console.log(`DEBUG: Income after standard deduction: ${incomeAfterStdDeduction}`)
@@ -628,4 +833,48 @@ export async function calculateStateTaxBurden(
       regionMatch: false,
     }
   }
+}
+
+function calculateFederalAGI(userInputs: UserTaxInputs): number {
+  // Calculate total income (similar to totalIncome calculation in main function)
+  const shortTermGains = Number(userInputs.shortTermCapitalGains) || 0;
+  const longTermGains = Number(userInputs.longTermCapitalGains) || 0;
+  
+  // Net self-employment income after expenses
+  const netSelfEmploymentIncome = Math.max(
+    0,
+    (userInputs.selfEmploymentIncome || 0) - (userInputs.selfEmploymentExpenses || 0)
+  );
+
+  const totalIncome =
+    (userInputs.annualIncome || 0) +
+    netSelfEmploymentIncome +
+    (userInputs.rentalIncome || 0) +
+    (userInputs.interestIncome || 0) +
+    (userInputs.dividendsIncome || 0) +
+    shortTermGains +
+    longTermGains +
+    (userInputs.unemploymentIncome || 0) +
+    (userInputs.gamblingWinnings || 0);
+
+  // Apply basic federal adjustments to get AGI
+  // This is a simplified federal AGI calculation - in reality it would include more adjustments
+  let adjustments = 0;
+  
+  // Self-employment tax deduction (half of SE tax)
+  if (netSelfEmploymentIncome > 0) {
+    const seTax = netSelfEmploymentIncome * 0.153; // 15.3% SE tax rate
+    adjustments += seTax * 0.5; // Half is deductible
+  }
+  
+  // Note: We don't include IRA distributions here as they are retirement income, not AGI adjustments
+  // In a full implementation, we would include IRA contributions/deductions, but this is simplified
+  
+  // Other common federal adjustments could be added here if needed in the userInputs interface
+  
+  const federalAGI = Math.max(0, totalIncome - adjustments);
+  
+  console.log(`Federal AGI calculation: Total Income ${totalIncome} - Adjustments ${adjustments} = AGI ${federalAGI}`);
+  
+  return federalAGI;
 }

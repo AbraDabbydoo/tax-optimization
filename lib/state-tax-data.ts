@@ -34,6 +34,12 @@ export interface StateTaxData {
     brackets: FilingStatusBrackets
     personalExemption: number
     dependentExemption: number
+    additionalPersonalExemption65Plus?: number
+    additionalPersonalExemptionBlind?: number
+    personalExemptionPhaseout?: {
+      dependentThreshold: number
+      description: string
+    }
     standardDeduction: {
       single: number
       married: number

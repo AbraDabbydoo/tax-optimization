@@ -82,8 +82,10 @@ export interface UserTaxInputs {
   preferredLifestyle: string
   regionPreference: string
   dependents: string // Add dependents field
+  qualifyingChildren?: string // Number of qualifying children for additional exemptions (Indiana, etc.)
   age: number // Primary taxpayer age
   spouseAge?: number // Spouse age for married filing jointly
+  spouseIncome?: number // Spouse's income for states that need it (Indiana exemptions, etc.)
   annualIncome: number
   retirementIncome: number
   socialSecurityIncome: number
@@ -1658,6 +1660,117 @@ function calculateHawaiiPersonalExemptions(
   totalExemptions += numDependents * baseExemption;
   
   console.log(`Hawaii personal exemptions: Base (${baseExemption}) + Age 65+ bonus (${age >= 65 ? additionalExemption65Plus : 0}) + Spouse (${filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint") ? baseExemption : 0}) + Spouse 65+ (${spouseAge && spouseAge >= 65 ? additionalExemption65Plus : 0}) + Dependents (${numDependents} × ${baseExemption}) = ${totalExemptions}`);
+  
+  return totalExemptions;
+}
+
+// Indiana-specific personal exemption calculation
+function calculateIndianaPersonalExemptions(
+  stateData: StateTaxData,
+  filingStatus: string,
+  numDependents: number,
+  numQualifyingChildren: number,
+  userInputs?: UserTaxInputs
+): number {
+  const exemptionData = (stateData.incomeTax as any)?.personalExemption;
+  
+  if (!exemptionData || typeof exemptionData !== 'object') {
+    console.log("Indiana: Using fallback exemption calculations");
+    return 1000; // Fallback to basic taxpayer exemption
+  }
+  
+  const taxpayerExemption = exemptionData.taxpayer || 1000;
+  const spouseExemption = exemptionData.spouse || 1000;
+  const dependentBaseExemption = exemptionData.dependentBase || 1000;
+  const qualifyingChildBonus = exemptionData.qualifyingChild || 1500;
+  
+  let totalExemptions = 0;
+  
+  // Personal exemption for taxpayer
+  totalExemptions += taxpayerExemption;
+  
+  // Spouse exemption (for married filing jointly or if spouse has no income when filing separately)
+  const isMarriedJoint = filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint");
+  const isMarriedSeparate = filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("separate");
+  
+  if (isMarriedJoint) {
+    totalExemptions += spouseExemption;
+  } else if (isMarriedSeparate) {
+    // Add spouse exemption if spouse has no income (assume this is the case unless specified otherwise)
+    const spouseHasIncome = userInputs?.spouseIncome && userInputs.spouseIncome > 0;
+    if (!spouseHasIncome) {
+      totalExemptions += spouseExemption;
+    }
+  }
+  
+  // Dependent exemptions: base amount per dependent
+  totalExemptions += numDependents * dependentBaseExemption;
+  
+  // Additional qualifying child exemption: $1,500 per qualifying dependent child
+  totalExemptions += numQualifyingChildren * qualifyingChildBonus;
+  
+  console.log(`Indiana personal exemptions: Taxpayer ($${taxpayerExemption}) + Spouse ($${isMarriedJoint || (isMarriedSeparate && !(userInputs?.spouseIncome && userInputs.spouseIncome > 0)) ? spouseExemption : 0}) + Dependents (${numDependents} × $${dependentBaseExemption}) + Qualifying Children (${numQualifyingChildren} × $${qualifyingChildBonus}) = $${totalExemptions}`);
+  
+  return totalExemptions;
+}
+
+// Illinois-specific personal exemption calculation
+function calculateIllinoisPersonalExemptions(
+  stateData: StateTaxData,
+  filingStatus: string,
+  numDependents: number,
+  age: number,
+  spouseAge?: number,
+  isBlind?: boolean,
+  spouseIsBlind?: boolean,
+  isClaimedAsDependent?: boolean,
+  illinoisBaseIncome?: number
+): number {
+  const baseExemption = stateData.incomeTax?.personalExemption || 2850; // 2025 amount
+  const additionalExemption65Plus = stateData.incomeTax?.additionalPersonalExemption65Plus || 1000;
+  const additionalExemptionBlind = stateData.incomeTax?.additionalPersonalExemptionBlind || 1000;
+  const phaseoutThreshold = stateData.incomeTax?.personalExemptionPhaseout?.dependentThreshold || 2850;
+  
+  // Check phaseout rule for dependents
+  if (isClaimedAsDependent && illinoisBaseIncome && illinoisBaseIncome > phaseoutThreshold) {
+    console.log(`Illinois personal exemptions: $0 (claimed as dependent with base income ${illinoisBaseIncome} > ${phaseoutThreshold})`);
+    return 0;
+  }
+  
+  let totalExemptions = 0;
+  
+  // Personal exemption for taxpayer
+  totalExemptions += baseExemption;
+  
+  // Additional exemption if taxpayer is 65+
+  if (age >= 65) {
+    totalExemptions += additionalExemption65Plus;
+  }
+  
+  // Additional exemption if taxpayer is blind
+  if (isBlind) {
+    totalExemptions += additionalExemptionBlind;
+  }
+  
+  // For married filing jointly, add spouse exemptions
+  if (filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint")) {
+    totalExemptions += baseExemption; // Spouse base exemption
+    
+    // Additional exemption if spouse is 65+
+    if (spouseAge && spouseAge >= 65) {
+      totalExemptions += additionalExemption65Plus;
+    }
+    
+    // Additional exemption if spouse is blind
+    if (spouseIsBlind) {
+      totalExemptions += additionalExemptionBlind;
+    }
+  }
+  
+  // Dependent exemptions
+  totalExemptions += numDependents * baseExemption;
+  
+  console.log(`Illinois personal exemptions: Base (${baseExemption}) + Age 65+ bonus (${age >= 65 ? additionalExemption65Plus : 0}) + Blind bonus (${isBlind ? additionalExemptionBlind : 0}) + Spouse (${filingStatus.toLowerCase().includes("married") && filingStatus.toLowerCase().includes("joint") ? baseExemption : 0}) + Spouse 65+ (${spouseAge && spouseAge >= 65 ? additionalExemption65Plus : 0}) + Spouse blind (${spouseIsBlind ? additionalExemptionBlind : 0}) + Dependents (${numDependents} × ${baseExemption}) = ${totalExemptions}`);
   
   return totalExemptions;
 }
@@ -3668,9 +3781,9 @@ export async function calculateStateTaxBurden(
 
     console.log(`Total income: ${adjustedIncome}`)
 
-    // Georgia, Hawaii, and Idaho-specific: Use federal AGI as starting point instead of total income
+    // Georgia, Hawaii, Idaho, Illinois, Iowa, Kansas, Kentucky, and Louisiana-specific: Use federal AGI as starting point instead of total income
     let incomeForDeduction = adjustedIncome;
-    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID") {
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID" || stateCode === "IL" || stateCode === "IA" || stateCode === "KS" || stateCode === "KY" || stateCode === "LA") {
       // Calculate federal AGI using a similar approach
       const federalAGI = calculateFederalAGI(userInputs);
       incomeForDeduction = federalAGI;
@@ -3706,6 +3819,42 @@ export async function calculateStateTaxBurden(
       );
       console.log(`Hawaii personal exemptions: $${hiPersonalExemptions}`);
       stdDeduction += hiPersonalExemptions;
+    }
+
+    // Apply Indiana personal exemptions if applicable
+    if (stateCode === "IN") {
+       const numQualifyingChildren = Number.parseInt(userInputs.qualifyingChildren || "0") || 0;
+      const inPersonalExemptions = calculateIndianaPersonalExemptions(
+        stateData,
+        userInputs.filingStatus,
+        numDependents,
+        numQualifyingChildren,
+        userInputs
+      );
+      console.log(`Indiana personal exemptions: $${inPersonalExemptions}`);
+      stdDeduction += inPersonalExemptions;
+    }
+
+    // Apply Illinois personal exemptions if applicable
+    if (stateCode === "IL") {
+      // For Illinois, we need to calculate the Illinois base income first
+      // Illinois base income = Federal AGI ± Illinois additions/subtractions - Illinois personal exemptions
+      // Since we're calculating the exemptions here, we'll use the federal AGI before exemptions for phaseout check
+      const illinoisBaseIncomeBeforeExemptions = incomeForDeduction; // This is federal AGI for Illinois
+      
+      const ilPersonalExemptions = calculateIllinoisPersonalExemptions(
+        stateData,
+        userInputs.filingStatus,
+        numDependents,
+        userInputs.age || 0,
+        userInputs.spouseAge,
+        false, // isBlind - field not available yet, defaulting to false
+        false, // spouseIsBlind - field not available yet, defaulting to false
+        false, // isClaimedAsDependent - field not available yet, defaulting to false
+        illinoisBaseIncomeBeforeExemptions
+      );
+      console.log(`Illinois personal exemptions: $${ilPersonalExemptions}`);
+      stdDeduction += ilPersonalExemptions;
     }
 
     // Arizona: additional standard deduction for age 65+
@@ -3755,9 +3904,38 @@ export async function calculateStateTaxBurden(
       stdDeduction += deAdditional
     }
 
-    // Georgia, Hawaii, and Idaho-specific: Calculate income after deduction using federal AGI
+    // Kansas: additional standard deduction for age 65+ and/or blind
+    if (stateCode === "KS") {
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
+      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
+      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
+      // Note: blindness fields are not yet available in userInputs, defaulting to false
+      const taxpayerIsBlind = false  // userInputs.isBlind || false
+      const spouseIsBlind = false    // userInputs.spouseIsBlind || false
+
+      let ksAdditional = 0
+      if (filingKey === "married") {
+        // Married Filing Jointly: $700 per spouse for 65+ and/or blind
+        if (taxpayerIs65Plus) ksAdditional += 700
+        if (taxpayerIsBlind) ksAdditional += 700
+        if (spouseIs65Plus) ksAdditional += 700
+        if (spouseIsBlind) ksAdditional += 700
+      } else if (filingKey === "marriedSeparate") {
+        // Married Filing Separately: $700 per taxpayer for 65+ and/or blind
+        if (taxpayerIs65Plus) ksAdditional += 700
+        if (taxpayerIsBlind) ksAdditional += 700
+      } else {
+        // Single or Head of Household: $850 for 65+ and/or $850 for blind
+        if (taxpayerIs65Plus) ksAdditional += 850
+        if (taxpayerIsBlind) ksAdditional += 850
+      }
+
+      stdDeduction += ksAdditional
+    }
+
+    // Georgia, Hawaii, Idaho, Indiana, Iowa, Kansas, and Kentucky-specific: Calculate income after deduction using federal AGI
     let incomeBeforeStdDeduction = adjustedIncome;
-    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID") {
+    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID" || stateCode === "IN" || stateCode === "IA" || stateCode === "KS" || stateCode === "KY") {
       incomeBeforeStdDeduction = incomeForDeduction;
     }
     
@@ -4767,7 +4945,95 @@ function resolveStandardDeduction(std: number | StandardDeductionBracket[] | und
   return 0;
 }
 
+/**
+ * Maine standard deduction configuration by year
+ */
+const ME_STANDARD_DEDUCTION: Record<number, {
+  base: Record<string, number>,
+  threshold: Record<string, number>,
+  reductionDivisor: number
+}> = {
+  2025: {
+    base: {
+      SINGLE: 15000,
+      MFS: 15000,
+      MFJ: 30000,
+      HOH: 22500,
+    },
+    threshold: {
+      SINGLE: 100000,
+      MFS: 100000,
+      MFJ: 200000,
+      HOH: 200000,
+    },
+    reductionDivisor: 40,
+  },
+};
+
+/**
+ * Compute Maine standard deduction after phase-out.
+ * @param {number} maineTaxableIncome - Income used for Maine phase-out test.
+ * @param {"SINGLE"|"MFS"|"MFJ"|"HOH"} filingStatus
+ * @param {number} taxYear - e.g., 2024
+ * @returns {number} deduction in whole dollars
+ */
+function maineStandardDeduction(maineTaxableIncome: number, filingStatus: string, taxYear: number): number {
+  const yr = ME_STANDARD_DEDUCTION[taxYear];
+  if (!yr) {
+    console.log(`No Maine standard deduction config for tax year ${taxYear}, using 2025`);
+    const fallbackYear = ME_STANDARD_DEDUCTION[2025];
+    if (!fallbackYear) throw new Error(`No Maine standard deduction config available`);
+    return maineStandardDeduction(maineTaxableIncome, filingStatus, 2025);
+  }
+
+  // Normalize filing status
+  const normalizedStatus = normalizeFilingStatusForMaine(filingStatus);
+  const base = yr.base[normalizedStatus];
+  const threshold = yr.threshold[normalizedStatus];
+  
+  if (base == null || threshold == null) {
+    throw new Error(`Unsupported filing status ${filingStatus} for Maine standard deduction in ${taxYear}`);
+  }
+
+  if (maineTaxableIncome <= threshold) return base;
+
+  const over = Math.max(0, Math.floor((maineTaxableIncome - threshold) / yr.reductionDivisor));
+  return Math.max(0, base - over);
+}
+
+/**
+ * Normalize filing status for Maine standard deduction lookup
+ */
+function normalizeFilingStatusForMaine(filingStatus: string): string {
+  const s = filingStatus.toLowerCase();
+  if (s.includes('married') && s.includes('joint')) return 'MFJ';
+  if (s.includes('married') && s.includes('separate')) return 'MFS';
+  if (s.includes('head') || s.includes('hoh')) return 'HOH';
+  return 'SINGLE';
+}
+
 export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
+  // Handle Maine's special standard deduction calculation
+  if (stateData?.abbreviation === "ME") {
+    // Check if Maine data has the new structure with base/threshold/reductionDivisor
+    const key = normalizeFilingStatus(filingStatus);
+    const maineStd = stateData?.incomeTax?.standardDeduction?.[key];
+    
+    if (maineStd && typeof maineStd === 'object' && 'base' in maineStd && 'threshold' in maineStd) {
+      // Use the new structure directly from JSON
+      const base = maineStd.base;
+      const threshold = maineStd.threshold;
+      const reductionDivisor = maineStd.reductionDivisor || 40;
+      
+      if (agi <= threshold) return base;
+      const over = Math.max(0, Math.floor((agi - threshold) / reductionDivisor));
+      return Math.max(0, base - over);
+    }
+    
+    // Fallback to hardcoded values if JSON doesn't have the new structure
+    return maineStandardDeduction(agi, filingStatus, 2025);
+  }
+
   const key = normalizeFilingStatus(filingStatus);
   const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
   const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;

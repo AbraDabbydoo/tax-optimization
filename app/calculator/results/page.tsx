@@ -135,6 +135,7 @@ export default function ResultsPage() {
         formData.append("filingStatus", basicInfo.filingStatus || "")
         formData.append("preferredLifestyle", basicInfo.preferredLifestyle || "")
         formData.append("dependents", basicInfo.dependents || "0")
+        formData.append("qualifyingChildren", basicInfo.qualifyingChildren || "0")
         formData.append("age", basicInfo.age || "65")
         formData.append("spouseAge", basicInfo.spouseAge || "65")
 
