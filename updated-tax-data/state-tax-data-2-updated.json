@@ -111,9 +111,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -214,9 +215,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -417,9 +419,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -580,9 +583,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -684,6 +688,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -917,6 +922,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -1119,9 +1125,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -1223,6 +1230,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -1485,9 +1493,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 8000,
+        "marriedSeparate": 8000,
+        "married": 16050,
+        "headOfHousehold": 11200
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -1629,6 +1638,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -1851,9 +1861,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 6350,
+        "marriedSeparate": 6350,
+        "married": 12700,
+        "headOfHousehold": 9350
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2034,9 +2045,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 2800,
+        "marriedSeparate": 2800,
+        "married": 5600,
+        "headOfHousehold": 4500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2138,6 +2150,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -2280,9 +2293,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 10900,
+        "marriedSeparate": 10900,
+        "married": 21800,
+        "headOfHousehold": 16350
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2423,9 +2437,10 @@
       "personalExemption": 0,
       "dependentExemption": 0,
       "standardDeduction": {
-        "single": 0,
-        "married": 0,
-        "headOfHousehold": 0
+        "single": 15000,
+        "marriedSeparate": 15000,
+        "married": 30000,
+        "headOfHousehold": 22500
       },
       "taxCredits": {
         "childTaxCredit": 0,
@@ -2527,6 +2542,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -2630,6 +2646,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -2733,6 +2750,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -3305,6 +3323,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -3691,6 +3710,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
@@ -3794,6 +3814,7 @@
       "dependentExemption": 0,
       "standardDeduction": {
         "single": 0,
+        "marriedSeparate": 0,
         "married": 0,
         "headOfHousehold": 0
       },
