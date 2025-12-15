@@ -215,7 +215,7 @@ function calculateIncomeTax(
   income: number,
   brackets: FilingStatusBrackets | StateTaxBracket[],
   filingStatus: string,
-  dependents = 0, // Add dependents parameter with default value
+  dependents = 0 // Add dependents parameter with default value
 ): number {
   console.log("Calculating income tax for income:", income, "filing status:", filingStatus)
 
@@ -4866,6 +4866,8 @@ function calculateNebraskaRetirementTax(
   return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
 }
 
+
+
 // Alabama-specific income tax calculation with alimony deduction
 function calculateAlabamaIncomeTax(
   income: number,
@@ -5012,12 +5014,132 @@ function normalizeFilingStatusForMaine(filingStatus: string): string {
   return 'SINGLE';
 }
 
+// --- Add NJ Gross Income calculation helper here ---
+
+/**
+ * Calculate NJ Gross Income using available and optional fields.
+ */
+export function calculateNJGrossIncomeFlexible(userInputs: {
+  annualIncome?: string | number,
+  selfEmploymentIncome?: string | number,
+  investmentIncome?: string | number,
+  interestIncome?: string | number,
+  dividendsIncome?: string | number,
+  rentalIncome?: string | number,
+  royaltyIncome?: string | number,
+  trustIncome?: string | number,
+  iraDistributions?: string | number,
+  privatePensionIncome?: string | number,
+  teacherPension?: string | number,
+  policePension?: string | number,
+  firefighterPension?: string | number,
+  otherGovernmentPension?: string | number,
+  militaryRetirementPay?: string | number,
+  shortTermCapitalGains?: string | number,
+  longTermCapitalGains?: string | number,
+  alimonyReceived?: string | number,
+  gamblingWinnings?: string | number,
+  // Optional/future fields:
+  partnershipIncome?: string | number,
+  sCorpIncome?: string | number,
+  prizesAwards?: string | number,
+  cancellationOfDebtIncome?: string | number,
+  otherTaxableIncome?: string | number,
+  propertySaleGains?: string | number,
+}) : number {
+  const n = (val?: string | number) =>
+    typeof val === "number" ? val : Number(val?.toString().replace(/,/g, "") || 0);
+
+  return (
+    n(userInputs.annualIncome) +
+    n(userInputs.selfEmploymentIncome) +
+    n(userInputs.investmentIncome) +
+    n(userInputs.interestIncome) +
+    n(userInputs.dividendsIncome) +
+    n(userInputs.rentalIncome) +
+    n(userInputs.royaltyIncome) +
+    n(userInputs.trustIncome) +
+    n(userInputs.iraDistributions) +
+    n(userInputs.privatePensionIncome) +
+    n(userInputs.teacherPension) +
+    n(userInputs.policePension) +
+    n(userInputs.firefighterPension) +
+    n(userInputs.otherGovernmentPension) +
+    n(userInputs.militaryRetirementPay) +
+    n(userInputs.shortTermCapitalGains) +
+    n(userInputs.longTermCapitalGains) +
+    n(userInputs.alimonyReceived) +
+    n(userInputs.gamblingWinnings) +
+    n(userInputs.partnershipIncome) +
+    n(userInputs.sCorpIncome) +
+    n(userInputs.prizesAwards) +
+    n(userInputs.cancellationOfDebtIncome) +
+    n(userInputs.otherTaxableIncome) +
+    n(userInputs.propertySaleGains)
+  );
+}
+
+/**
+ * Calculate NJ income tax using UI inputs and state tax data.
+ */
+export function calculateNJIncomeTax(
+  userInputs: UserTaxInputs,
+  stateData: StateTaxData
+): number {
+  // 1. Calculate NJ Gross Income
+  const njGrossIncome = calculateNJGrossIncomeFlexible(userInputs);
+
+  // 2. Calculate NJ personal exemptions
+  let exemptions = 0;
+  // Taxpayer
+  exemptions += 1000;
+  // Spouse (if not filing separately)
+  const filingStatus = (userInputs.filingStatus || "").toLowerCase();
+  if (filingStatus.includes("married") && !filingStatus.includes("separate")) {
+    exemptions += 1000;
+  }
+  // Dependents
+  const numDependents = Number(userInputs.dependents) || 0;
+  exemptions += numDependents * 1500;
+  // Age 65+ (taxpayer)
+  if ((userInputs.age || 0) >= 65) {
+    exemptions += 1000;
+  }
+  // Age 65+ (spouse, if not filing separately)
+  if (
+    userInputs.spouseAge !== undefined &&
+    userInputs.spouseAge >= 65 &&
+    filingStatus.includes("married") &&
+    !filingStatus.includes("separate")
+  ) {
+    exemptions += 1000;
+  }
+
+  // 3. Calculate NJ taxable income
+  const njTaxableIncome = Math.max(0, njGrossIncome - exemptions);
+
+  // 4. Apply NJ tax brackets
+  const brackets = stateData.incomeTax?.brackets;
+  if (!brackets) return 0;
+
+  // Use your existing bracket calculation helper
+  const njIncomeTax = calculateIncomeTax(
+    njTaxableIncome,
+    brackets,
+    userInputs.filingStatus,
+    numDependents
+  );
+
+  return njIncomeTax;
+}
+
 export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
   // Handle Maine's special standard deduction calculation
   if (stateData?.abbreviation === "ME") {
     // Check if Maine data has the new structure with base/threshold/reductionDivisor
     const key = normalizeFilingStatus(filingStatus);
     const maineStd = stateData?.incomeTax?.standardDeduction?.[key];
+
     
     if (maineStd && typeof maineStd === 'object' && 'base' in maineStd && 'threshold' in maineStd) {
       // Use the new structure directly from JSON
@@ -5033,12 +5155,86 @@ export function getStandardDeductionForState(stateData: any, filingStatus: strin
     // Fallback to hardcoded values if JSON doesn't have the new structure
     return maineStandardDeduction(agi, filingStatus, 2025);
   }
+   // Montana: No state standard deduction, start from federal AGI
+  if (stateData.abbreviation === "MT") {
+    return 0;
+  }
 
+    // Handle Minnesota's standard deduction phase-out
+  if (stateData?.abbreviation === "MN") {
+    const key = normalizeFilingStatus(filingStatus);
+   const mnStd = stateData?.incomeTax?.standardDeduction?.[key];
+  
+   if (typeof mnStd === 'number') {
+     // Apply Minnesota phase-out logic
+      const baseDeduction = mnStd;
+     return minnesotaStandardDeduction(baseDeduction, agi, filingStatus);
+   }
+  
+  return resolveStandardDeduction(mnStd as StandardDeductionBracket[] | undefined, agi);
+}
+
+ 
   const key = normalizeFilingStatus(filingStatus);
   const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
   const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
   const std = (stdInIncomeTax ?? stdTopLevel) as number | StandardDeductionBracket[] | undefined;
   return resolveStandardDeduction(std, agi);
+}
+
+// Minnesota standard deduction phase-out constants
+const MN_PHASE_OUT_THRESHOLD_1 = 238950;
+const MN_PHASE_OUT_THRESHOLD_2 = 330300;
+const MN_PHASE_OUT_MAX_THRESHOLD = 1083150;
+const MN_PHASE_OUT_RATE_1 = 0.03;
+const MN_PHASE_OUT_RATE_2 = 0.10;
+const MN_MIN_DEDUCTION_PERCENT = 0.20;
+
+function minnesotaStandardDeduction(
+  baseDeduction: number,
+  agi: number,
+  filingStatus: string
+): number {
+  // Determine threshold based on filing status
+  let threshold1 = MN_PHASE_OUT_THRESHOLD_1;
+  let threshold2 = MN_PHASE_OUT_THRESHOLD_2;
+  let maxThreshold = MN_PHASE_OUT_MAX_THRESHOLD;
+
+  if (filingStatus.toLowerCase().includes("separate")) {
+    threshold1 = threshold1 / 2;
+    threshold2 = threshold2 / 2;
+    maxThreshold = maxThreshold / 2;
+  }
+
+  // If AGI is below first threshold, no phase-out
+  if (agi <= threshold1) {
+    return baseDeduction;
+  }
+
+  // If AGI is at or above maximum threshold, limit to 20% of base deduction
+  if (agi >= maxThreshold) {
+    return baseDeduction * MN_MIN_DEDUCTION_PERCENT;
+  }
+
+  let reduction = 0;
+
+  // First reduction: 3% of amount over threshold 1
+  if (agi > threshold1) {
+    const excessOverThreshold1 = agi - threshold1;
+    reduction += excessOverThreshold1 * MN_PHASE_OUT_RATE_1;
+  }
+
+  // Second reduction: 10% of amount over threshold 2
+  if (agi > threshold2) {
+    const excessOverThreshold2 = agi - threshold2;
+    reduction += excessOverThreshold2 * MN_PHASE_OUT_RATE_2;
+  }
+
+  const phasedOutDeduction = baseDeduction - reduction;
+  const minimumDeduction = baseDeduction * MN_MIN_DEDUCTION_PERCENT;
+
+  // Ensure deduction never goes below 20% of base
+  return Math.max(phasedOutDeduction, minimumDeduction);
 }
 
 // Calculate federal AGI (Adjusted Gross Income) for Georgia tax purposes
@@ -5084,4 +5280,4 @@ function calculateFederalAGI(userInputs: UserTaxInputs): number {
   console.log(`Federal AGI calculation: Total Income ${totalIncome} - Adjustments ${adjustments} = AGI ${federalAGI}`);
   
   return federalAGI;
-}
+} 

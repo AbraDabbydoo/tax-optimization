@@ -631,8 +631,22 @@ Would you like me to start implementing any specific part of this system?
 - **Frontend Fields**: ❌ Missing
   - [ ] Add "Taxpayer is legally blind" checkbox to tax input form
   - [ ] Add "Spouse is legally blind" checkbox for married filing jointly
-  - [ ] Update `UserTaxInputs` interface to include `isBlind?: boolean` and `spouseIsBlind?: boolean`
+  - [ ] Update `UserTaxInputs` interface to include `isBlind?: boolean` and `spouseIsBlind?: boolean`sur
 - **Current Behavior**: All taxpayers default to "not blind" (blind exemptions = $0)
 - **Future Enhancement**: Add frontend fields when blind exemption support is prioritized
 
 **Note**: The blind exemption is relatively uncommon and can be added later if there's user demand. The current implementation correctly calculates all other Illinois exemptions (base $2,850 + age 65+ bonus $1,000).
+
+**Note**
+VeteranExemption for states like NJ
+### TODO: Add State-Specific Personal Exemption Inputs to Step 1 (Basic Info)
+
+- [ ] Add "Taxpayer is legally blind" checkbox (for Illinois and other states)
+- [ ] Add "Spouse is legally blind" checkbox (if married)
+- [ ] Add "Taxpayer is a veteran" checkbox (for NJ and other states)
+- [ ] Add "Spouse is a veteran" checkbox (if married)
+- [ ] Add "Taxpayer is disabled" checkbox (for states with disability exemptions)
+- [ ] Add "Spouse is disabled" checkbox (if married)
+- [ ] Review and add other state-specific exemption fields as needed (e.g., foster child, student, etc.)
+- [ ] Update `UserTaxInputs` interface and backend logic to support these new fields
+- [ ] Update calculation logic in `tax-calculator.ts` to use these fields for exemption calculations

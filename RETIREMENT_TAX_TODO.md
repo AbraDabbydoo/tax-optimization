@@ -19,6 +19,7 @@ This file tracks all outstanding TODOs, logic gaps, and review items for state r
  **Notes:** All retirement income is taxed at standard Wisconsin rates
     - **TODO:** Track pre-1964 WI public pensions for exemption (these are fully exempt, but currently not tracked in user inputs)
     - **TODO:** Handle the $250 personal exemption for 65+ in the tax output (not currently included in retirement income calculation)
+    [ ] **Revisit Michigan (MI)** pension/retirement deduction rules — Michigan provides an alternative deduction method for pension/retirement benefits in addition to the standard deduction. Confirm eligibility, calculation method, thresholds, and update retirement tax logic and state data
 
 
 
@@ -51,4 +52,6 @@ This file tracks all outstanding TODOs, logic gaps, and review items for state r
 
 ## Notes
 - This file should be updated as new TODOs are discovered or completed.
-- When a TODO is resolved, check it off and add a note with the PR/commit/date. 
+- When a TODO is resolved, check it off and add a note with the PR/commit/date.
+
+- 
