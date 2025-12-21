@@ -1,0 +1,104 @@
+{
+  "abbreviation": "NV",
+  "salesTax": {
+    "stateRate": 0.046,
+    "averageLocalRate": 0.0129,
+    "combinedRate": 0.0589,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0814
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0814
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0814
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.046
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0814
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.5499999999999999,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 0,
+      "marriedSeparate": 0,
+      "married": 0,
+      "headOfHousehold": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "abbreviation": "SC",
+  "salesTax": {
+    "stateRate": 0.06,
+    "averageLocalRate": 0.0143,
+    "combinedRate": 0.0743,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0743
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0743
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0743
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.06
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0743
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.5700000000000001,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 3460,
+          "rate": 0
+        },
+        {
+          "min": 3461,
+          "max": 17330,
+          "rate": 3
+        },
+        {
+          "min": 17331,
+          "max": null,
+          "rate": 6.2
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 3460,
+          "rate": 0
+        },
+        {
+          "min": 3461,
+          "max": 17330,
+          "rate": 3
+        },
+        {
+          "min": 17331,
+          "max": null,
+          "rate": 6.2
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 3460,
+          "rate": 0
+        },
+        {
+          "min": 3461,
+          "max": 17330,
+          "rate": 3
+        },
+        {
+          "min": 17331,
+          "max": null,
+          "rate": 6.2
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 3460,
+          "rate": 0
+        },
+        {
+          "min": 3461,
+          "max": 17330,
+          "rate": 3
+        },
+        {
+          "min": 17331,
+          "max": null,
+          "rate": 6.2
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 15000,
+      "marriedSeparate": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

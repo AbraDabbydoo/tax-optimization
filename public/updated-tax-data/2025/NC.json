@@ -1,0 +1,104 @@
+{
+  "abbreviation": "NC",
+  "salesTax": {
+    "stateRate": 0.0475,
+    "averageLocalRate": 0.0222,
+    "combinedRate": 0.0697,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.02
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0697
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0697
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0697
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.0475
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0697
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.88,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.5
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.5
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.5
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.5
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 15000,
+      "marriedSeparate": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

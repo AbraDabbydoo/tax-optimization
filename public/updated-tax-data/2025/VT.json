@@ -1,0 +1,183 @@
+{
+  "abbreviation": "VT",
+  "salesTax": {
+    "stateRate": 0.06,
+    "averageLocalRate": 0.18,
+    "combinedRate": 0.24,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.09
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0618
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0618
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.06
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0618
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 1.9,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 40350,
+          "rate": 3.35
+        },
+        {
+          "min": 40351,
+          "max": 67450,
+          "rate": 6.6
+        },
+        {
+          "min": 67451,
+          "max": 97800,
+          "rate": 7.6
+        },
+        {
+          "min": 97801,
+          "max": 163000,
+          "rate": 8.5
+        },
+        {
+          "min": 163001,
+          "max": null,
+          "rate": 9
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 40350,
+          "rate": 3.35
+        },
+        {
+          "min": 40351,
+          "max": 67450,
+          "rate": 6.6
+        },
+        {
+          "min": 67451,
+          "max": 97800,
+          "rate": 7.6
+        },
+        {
+          "min": 97801,
+          "max": 163000,
+          "rate": 8.5
+        },
+        {
+          "min": 163001,
+          "max": null,
+          "rate": 9
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 40350,
+          "rate": 3.35
+        },
+        {
+          "min": 40351,
+          "max": 67450,
+          "rate": 6.6
+        },
+        {
+          "min": 67451,
+          "max": 97800,
+          "rate": 7.6
+        },
+        {
+          "min": 97801,
+          "max": 163000,
+          "rate": 8.5
+        },
+        {
+          "min": 163001,
+          "max": null,
+          "rate": 9
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 40350,
+          "rate": 3.35
+        },
+        {
+          "min": 40351,
+          "max": 67450,
+          "rate": 6.6
+        },
+        {
+          "min": 67451,
+          "max": 97800,
+          "rate": 7.6
+        },
+        {
+          "min": 97801,
+          "max": 163000,
+          "rate": 8.5
+        },
+        {
+          "min": 163001,
+          "max": null,
+          "rate": 9
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 0,
+      "married": 0,
+      "headOfHousehold": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

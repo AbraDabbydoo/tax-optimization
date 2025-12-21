@@ -1,0 +1,234 @@
+{
+  "abbreviation": "NJ",
+  "salesTax": {
+    "stateRate": 0.06625,
+    "averageLocalRate": 0,
+    "combinedRate": 0.06625,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0663
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0663
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0663
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.0663
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0663
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 2.23,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 20000,
+          "rate": 1.4
+        },
+        {
+          "min": 20001,
+          "max": 35000,
+          "rate": 1.75
+        },
+        {
+          "min": 35001,
+          "max": 40000,
+          "rate": 3.5
+        },
+        {
+          "min": 40001,
+          "max": 75000,
+          "rate": 5.525
+        },
+        {
+          "min": 75001,
+          "max": 500000,
+          "rate": 6.37
+        },
+        {
+          "min": 500001,
+          "max": 1000000,
+          "rate": 8.97
+        },
+        {
+          "min": 1000001,
+          "max": null,
+          "rate": 10.75
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 20000,
+          "rate": 1.4
+        },
+        {
+          "min": 20001,
+          "max": 50000,
+          "rate": 1.75
+        },
+        {
+          "min": 50001,
+          "max": 70000,
+          "rate": 2.45
+        },
+        {
+          "min": 70001,
+          "max": 80000,
+          "rate": 3.5
+        },
+        {
+          "min": 80001,
+          "max": 150000,
+          "rate": 5.525
+        },
+        {
+          "min": 150001,
+          "max": 500000,
+          "rate": 6.37
+        },
+        {
+          "min": 500001,
+          "max": 1000000,
+          "rate": 8.97
+        },
+        {
+          "min": 1000001,
+          "max": null,
+          "rate": 10.75
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 20000,
+          "rate": 1.4
+        },
+        {
+          "min": 20001,
+          "max": 50000,
+          "rate": 1.75
+        },
+        {
+          "min": 50001,
+          "max": 70000,
+          "rate": 2.45
+        },
+        {
+          "min": 70001,
+          "max": 80000,
+          "rate": 3.5
+        },
+        {
+          "min": 80001,
+          "max": 150000,
+          "rate": 5.525
+        },
+        {
+          "min": 150001,
+          "max": 500000,
+          "rate": 6.37
+        },
+        {
+          "min": 500001,
+          "max": 1000000,
+          "rate": 8.97
+        },
+        {
+          "min": 1000001,
+          "max": null,
+          "rate": 10.75
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 20000,
+          "rate": 1.4
+        },
+        {
+          "min": 20001,
+          "max": 35000,
+          "rate": 1.75
+        },
+        {
+          "min": 35001,
+          "max": 40000,
+          "rate": 3.5
+        },
+        {
+          "min": 40001,
+          "max": 75000,
+          "rate": 5.525
+        },
+        {
+          "min": 75001,
+          "max": 500000,
+          "rate": 6.37
+        },
+        {
+          "min": 500001,
+          "max": 1000000,
+          "rate": 8.97
+        },
+        {
+          "min": 1000001,
+          "max": null,
+          "rate": 10.75
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 0,
+      "marriedSeparate": 0,
+      "married": 0,
+      "headOfHousehold": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

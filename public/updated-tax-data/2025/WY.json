@@ -1,0 +1,104 @@
+{
+  "abbreviation": "WY",
+  "salesTax": {
+    "stateRate": 0.04,
+    "averageLocalRate": 0.013600000000000001,
+    "combinedRate": 0.0536,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0536
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0536
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0536
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.04
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0536
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.61,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 0
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 0,
+      "marriedSeparate": 0,
+      "married": 0,
+      "headOfHousehold": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

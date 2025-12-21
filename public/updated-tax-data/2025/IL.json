@@ -1,0 +1,110 @@
+{
+  "abbreviation": "IL",
+  "salesTax": {
+    "stateRate": 0.0625,
+    "averageLocalRate": 0.0249,
+    "combinedRate": 0.0874,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.01
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0874
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0874
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0874
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.0625
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0874
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 2.08,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.95
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.95
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.95
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.95
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 2850,
+    "dependentExemption": 2850,
+    "additionalPersonalExemption65Plus": 1000,
+    "additionalPersonalExemptionBlind": 1000,
+    "personalExemptionPhaseout": {
+      "dependentThreshold": 2850,
+      "description": "Personal exemption reduced to $0 if claimed as dependent and Illinois base income exceeds exemption amount"
+    },
+    "standardDeduction": {
+      "single": 0,
+      "married": 0,
+      "headOfHousehold": 0,
+      "marriedSeparate": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

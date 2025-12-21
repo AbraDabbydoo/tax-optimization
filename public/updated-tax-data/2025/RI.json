@@ -1,0 +1,144 @@
+{
+  "abbreviation": "RI",
+  "salesTax": {
+    "stateRate": 0.07,
+    "averageLocalRate": 0,
+    "combinedRate": 0.07,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.07
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.07
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.07
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.07
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.07
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 1.37,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 77450,
+          "rate": 3.75
+        },
+        {
+          "min": 77451,
+          "max": 176050,
+          "rate": 4.75
+        },
+        {
+          "min": 176051,
+          "max": null,
+          "rate": 5.99
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 77450,
+          "rate": 3.75
+        },
+        {
+          "min": 77451,
+          "max": 176050,
+          "rate": 4.75
+        },
+        {
+          "min": 176051,
+          "max": null,
+          "rate": 5.99
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 77450,
+          "rate": 3.75
+        },
+        {
+          "min": 77451,
+          "max": 176050,
+          "rate": 4.75
+        },
+        {
+          "min": 176051,
+          "max": null,
+          "rate": 5.99
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 77450,
+          "rate": 3.75
+        },
+        {
+          "min": 77451,
+          "max": 176050,
+          "rate": 4.75
+        },
+        {
+          "min": 176051,
+          "max": null,
+          "rate": 5.99
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 10900,
+      "marriedSeparate": 10900,
+      "married": 21800,
+      "headOfHousehold": 16350
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

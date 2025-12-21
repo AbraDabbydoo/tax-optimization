@@ -1,0 +1,104 @@
+{
+  "abbreviation": "ID",
+  "salesTax": {
+    "stateRate": 0.06,
+    "averageLocalRate": 0.03,
+    "combinedRate": 0.09,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.06
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0603
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0603
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0603
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.06
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0603
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.63,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 5.8
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 5.8
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 5.8
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 5.8
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500,
+      "marriedSeparate": 15000
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

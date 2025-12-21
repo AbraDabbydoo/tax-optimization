@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { calculateOptimalTaxStates } from "@/app/actions"
 import type { TaxCalculationResult } from "@/lib/tax-calculator"
-import { stateTaxData } from "@/lib/state-tax-data"
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // Define a formatCurrency function if it's not available from utils

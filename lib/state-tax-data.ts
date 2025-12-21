@@ -85,63 +85,31 @@ export interface StateTaxData {
   lifestyleTags: string[]
 }
 
-// Create a record of state tax data
-export type StateTaxDataRecord = Record<string, StateTaxData>
 
-// Load the state tax data
-export const stateTaxData: StateTaxDataRecord = {}
-
-// Function to load the state tax data
-async function loadStateTaxData(): Promise<StateTaxDataRecord> {
-  try {
-    console.log("Loading state tax data...")
-    
-    let data1, data2;
-    
-    // Check if we're running on the server or client
-    if (typeof window === 'undefined') {
-      // Server-side: prefer updated files with fallback to legacy paths
+// Utility to load a single state's tax data for a given year (default 2025)
+export async function getStateTaxData(stateAbbr: string, year: string = "2025"): Promise<StateTaxData | null> {
+  const fileName = `${stateAbbr.toUpperCase()}.json`;
+  // Server-side
+  if (typeof window === 'undefined') {
+    try {
       const fs = require('fs');
       const path = require('path');
-      
-      const updatedPath1 = path.join(process.cwd(), 'public', 'updated-tax-data', 'state-tax-data-updated.json');
-      const updatedPath2 = path.join(process.cwd(), 'public', 'updated-tax-data', 'state-tax-data-2-updated.json');
-      const dataPath1 = path.join(process.cwd(), 'public', 'data', 'state-tax-data.json');
-      const dataPath2 = path.join(process.cwd(), 'public', 'data', 'state-tax-data-2.json');
-      
-      const file1 = fs.existsSync(updatedPath1) ? updatedPath1 : dataPath1;
-      const file2 = fs.existsSync(updatedPath2) ? updatedPath2 : dataPath2;
-      
-      data1 = JSON.parse(fs.readFileSync(file1, 'utf8'));
-      data2 = JSON.parse(fs.readFileSync(file2, 'utf8'));
-    } else {
-      // Client-side: prefer updated files with fallback to legacy paths
-      async function fetchWithFallback(primary: string, fallback: string) {
-        try {
-          const r = await fetch(primary);
-          if (r && r.ok) return await r.json();
-        } catch (_) {}
-        const r2 = await fetch(fallback);
-        return await r2.json();
-      }
-      
-      data1 = await fetchWithFallback('/updated-tax-data/state-tax-data-updated.json', '/data/state-tax-data.json');
-      data2 = await fetchWithFallback('/updated-tax-data/state-tax-data-2-updated.json', '/data/state-tax-data-2.json');
+      const filePath = path.join(process.cwd(), 'public', 'updated-tax-data', year, fileName);
+      if (!fs.existsSync(filePath)) return null;
+      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    } catch (err) {
+      console.error(`Error loading state tax data for ${stateAbbr} (${year}):`, err);
+      return null;
     }
-
-    // Combine the data
-    const combinedData = { ...data1, ...data2 };
-
-    console.log(`Loaded tax data for ${Object.keys(combinedData).length} states`);
-
-    // Add the data to the stateTaxData object
-    Object.assign(stateTaxData, combinedData);
-
-    return combinedData;
-  } catch (error) {
-    console.error("Error loading state tax data:", error);
-    throw new Error("Failed to load state tax data");
+  } else {
+    // Client-side
+    try {
+      const res = await fetch(`/updated-tax-data/${year}/${fileName}`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (err) {
+      console.error(`Error loading state tax data for ${stateAbbr} (${year}):`, err);
+      return null;
+    }
   }
 }
-// Create a promise to load the state tax data
-export const stateTaxDataPromise = loadStateTaxData()

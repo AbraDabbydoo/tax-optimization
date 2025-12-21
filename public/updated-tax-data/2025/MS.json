@@ -1,0 +1,104 @@
+{
+  "abbreviation": "MS",
+  "salesTax": {
+    "stateRate": 0.07,
+    "averageLocalRate": 0.07,
+    "combinedRate": 0.14,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.07
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0707
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0707
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0707
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.07
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0707
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.52,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.7
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.7
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.7
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 4.7
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 2300,
+      "marriedSeparate": 2300,
+      "married": 4600,
+      "headOfHousehold": 3400
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

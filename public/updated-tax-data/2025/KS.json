@@ -1,0 +1,124 @@
+{
+  "abbreviation": "KS",
+  "salesTax": {
+    "stateRate": 0.065,
+    "averageLocalRate": 0.0217,
+    "combinedRate": 0.0867,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.065
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0867
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0867
+      },
+      "services": {
+        "taxable": true,
+        "rate": 0.0867
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0867
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.065
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0867
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 1.34,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 23000,
+          "rate": 5.2
+        },
+        {
+          "min": 23001,
+          "max": null,
+          "rate": 5.58
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 46000,
+          "rate": 5.2
+        },
+        {
+          "min": 46001,
+          "max": null,
+          "rate": 5.58
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 23000,
+          "rate": 5.2
+        },
+        {
+          "min": 23001,
+          "max": null,
+          "rate": 5.58
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 23000,
+          "rate": 5.2
+        },
+        {
+          "min": 23001,
+          "max": null,
+          "rate": 5.58
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 3605,
+      "married": 8240,
+      "headOfHousehold": 6180,
+      "marriedSeparate": 4120
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

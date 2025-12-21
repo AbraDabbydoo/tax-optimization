@@ -1,0 +1,325 @@
+{
+  "abbreviation": "HI",
+  "salesTax": {
+    "stateRate": 0.04,
+    "averageLocalRate": 0.044,
+    "combinedRate": 0.08399999999999999,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.04
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0444
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0444
+      },
+      "services": {
+        "taxable": true,
+        "rate": 0.0444
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0444
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.04
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0444
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.3,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 2400,
+          "rate": 1.4
+        },
+        {
+          "min": 2401,
+          "max": 4800,
+          "rate": 3.2
+        },
+        {
+          "min": 4801,
+          "max": 9600,
+          "rate": 5.5
+        },
+        {
+          "min": 9601,
+          "max": 14400,
+          "rate": 6.4
+        },
+        {
+          "min": 14401,
+          "max": 19200,
+          "rate": 6.8
+        },
+        {
+          "min": 19201,
+          "max": 24000,
+          "rate": 7.2
+        },
+        {
+          "min": 24001,
+          "max": 36000,
+          "rate": 7.6
+        },
+        {
+          "min": 36001,
+          "max": 48000,
+          "rate": 7.9
+        },
+        {
+          "min": 48001,
+          "max": 150000,
+          "rate": 8.25
+        },
+        {
+          "min": 150001,
+          "max": 175000,
+          "rate": 9
+        },
+        {
+          "min": 175001,
+          "max": 200000,
+          "rate": 10
+        },
+        {
+          "min": 200001,
+          "max": null,
+          "rate": 11
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 4800,
+          "rate": 1.4
+        },
+        {
+          "min": 4801,
+          "max": 9600,
+          "rate": 3.2
+        },
+        {
+          "min": 9601,
+          "max": 19200,
+          "rate": 5.5
+        },
+        {
+          "min": 19201,
+          "max": 28800,
+          "rate": 6.4
+        },
+        {
+          "min": 28801,
+          "max": 38400,
+          "rate": 6.8
+        },
+        {
+          "min": 38401,
+          "max": 48000,
+          "rate": 7.2
+        },
+        {
+          "min": 48001,
+          "max": 72000,
+          "rate": 7.6
+        },
+        {
+          "min": 72001,
+          "max": 96000,
+          "rate": 7.9
+        },
+        {
+          "min": 96001,
+          "max": 300000,
+          "rate": 8.25
+        },
+        {
+          "min": 300001,
+          "max": 350000,
+          "rate": 9
+        },
+        {
+          "min": 350001,
+          "max": 400000,
+          "rate": 10
+        },
+        {
+          "min": 400001,
+          "max": null,
+          "rate": 11
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 2400,
+          "rate": 1.4
+        },
+        {
+          "min": 2401,
+          "max": 4800,
+          "rate": 3.2
+        },
+        {
+          "min": 4801,
+          "max": 9600,
+          "rate": 5.5
+        },
+        {
+          "min": 9601,
+          "max": 14400,
+          "rate": 6.4
+        },
+        {
+          "min": 14401,
+          "max": 19200,
+          "rate": 6.8
+        },
+        {
+          "min": 19201,
+          "max": 24000,
+          "rate": 7.2
+        },
+        {
+          "min": 24001,
+          "max": 36000,
+          "rate": 7.6
+        },
+        {
+          "min": 36001,
+          "max": 48000,
+          "rate": 7.9
+        },
+        {
+          "min": 48001,
+          "max": 150000,
+          "rate": 8.25
+        },
+        {
+          "min": 150001,
+          "max": 175000,
+          "rate": 9
+        },
+        {
+          "min": 175001,
+          "max": 200000,
+          "rate": 10
+        },
+        {
+          "min": 200001,
+          "max": null,
+          "rate": 11
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 2400,
+          "rate": 1.4
+        },
+        {
+          "min": 2401,
+          "max": 4800,
+          "rate": 3.2
+        },
+        {
+          "min": 4801,
+          "max": 9600,
+          "rate": 5.5
+        },
+        {
+          "min": 9601,
+          "max": 14400,
+          "rate": 6.4
+        },
+        {
+          "min": 14401,
+          "max": 19200,
+          "rate": 6.8
+        },
+        {
+          "min": 19201,
+          "max": 24000,
+          "rate": 7.2
+        },
+        {
+          "min": 24001,
+          "max": 36000,
+          "rate": 7.6
+        },
+        {
+          "min": 36001,
+          "max": 48000,
+          "rate": 7.9
+        },
+        {
+          "min": 48001,
+          "max": 150000,
+          "rate": 8.25
+        },
+        {
+          "min": 150001,
+          "max": 175000,
+          "rate": 9
+        },
+        {
+          "min": 175001,
+          "max": 200000,
+          "rate": 10
+        },
+        {
+          "min": 200001,
+          "max": null,
+          "rate": 11
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 1144,
+    "dependentExemption": 1144,
+    "additionalPersonalExemption65Plus": 1144,
+    "standardDeduction": {
+      "single": 4400,
+      "married": 8800,
+      "marriedSeparate": 4400,
+      "headOfHousehold": 6424
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

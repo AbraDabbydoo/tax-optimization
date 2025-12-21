@@ -1,0 +1,104 @@
+{
+  "abbreviation": "LA",
+  "salesTax": {
+    "stateRate": 0.0445,
+    "averageLocalRate": 0.0507,
+    "combinedRate": 0.0952,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0952
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0952
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0952
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.0445
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0952
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.51,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 12500,
+      "married": 25000,
+      "headOfHousehold": 25000,
+      "marriedSeparate": 12500
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

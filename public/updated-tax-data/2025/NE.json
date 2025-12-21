@@ -1,0 +1,164 @@
+{
+  "abbreviation": "NE",
+  "salesTax": {
+    "stateRate": 0.055,
+    "averageLocalRate": 0.0143,
+    "combinedRate": 0.0693,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.055
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0693
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0693
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0693
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.055
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0693
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 1.63,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 3999,
+          "rate": 2.46
+        },
+        {
+          "min": 4000,
+          "max": 15999,
+          "rate": 3.51
+        },
+        {
+          "min": 16000,
+          "max": 29999,
+          "rate": 5.01
+        },
+        {
+          "min": 30000,
+          "max": null,
+          "rate": 6.64
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 3999,
+          "rate": 2.46
+        },
+        {
+          "min": 4000,
+          "max": 15999,
+          "rate": 3.51
+        },
+        {
+          "min": 16000,
+          "max": 29999,
+          "rate": 5.01
+        },
+        {
+          "min": 30000,
+          "max": null,
+          "rate": 6.64
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 3999,
+          "rate": 2.46
+        },
+        {
+          "min": 4000,
+          "max": 15999,
+          "rate": 3.51
+        },
+        {
+          "min": 16000,
+          "max": 29999,
+          "rate": 5.01
+        },
+        {
+          "min": 30000,
+          "max": null,
+          "rate": 6.64
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 3999,
+          "rate": 2.46
+        },
+        {
+          "min": 4000,
+          "max": 15999,
+          "rate": 3.51
+        },
+        {
+          "min": 16000,
+          "max": 29999,
+          "rate": 5.01
+        },
+        {
+          "min": 30000,
+          "max": null,
+          "rate": 6.64
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 15000,
+      "marriedSeparate": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "abbreviation": "IA",
+  "salesTax": {
+    "stateRate": 0.07,
+    "averageLocalRate": 0.008199999999999999,
+    "combinedRate": 0.0782,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0682
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0682
+      },
+      "services": {
+        "taxable": true,
+        "rate": 0.0682
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0682
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.07
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0682
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 1.53,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3.8
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3.8
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3.8
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": null,
+          "rate": 3.8
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 14600,
+      "married": 29200,
+      "headOfHousehold": 21900,
+      "marriedSeparate": 14600
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

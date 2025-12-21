@@ -2,7 +2,7 @@
 
 import { getTaxOptimizationRecommendations } from "@/lib/tax-calculator"
 import type { UserTaxInputs } from "@/lib/tax-calculator"
-import { stateTaxDataPromise } from "@/lib/state-tax-data"
+
 
 export async function calculateOptimalTaxStates(formData: FormData) {
   try {
@@ -81,11 +81,7 @@ export async function calculateOptimalTaxStates(formData: FormData) {
 
     console.log("User inputs prepared:", userInputs)
 
-    // Debug: Check if NC has income tax in the data
-    const taxData = await stateTaxDataPromise
-    console.log("NC tax data:", taxData["NC"])
-    console.log("NC income tax data:", taxData["NC"]?.incomeTax)
-    console.log("NC income tax brackets:", taxData["NC"]?.incomeTax?.brackets)
+
 
     // Get tax optimization recommendations
     const recommendations = await getTaxOptimizationRecommendations(userInputs)

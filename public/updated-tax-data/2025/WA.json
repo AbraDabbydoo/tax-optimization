@@ -1,0 +1,124 @@
+{
+  "abbreviation": "WA",
+  "salesTax": {
+    "stateRate": 0.065,
+    "averageLocalRate": 0.027000000000000003,
+    "combinedRate": 0.092,
+    "categories": {
+      "groceries": {
+        "taxable": false,
+        "rate": 0
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.092
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.092
+      },
+      "services": {
+        "taxable": false,
+        "rate": 0
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.092
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.065
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.092
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.84,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 270000,
+          "rate": 0
+        },
+        {
+          "min": 270001,
+          "max": null,
+          "rate": 7
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 270000,
+          "rate": 0
+        },
+        {
+          "min": 270001,
+          "max": null,
+          "rate": 7
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 270000,
+          "rate": 0
+        },
+        {
+          "min": 270001,
+          "max": null,
+          "rate": 7
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 270000,
+          "rate": 0
+        },
+        {
+          "min": 270001,
+          "max": null,
+          "rate": 7
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 0,
+      "marriedSeparate": 0,
+      "married": 0,
+      "headOfHousehold": 0
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

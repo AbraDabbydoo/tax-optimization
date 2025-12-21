@@ -1,0 +1,204 @@
+{
+  "abbreviation": "NM",
+  "salesTax": {
+    "stateRate": 0.05125,
+    "averageLocalRate": 0.0269,
+    "combinedRate": 0.07815,
+    "categories": {
+      "groceries": {
+        "taxable": true,
+        "rate": 0.07815
+      },
+      "preparedFood": {
+        "taxable": true,
+        "rate": 0.0782
+      },
+      "utilities": {
+        "taxable": true,
+        "rate": 0.0782
+      },
+      "services": {
+        "taxable": true,
+        "rate": 0.0782
+      },
+      "digitalGoods": {
+        "taxable": true,
+        "rate": 0.0782
+      },
+      "medicine": {
+        "taxable": false,
+        "rate": 0.0513
+      },
+      "streamingSubscriptions": {
+        "taxable": true,
+        "rate": 0.0782
+      }
+    }
+  },
+  "propertyTax": {
+    "averageEffectiveRate": 0.7799999999999999,
+    "hasPropertyTax": true,
+    "lastUpdated": "2025-05-19T14:29:16.723Z"
+  },
+  "retirementIncome": {
+    "socialSecurityTaxed": false,
+    "pensionsTaxed": false,
+    "iraDistributionsTaxed": false,
+    "retirementIncomeExemption": 0,
+    "retirementIncomeExemptionAgeRequirement": 0
+  },
+  "vehicleTax": {
+    "rate": 0,
+    "hasRelief": false,
+    "isCountyBased": false,
+    "specialAssessmentRules": ""
+  },
+  "costOfLivingIndex": 100,
+  "lifestyleTags": [],
+  "incomeTax": {
+    "brackets": {
+      "single": [
+        {
+          "min": 0,
+          "max": 12550,
+          "rate": 0
+        },
+        {
+          "min": 12551,
+          "max": 17550,
+          "rate": 1.7
+        },
+        {
+          "min": 17551,
+          "max": 23550,
+          "rate": 3.2
+        },
+        {
+          "min": 23551,
+          "max": 28550,
+          "rate": 4.7
+        },
+        {
+          "min": 28551,
+          "max": 222550,
+          "rate": 4.9
+        },
+        {
+          "min": 222551,
+          "max": null,
+          "rate": 4.9
+        }
+      ],
+      "married": [
+        {
+          "min": 0,
+          "max": 25100,
+          "rate": 0
+        },
+        {
+          "min": 25101,
+          "max": 30100,
+          "rate": 1.7
+        },
+        {
+          "min": 30101,
+          "max": 36100,
+          "rate": 3.2
+        },
+        {
+          "min": 36101,
+          "max": 41100,
+          "rate": 4.7
+        },
+        {
+          "min": 41101,
+          "max": 236100,
+          "rate": 4.9
+        },
+        {
+          "min": 236101,
+          "max": null,
+          "rate": 4.9
+        }
+      ],
+      "headOfHousehold": [
+        {
+          "min": 0,
+          "max": 12550,
+          "rate": 0
+        },
+        {
+          "min": 12551,
+          "max": 17550,
+          "rate": 1.7
+        },
+        {
+          "min": 17551,
+          "max": 23550,
+          "rate": 3.2
+        },
+        {
+          "min": 23551,
+          "max": 28550,
+          "rate": 4.7
+        },
+        {
+          "min": 28551,
+          "max": 222550,
+          "rate": 4.9
+        },
+        {
+          "min": 222551,
+          "max": null,
+          "rate": 4.9
+        }
+      ],
+      "marriedSeparate": [
+        {
+          "min": 0,
+          "max": 12550,
+          "rate": 0
+        },
+        {
+          "min": 12551,
+          "max": 17550,
+          "rate": 1.7
+        },
+        {
+          "min": 17551,
+          "max": 23550,
+          "rate": 3.2
+        },
+        {
+          "min": 23551,
+          "max": 28550,
+          "rate": 4.7
+        },
+        {
+          "min": 28551,
+          "max": 222550,
+          "rate": 4.9
+        },
+        {
+          "min": 222551,
+          "max": null,
+          "rate": 4.9
+        }
+      ]
+    },
+    "hasIncomeTax": true,
+    "personalExemption": 0,
+    "dependentExemption": 0,
+    "standardDeduction": {
+      "single": 15000,
+      "marriedSeparate": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500
+    },
+    "taxCredits": {
+      "childTaxCredit": 0,
+      "childCareTaxCredit": 0,
+      "earnedIncomeTaxCredit": false
+    }
+  }
+}

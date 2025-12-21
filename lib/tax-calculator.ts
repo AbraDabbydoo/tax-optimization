@@ -1,7 +1,7 @@
 console.log("TAX CALCULATOR MODULE LOADED");
 
 import {
-  stateTaxDataPromise,
+  getStateTaxData,
   type StateTaxData,
   type StateTaxBracket,
   type FilingStatusBrackets,
@@ -173,41 +173,30 @@ function getBracketsByFilingStatus(
   brackets: FilingStatusBrackets | StateTaxBracket[],
   filingStatus: string,
 ): StateTaxBracket[] {
-  console.log("Getting brackets for filing status:", filingStatus)
-
-  // If brackets is an array, it means there's only one set of brackets for all filing statuses
-  if (Array.isArray(brackets)) {
-    console.log("Brackets is an array, returning directly")
-    return brackets
-  }
-
-  // Map the user's filing status to the ones in our data structure
-  let dataFilingStatus = filingStatus.toLowerCase()
+  // ...existing code...
+  if (Array.isArray(brackets)) return brackets;
+  let dataFilingStatus = filingStatus.toLowerCase();
   if (
     dataFilingStatus === "joint" ||
     dataFilingStatus === "marriedjointly" ||
     dataFilingStatus === "married filing jointly"
   ) {
-    dataFilingStatus = "married"
+    dataFilingStatus = "married";
   } else if (dataFilingStatus === "head" || dataFilingStatus === "hoh" || dataFilingStatus === "head of household") {
-    dataFilingStatus = "headOfHousehold"
+    dataFilingStatus = "headOfHousehold";
   } else if (
     dataFilingStatus !== "single" &&
     dataFilingStatus !== "married" &&
     dataFilingStatus !== "headOfHousehold"
   ) {
-    console.log("Unknown filing status, defaulting to single")
-    dataFilingStatus = "single" // Default to single for unknown filing statuses
+    dataFilingStatus = "single";
   }
+  return brackets[dataFilingStatus as keyof FilingStatusBrackets] || brackets.single || [];
+}
 
-  console.log("Mapped filing status:", dataFilingStatus)
-
-  // Get the brackets for the specified filing status
-  // Default to single if the filing status doesn't exist
-  const result = brackets[dataFilingStatus as keyof FilingStatusBrackets] || brackets.single || []
-  console.log(`Found ${result.length} brackets for ${dataFilingStatus}`)
-
-  return result
+// New: Load state tax data for a given state (and year)
+export async function loadStateTaxDataForCalculation(stateAbbr: string, year: string = "2025"): Promise<StateTaxData | null> {
+  return await getStateTaxData(stateAbbr, year);
 }
 
 // Calculate income tax based on brackets
@@ -3709,12 +3698,9 @@ export async function calculateStateTaxBurden(
   try {
     console.log(`Calculating tax burden for state: ${stateCode}`)
 
-    // Ensure state tax data is loaded
-    const taxData = await stateTaxDataPromise
-    const stateData = taxData[stateCode]
-
+    // Load state tax data for this state
+    const stateData = await loadStateTaxDataForCalculation(stateCode)
     console.log("STATE DATA FOR", stateCode, ":", stateData);
-
     if (!stateData) {
       throw new Error(`No tax data available for state code: ${stateCode}`)
     }
@@ -4119,26 +4105,23 @@ export async function getTaxOptimizationRecommendations(
 
     console.log("Current state tax burden:", currentStateTaxBurden)
 
-    // Ensure state tax data is loaded
-    const taxData = await stateTaxDataPromise
-    console.log("Tax data loaded for states:", Object.keys(taxData).length)
-    console.log("ALL STATE CODES:", Object.keys(taxData));
-
+    // List of all state codes (update as needed or load from a config)
+    const allStateCodes = [
+      "AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI","WV","WY"
+    ];
     // Calculate tax burden for all states
-    const allStateResultsPromises = Object.keys(taxData).map(async (stateCode) => {
+    const allStateResultsPromises = allStateCodes.map(async (stateCode) => {
       try {
         const result = await calculateStateTaxBurden(stateCode, userInputs)
-
         // Calculate savings compared to current state
         result.estimatedAnnualSavings = currentStateTaxBurden - result.totalTaxBurden
-
         return result
       } catch (error) {
         console.error(`Error calculating for state ${stateCode}:`, error)
         // Return a placeholder result for states that fail
         return {
           stateCode,
-          stateName: taxData[stateCode]?.name || stateCode,
+          stateName: stateCode,
           totalTaxBurden: 0,
           incomeTaxBurden: 0,
           retirementTaxBurden: 0,
@@ -4152,7 +4135,6 @@ export async function getTaxOptimizationRecommendations(
         } as TaxCalculationResult
       }
     })
-
     // Wait for all calculations to complete
     const allStateResults = await Promise.all(allStateResultsPromises)
     console.log("Calculated results for all states:", allStateResults.length)
