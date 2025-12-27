@@ -1,7 +1,17 @@
 {
   "abbreviation": "IL",
+  "metadata": {
+    "source": "https://taxfoundation.org/...",
+    "last_verified": "2025-12-15",
+    "verified_by": "manual"
+  },
   "salesTax": {
     "stateRate": 0.0625,
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "averageLocalRate": 0.0249,
     "combinedRate": 0.0874,
     "categories": {
@@ -37,11 +47,21 @@
   },
   "propertyTax": {
     "averageEffectiveRate": 2.08,
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "hasPropertyTax": true,
     "lastUpdated": "2025-05-19T14:29:16.723Z"
   },
   "retirementIncome": {
     "socialSecurityTaxed": false,
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "pensionsTaxed": false,
     "iraDistributionsTaxed": false,
     "retirementIncomeExemption": 0,
@@ -49,14 +69,39 @@
   },
   "vehicleTax": {
     "rate": 0,
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "hasRelief": false,
     "isCountyBased": false,
     "specialAssessmentRules": ""
   },
   "costOfLivingIndex": 100,
+    "costOfLivingIndexMetadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
   "lifestyleTags": [],
   "incomeTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "brackets": {
+          "personalExemptionMetadata": {
+            "source": "https://taxfoundation.org/...",
+            "last_verified": "2025-12-15",
+            "verified_by": "manual"
+          },
+          "dependentExemptionMetadata": {
+            "source": "https://taxfoundation.org/...",
+            "last_verified": "2025-12-15",
+            "verified_by": "manual"
+          },
       "single": [
         {
           "min": 0,
@@ -96,12 +141,22 @@
       "description": "Personal exemption reduced to $0 if claimed as dependent and Illinois base income exceeds exemption amount"
     },
     "standardDeduction": {
+          "standardDeductionMetadata": {
+            "source": "https://taxfoundation.org/...",
+            "last_verified": "2025-12-15",
+            "verified_by": "manual"
+          },
       "single": 0,
       "married": 0,
       "headOfHousehold": 0,
       "marriedSeparate": 0
     },
     "taxCredits": {
+          "taxCreditsMetadata": {
+            "source": "https://taxfoundation.org/...",
+            "last_verified": "2025-12-15",
+            "verified_by": "manual"
+          },
       "childTaxCredit": 0,
       "childCareTaxCredit": 0,
       "earnedIncomeTaxCredit": false

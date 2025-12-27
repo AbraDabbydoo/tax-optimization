@@ -1,9 +1,19 @@
 {
   "abbreviation": "MS",
   "salesTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "stateRate": 0.07,
     "averageLocalRate": 0.07,
     "combinedRate": 0.14,
+     "categoriesMetadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "categories": {
       "groceries": {
         "taxable": true,
@@ -36,11 +46,21 @@
     }
   },
   "propertyTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "averageEffectiveRate": 0.52,
     "hasPropertyTax": true,
     "lastUpdated": "2025-05-19T14:29:16.723Z"
   },
   "retirementIncome": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "socialSecurityTaxed": false,
     "pensionsTaxed": false,
     "iraDistributionsTaxed": false,
@@ -48,14 +68,29 @@
     "retirementIncomeExemptionAgeRequirement": 0
   },
   "vehicleTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "rate": 0,
     "hasRelief": false,
     "isCountyBased": false,
     "specialAssessmentRules": ""
   },
   "costOfLivingIndex": 100,
+  "costOfLivingIndexMetadata": {
+    "source": "https://taxfoundation.org/...",
+    "last_verified": "2025-12-15",
+    "verified_by": "manual"
+  },
   "lifestyleTags": [],
   "incomeTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "brackets": {
       "single": [
         {
@@ -88,14 +123,34 @@
     },
     "hasIncomeTax": true,
     "personalExemption": 0,
+    "personalExemptionMetadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "dependentExemption": 0,
+    "dependentExemptionMetadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-15",
+      "verified_by": "manual"
+    },
     "standardDeduction": {
+      "standardDeductionMetadata": {
+        "source": "https://taxfoundation.org/...",
+        "last_verified": "2025-12-15",
+        "verified_by": "manual"
+      },
       "single": 2300,
       "marriedSeparate": 2300,
       "married": 4600,
       "headOfHousehold": 3400
     },
     "taxCredits": {
+      "taxCreditsMetadata": {
+        "source": "https://taxfoundation.org/...",
+        "last_verified": "2025-12-15",
+        "verified_by": "manual"
+      },
       "childTaxCredit": 0,
       "childCareTaxCredit": 0,
       "earnedIncomeTaxCredit": false

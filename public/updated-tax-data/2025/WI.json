@@ -1,9 +1,19 @@
 {
   "abbreviation": "WI",
   "salesTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "stateRate": 0.05,
     "averageLocalRate": 0.0044,
     "combinedRate": 0.054400000000000004,
+    "categoriesMetadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "categories": {
       "groceries": {
         "taxable": false,
@@ -36,11 +46,21 @@
     }
   },
   "propertyTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "averageEffectiveRate": 1.6099999999999999,
     "hasPropertyTax": true,
     "lastUpdated": "2025-05-19T14:29:16.723Z"
   },
   "retirementIncome": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "socialSecurityTaxed": false,
     "pensionsTaxed": false,
     "iraDistributionsTaxed": false,
@@ -48,14 +68,29 @@
     "retirementIncomeExemptionAgeRequirement": 0
   },
   "vehicleTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "rate": 0,
     "hasRelief": false,
     "isCountyBased": false,
     "specialAssessmentRules": ""
   },
   "costOfLivingIndex": 100,
+  "costOfLivingIndexMetadata": {
+    "source": "https://taxfoundation.org/...",
+    "last_verified": "2025-12-27",
+    "verified_by": "manual"
+  },
   "lifestyleTags": [],
   "incomeTax": {
+    "metadata": {
+      "source": "https://taxfoundation.org/...",
+      "last_verified": "2025-12-27",
+      "verified_by": "manual"
+    },
     "brackets": {
       "single": [
         {
@@ -175,6 +210,11 @@
       "headOfHousehold": 0
     },
     "taxCredits": {
+      "taxCreditsMetadata": {
+        "source": "https://taxfoundation.org/...",
+        "last_verified": "2025-12-27",
+        "verified_by": "manual"
+      },
       "childTaxCredit": 0,
       "childCareTaxCredit": 0,
       "earnedIncomeTaxCredit": false
