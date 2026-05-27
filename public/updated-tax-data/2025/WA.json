@@ -91,57 +91,7 @@
       "last_verified": "2025-12-27",
       "verified_by": "manual"
     },
-    "brackets": {
-      "single": [
-        {
-          "min": 0,
-          "max": 270000,
-          "rate": 0
-        },
-        {
-          "min": 270001,
-          "max": null,
-          "rate": 7
-        }
-      ],
-      "married": [
-        {
-          "min": 0,
-          "max": 270000,
-          "rate": 0
-        },
-        {
-          "min": 270001,
-          "max": null,
-          "rate": 7
-        }
-      ],
-      "headOfHousehold": [
-        {
-          "min": 0,
-          "max": 270000,
-          "rate": 0
-        },
-        {
-          "min": 270001,
-          "max": null,
-          "rate": 7
-        }
-      ],
-      "marriedSeparate": [
-        {
-          "min": 0,
-          "max": 270000,
-          "rate": 0
-        },
-        {
-          "min": 270001,
-          "max": null,
-          "rate": 7
-        }
-      ]
-    },
-    "hasIncomeTax": true,
+    "hasIncomeTax": false,
     "personalExemption": 0,
     "dependentExemption": 0,
     "standardDeduction": {

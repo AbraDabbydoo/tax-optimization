@@ -242,13 +242,15 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
-    "dependentExemption": 0,
+    "personalExemption": 1000,
+    "dependentExemption": 1000,
+    "exemptionNotes": "Oklahoma allows a personal exemption of $1,000 per taxpayer, $1,000 per spouse (if applicable), and $1,000 per dependent. Additional exemptions may apply for blindness and age 65+ under certain income limits.",
     "standardDeduction": {
       "single": 6350,
       "marriedSeparate": 6350,
       "married": 12700,
-      "headOfHousehold": 9350
+      "headOfHousehold": 9350,
+      "additional65Plus": 0
     },
     "taxCredits": {
       "taxCreditsMetadata": {

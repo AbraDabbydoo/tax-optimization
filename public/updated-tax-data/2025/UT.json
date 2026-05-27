@@ -125,9 +125,9 @@
     "personalExemption": 0,
     "dependentExemption": 0,
     "standardDeduction": {
-      "single": 0,
-      "married": 0,
-      "headOfHousehold": 0
+      "single": 14600,
+      "married": 29200,
+      "headOfHousehold": 21900
     },
     "taxCredits": {
       "taxCreditsMetadata": {

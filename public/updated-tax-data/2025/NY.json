@@ -87,9 +87,9 @@
   "lifestyleTags": [],
   "incomeTax": {
     "metadata": {
-      "source": "https://taxfoundation.org/...",
-      "last_verified": "2025-12-26",
-      "verified_by": "manual"
+      "source": "https://www.tax.ny.gov/pit/file/standard_deductions.htm?utm_source=chatgpt.com",
+      "last_verified": "2025-12-28",
+      "verified_by": "JDD"
     },
     "brackets": {
       "single": [
@@ -286,9 +286,11 @@
     "dependentExemption": 0,
     "standardDeduction": {
       "single": 8000,
-      "marriedSeparate": 8000,
+      "singleDependent": 3100,
       "married": 16050,
-      "headOfHousehold": 11200
+      "marriedSeparate": 8000,
+      "headOfHousehold": 11200,
+      "qualifyingSurvivingSpouse": 16050
     },
     "taxCredits": {
       "taxCreditsMetadata": {

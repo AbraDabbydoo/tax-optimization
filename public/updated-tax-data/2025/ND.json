@@ -224,12 +224,7 @@
     "hasIncomeTax": true,
     "personalExemption": 0,
     "dependentExemption": 0,
-    "standardDeduction": {
-      "single": 15000,
-      "marriedSeparate": 15000,
-      "married": 30000,
-      "headOfHousehold": 22500
-    },
+    "standardDeduction": null,
     "taxCredits": {
       "taxCreditsMetadata": {
         "source": "https://taxfoundation.org/...",

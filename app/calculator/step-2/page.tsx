@@ -13,6 +13,7 @@ import { Tooltip } from "@/components/ui/tooltip"
 
 export default function IncomePage() {
   const [annualIncome, setAnnualIncome] = useState("")
+  const [federalTaxableIncome, setFederalTaxableIncome] = useState("")
   const [socialSecurityIncome, setSocialSecurityIncome] = useState("")
   const [investmentIncome, setInvestmentIncome] = useState("")
   const [interestIncome, setInterestIncome] = useState("")
@@ -97,6 +98,7 @@ export default function IncomePage() {
         setAlimonyReceived(parsedData.alimonyReceived || "")
         setAlimonyDivorceDate(parsedData.alimonyDivorceDate || "")
         setGamblingWinnings(parsedData.gamblingWinnings || "")
+        setFederalTaxableIncome(parsedData.federalTaxableIncome || "")
       }
       
       // Load alimony status from basic info
@@ -135,6 +137,7 @@ export default function IncomePage() {
     try {
       const formData = {
         annualIncome,
+        federalTaxableIncome,
         socialSecurityIncome,
         investmentIncome,
         interestIncome,
@@ -176,6 +179,7 @@ export default function IncomePage() {
     }
   }, [
     annualIncome,
+    federalTaxableIncome,
     socialSecurityIncome,
     investmentIncome,
     interestIncome,
@@ -271,10 +275,13 @@ export default function IncomePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center justify-between">
         <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
+        </Link>
+        <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+          Go to Dashboard
         </Link>
       </div>
 
@@ -330,6 +337,27 @@ export default function IncomePage() {
             </div>
             {errors.annualIncome && <p className="text-sm text-red-500">Please enter your annual income </p>}
             <p className="text-xs text-muted-foreground">Enter your gross annual income before taxes and deductions from wages/salary.</p>
+          </div>
+
+          {/* Federal Taxable Income for ND */}
+          <div className="space-y-2">
+            <Label htmlFor="federalTaxableIncome">
+              Federal Taxable Income (for North Dakota)
+            </Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="federalTaxableIncome"
+                className="pl-9"
+                placeholder="Enter your federal taxable income"
+                value={federalTaxableIncome ? Number(federalTaxableIncome.replace(/,/g, "")).toLocaleString() : ""}
+                onChange={e => {
+                  const raw = e.target.value.replace(/,/g, "");
+                  if (/^\d*$/.test(raw)) setFederalTaxableIncome(raw);
+                }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">If you are filing in North Dakota, enter your federal taxable income from your federal return. Otherwise, you can leave this blank.</p>
           </div>
 
           {/* Add new income fields here, before the retirement income section */}

@@ -162,13 +162,15 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
-    "dependentExemption": 0,
+    "personalExemption": 5100,
+    "dependentExemption": 5100,
+    "personalExemptionAmount": 5100,
     "standardDeduction": {
       "single": 10900,
       "marriedSeparate": 10900,
       "married": 21800,
-      "headOfHousehold": 16350
+      "headOfHousehold": 16350,
+      "additional65Plus": 0
     },
     "taxCredits": {
       "taxCreditsMetadata": {

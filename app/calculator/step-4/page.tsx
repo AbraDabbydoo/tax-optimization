@@ -42,6 +42,7 @@ export default function ExpensesPage() {
         "taxCalculator_expensesInfo",
         JSON.stringify({ groceries, preparedFood, utilities, services, digitalGoods, medicine, streamingSubscriptions })
       );
+      localStorage.setItem("taxCalculator_expensesInfoVisited", "true")
     } catch (e) {}
   }, [groceries, preparedFood, utilities, services, digitalGoods, medicine, streamingSubscriptions]);
 

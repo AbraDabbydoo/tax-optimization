@@ -222,7 +222,7 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
+    "personalExemption": 4000,
     "dependentExemption": 0,
     "standardDeduction": {
       "single": 0,

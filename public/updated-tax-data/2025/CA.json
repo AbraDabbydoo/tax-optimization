@@ -282,28 +282,25 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
-        "personalExemptionMetadata": {
-          "source": "https://taxfoundation.org/...",
-          "last_verified": "2025-12-15",
-          "verified_by": "manual"
-        },
-    "dependentExemption": 0,
-        "dependentExemptionMetadata": {
-          "source": "https://taxfoundation.org/...",
-          "last_verified": "2025-12-15",
-          "verified_by": "manual"
-        },
+    
+    "personalExemptionCredit": {
+      "single": 153,
+      "headOfHousehold": 153,
+      "married": 307,
+      "marriedSeparate": 153
+    },
+    
+    "dependentExemptionCredit": 475,
     "standardDeduction": {
           "standardDeductionMetadata": {
             "source": "https://taxfoundation.org/...",
             "last_verified": "2025-12-15",
             "verified_by": "manual"
           },
-      "single": 5540,
-      "married": 11080,
-      "headOfHousehold": 11080,
-      "marriedSeparate": 5540
+      "single": 5706,
+      "married": 11412,
+      "headOfHousehold": 11412,
+      "marriedSeparate": 5706
     },
     "taxCredits": {
           "taxCreditsMetadata": {

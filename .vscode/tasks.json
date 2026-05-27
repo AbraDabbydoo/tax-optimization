@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run state-tax-calculator-income.test.ts",
+			"type": "shell",
+			"command": "npx jest test/state-tax-calculator-income.test.ts",
+			"group": "test"
+		},
+		{
+			"label": "Run state-tax-calculator-income.test.ts",
+			"type": "shell",
+			"command": "npx jest test/state-tax-calculator-income.test.ts",
+			"group": "test"
+		},
+		{
+			"label": "Run state-tax-calculator-income.test.ts",
+			"type": "shell",
+			"command": "npx jest test/state-tax-calculator-income.test.ts",
+			"group": "test"
+		},
+		{
+			"label": "Run state-tax-calculator-income.test.ts with cjs config",
+			"type": "shell",
+			"command": "npx jest test/state-tax-calculator-income.test.ts --config=jest.config.cjs",
+			"group": "test"
+		},
+		{
+			"label": "Run state-tax-calculator-income.test.ts after CA credit fix",
+			"type": "shell",
+			"command": "npx jest test/state-tax-calculator-income.test.ts --config=jest.config.cjs",
+			"group": "test"
+		}
+	]
+}

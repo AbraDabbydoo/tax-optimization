@@ -128,7 +128,8 @@
       "single": 0,
       "marriedSeparate": 0,
       "married": 0,
-      "headOfHousehold": 0
+      "headOfHousehold": 0,
+      "additional65Plus": 0
     },
     "taxCredits": {
       "taxCreditsMetadata": {

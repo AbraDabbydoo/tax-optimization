@@ -1,3 +1,67 @@
+// Vermont-specific personal exemption calculation with phase-out
+function calculateVermontPersonalExemptions(
+  stateData: StateTaxData,
+  filingStatus: string,
+  numDependents: number,
+  agi: number
+): number {
+  const exemption = stateData.incomeTax?.personalExemption || 0;
+  const dependentExemption = stateData.incomeTax?.dependentExemption || 0;
+  let totalExemption = 0;
+
+  // Each taxpayer/spouse gets personal exemption
+  const status = filingStatus.toLowerCase();
+  let numTaxpayers = 1;
+  if (status.includes("married") && !status.includes("separate")) {
+    numTaxpayers = 2;
+  }
+  totalExemption += numTaxpayers * exemption;
+  totalExemption += numDependents * dependentExemption;
+
+  // Phase-out logic
+  const phaseOut = stateData.incomeTax?.personalExemptionPhaseOut;
+  if (phaseOut) {
+    let threshold = phaseOut.single?.thresholdAGI || 250000;
+    let reductionPer1000 = phaseOut.single?.reductionPer1000 || 0.02;
+    if (status.includes("married") && !status.includes("separate")) {
+      threshold = phaseOut.married?.thresholdAGI || 500000;
+      reductionPer1000 = phaseOut.married?.reductionPer1000 || 0.02;
+    }
+    if (agi > threshold) {
+      const excess = agi - threshold;
+      const increments = Math.ceil(excess / 1000);
+      const reduction = increments * reductionPer1000;
+      totalExemption = Math.max(0, Math.round(totalExemption * (1 - reduction)));
+    }
+  }
+  return totalExemption;
+}
+/**
+ * Rhode Island phase-out for standard deduction and exemptions (2025).
+ * Reduces by 2% per $1,000 (rounded up) over threshold, up to max phase-out.
+ * @param {number} agi - RI Modified AGI
+ * @param {string} filingStatus - Filing status
+ * @param {number} baseAmount - The combined deduction/exemption amount before phase-out
+ * @returns {number} - The reduced amount after phase-out
+ */
+function applyRhodeIslandPhaseOut(agi: number, filingStatus: string, baseAmount: number): number {
+  // 2025 thresholds
+  const status = filingStatus.toLowerCase();
+  let phaseOutStart = 254250;
+  let phaseOutEnd = 283250;
+  if (status.includes("separate")) {
+    phaseOutStart = 127125;
+    phaseOutEnd = 141625;
+  }
+  // All other statuses (single, head, joint) use same thresholds
+  if (agi <= phaseOutStart) return baseAmount;
+  if (agi >= phaseOutEnd) return 0;
+  const excess = agi - phaseOutStart;
+  const increments = Math.ceil(excess / 1000);
+  const reductionPercent = increments * 2;
+  const reduced = Math.round(baseAmount * (1 - reductionPercent / 100));
+  return Math.max(0, reduced);
+}
 console.log("TAX CALCULATOR MODULE LOADED");
 
 import {
@@ -82,9 +146,17 @@ export interface UserTaxInputs {
   preferredLifestyle: string
   regionPreference: string
   dependents: string // Add dependents field
+  /**
+   * NY-specific: true if user can be claimed as a dependent on another taxpayer's federal return
+   */
+  canBeClaimedAsDependent?: boolean
   qualifyingChildren?: string // Number of qualifying children for additional exemptions (Indiana, etc.)
   age: number // Primary taxpayer age
-  spouseAge?: number // Spouse age for married filing jointly
+    spouseAge?: number // Spouse age for married filing jointly
+    /**
+     * Federal taxable income (for North Dakota and similar states)
+     */
+    federalTaxableIncome?: number | string;
   spouseIncome?: number // Spouse's income for states that need it (Indiana exemptions, etc.)
   annualIncome: number
   retirementIncome: number
@@ -175,23 +247,26 @@ function getBracketsByFilingStatus(
 ): StateTaxBracket[] {
   // ...existing code...
   if (Array.isArray(brackets)) return brackets;
-  let dataFilingStatus = filingStatus.toLowerCase();
-  if (
-    dataFilingStatus === "joint" ||
-    dataFilingStatus === "marriedjointly" ||
-    dataFilingStatus === "married filing jointly"
-  ) {
-    dataFilingStatus = "married";
-  } else if (dataFilingStatus === "head" || dataFilingStatus === "hoh" || dataFilingStatus === "head of household") {
-    dataFilingStatus = "headOfHousehold";
-  } else if (
-    dataFilingStatus !== "single" &&
-    dataFilingStatus !== "married" &&
-    dataFilingStatus !== "headOfHousehold"
-  ) {
-    dataFilingStatus = "single";
-  }
-  return brackets[dataFilingStatus as keyof FilingStatusBrackets] || brackets.single || [];
+  // Always normalize filing status for lookup
+  const STATUS_MAP: Record<string, keyof FilingStatusBrackets> = {
+    single: 'single',
+    married: 'married',
+    married_joint: 'married',
+    marriedjoint: 'married',
+    married_filing_jointly: 'married',
+    married_separate: 'marriedSeparate',
+    married_filing_separately: 'marriedSeparate',
+    head_of_household: 'headOfHousehold',
+    head_ofhousehold: 'headOfHousehold',
+    headofhousehold: 'headOfHousehold',
+    hoh: 'headOfHousehold',
+    head: 'headOfHousehold',
+    // fallback
+  };
+  let key = (filingStatus || '').toLowerCase().replace(/\s+/g, '_');
+  key = key.replace(/[^a-z_]/g, ''); // Remove non-alpha chars
+  const normalized = STATUS_MAP[key] || 'single';
+  return brackets[normalized] || brackets.single || [];
 }
 
 // New: Load state tax data for a given state (and year)
@@ -201,12 +276,19 @@ export async function loadStateTaxDataForCalculation(stateAbbr: string, year: st
 
 // Calculate income tax based on brackets
 function calculateIncomeTax(
-  income: number,
+  taxableIncome: number,
   brackets: FilingStatusBrackets | StateTaxBracket[],
   filingStatus: string,
-  dependents = 0 // Add dependents parameter with default value
+  dependents = 0
 ): number {
-  console.log("Calculating income tax for income:", income, "filing status:", filingStatus)
+  console.log(
+    "Calculating income tax for TAXABLE income:",
+    taxableIncome,
+    "filing status:",
+    filingStatus
+  )
+
+  if (taxableIncome <= 0) return 0
 
   // Get the appropriate brackets based on filing status
   const applicableBrackets = getBracketsByFilingStatus(brackets, filingStatus)
@@ -219,40 +301,41 @@ function calculateIncomeTax(
   let tax = 0
 
   // Sort brackets by min income to ensure proper calculation
-  const sortedBrackets = [...applicableBrackets].sort((a, b) => (a.min || 0) - (b.min || 0))
+  const sortedBrackets = [...applicableBrackets].sort(
+    (a, b) => (a.min ?? 0) - (b.min ?? 0)
+  )
 
-  for (let i = 0; i < sortedBrackets.length; i++) {
-    const bracket = sortedBrackets[i]
-    const min = bracket.min || 0
-    const max = bracket.max === null ? Number.POSITIVE_INFINITY : bracket.max
-    const rate = bracket.rate / 100 // Convert percentage to decimal
+  for (const bracket of sortedBrackets) {
+    const min = bracket.min ?? 0
+    const max =
+      bracket.max === null ? Number.POSITIVE_INFINITY : bracket.max
+    const rate = bracket.rate / 100
 
-    console.log(`Bracket ${i + 1}: min=${min}, max=${max}, rate=${rate}`)
+    // Taxable income does not reach this bracket
+    if (taxableIncome <= min) break
 
-    if (income <= min) {
-      // Income is below this bracket
-      break
+    // Portion of taxable income that falls within this bracket
+    const amountInBracket =
+      Math.min(taxableIncome, max) - min
+
+    if (amountInBracket > 0) {
+      const taxForBracket = amountInBracket * rate
+      tax += taxForBracket
+
+      console.log(
+        `Bracket min=${min}, max=${max}, rate=${rate}, ` +
+        `amount=${amountInBracket}, tax=${taxForBracket}`
+      )
     }
 
-    const taxableInThisBracket = Math.min(income, max) - min
-    console.log(`Taxable in bracket ${i + 1}: ${taxableInThisBracket}`)
-
-    if (taxableInThisBracket <= 0) continue
-
-    const taxForBracket = taxableInThisBracket * rate
-    console.log(`Tax for bracket ${i + 1}: ${taxForBracket}`)
-
-    tax += taxForBracket
-
-    if (income <= max) {
-      // We've reached the highest applicable bracket
-      break
-    }
+    // No higher brackets apply
+    if (taxableIncome <= max) break
   }
 
   console.log("Total calculated income tax:", tax)
-  return tax
+  return Math.max(0, tax)
 }
+
 
 // Calculate retirement income tax
 function calculateRetirementTax(
@@ -1167,29 +1250,35 @@ function calculateCaliforniaRetirementTax(
     userInputs,
   });
 
-  let taxableRetirementIncome = 0;
+  let grossRetirementIncome = 0;
 
   // In California, ALL retirement income is taxed at normal rates
   // Social Security is NOT taxed federally, but California doesn't tax it either
-  // taxableRetirementIncome += 0; // Explicitly showing it's not added
+  // grossRetirementIncome += 0; // Explicitly showing it's not added
 
   // All other retirement income is taxable at normal California rates
-  taxableRetirementIncome += privatePensionIncome;
-  taxableRetirementIncome += publicPensionIncome;
-  taxableRetirementIncome += iraDistributions;
+  grossRetirementIncome += privatePensionIncome;
+  grossRetirementIncome += publicPensionIncome;
+  grossRetirementIncome += iraDistributions;
 
   // Military retirement is also taxed at normal rates in California
   if (userInputs?.militaryRetirementPay) {
-    taxableRetirementIncome += userInputs.militaryRetirementPay;
+    grossRetirementIncome += userInputs.militaryRetirementPay;
     console.log("Military retirement pay included in California taxation:", userInputs.militaryRetirementPay);
   }
+
+  // Subtract standard deduction
+  const stdDeduction = getStandardDeductionForState(stateData, filingStatus, grossRetirementIncome);
+  const taxableRetirementIncome = Math.max(0, grossRetirementIncome - stdDeduction);
 
   console.log("California retirement tax calculation:", {
     privatePensionIncome,
     publicPensionIncome,
     iraDistributions,
     militaryRetirementPay: userInputs?.militaryRetirementPay || 0,
-    totalTaxableRetirementIncome: taxableRetirementIncome,
+    grossRetirementIncome,
+    stdDeduction,
+    taxableRetirementIncome,
   });
 
   // Calculate tax using California income tax brackets
@@ -2440,6 +2529,39 @@ function calculateNewMexicoRetirementTax(
 
   // TODO: SB114 for non-Social Security-covered public pensions
 
+  // Calculate personal and dependent exemptions with phaseout
+  const personalExemptionData = (stateData.incomeTax as any)?.personalExemption;
+  const dependentExemptionData = (stateData.incomeTax as any)?.dependentExemption;
+  let numPersonal = 1;
+  let numDependents = 0;
+  if (isMarried) numPersonal = 2;
+  if (userInputs?.dependents) {
+    const parsed = Number(userInputs.dependents);
+    numDependents = isNaN(parsed) ? 0 : parsed;
+  }
+  // Calculate total exemption before phaseout
+  let totalExemption = 0;
+  if (personalExemptionData?.amount) totalExemption += numPersonal * personalExemptionData.amount;
+  if (dependentExemptionData?.amount) totalExemption += numDependents * dependentExemptionData.amount;
+  // Apply phaseout
+  let phaseout = 0;
+  const statusKey = (() => {
+    const fs = filingStatus.toLowerCase();
+    if (fs.includes("joint")) return "married";
+    if (fs.includes("separate")) return "marriedSeparate";
+    if (fs.includes("head")) return "headOfHousehold";
+    return "single";
+  })();
+  const phaseoutInfo = personalExemptionData?.phaseout?.[statusKey];
+  if (phaseoutInfo && agi > phaseoutInfo.threshold) {
+    const excess = agi - phaseoutInfo.threshold;
+    const units = Math.ceil(excess / phaseoutInfo.per);
+    phaseout = totalExemption * (units * phaseoutInfo.rate);
+    if (phaseout > totalExemption) phaseout = totalExemption;
+  }
+  const exemptionAfterPhaseout = Math.max(0, totalExemption - phaseout);
+  // Subtract exemptions from taxable income
+  taxableRetirementIncome = Math.max(0, taxableRetirementIncome - exemptionAfterPhaseout);
   // Calculate tax using NM income tax brackets
   return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
 }
@@ -3271,6 +3393,48 @@ function calculateVermontRetirementTax(
 }
 
 // Virginia-specific retirement income tax calculation
+// Virginia Age 65+ Deduction Calculation
+function calculateVirginiaAge65PlusDeduction(
+  stateData: StateTaxData,
+  filingStatus: string,
+  age: number,
+  agi: number,
+  spouseAge?: number
+): number {
+  const deductionConfig = stateData.incomeTax?.age65PlusDeduction;
+  if (!deductionConfig || age < 65) return 0;
+
+  // Helper to get birthdate from age
+  const currentYear = 2025;
+  const birthYear = currentYear - age;
+  const spouseBirthYear = spouseAge ? currentYear - spouseAge : undefined;
+
+  let totalDeduction = 0;
+  const isMarried = filingStatus.toLowerCase().includes("married");
+
+  // Per spouse logic
+  const eligibleSpouses = [birthYear];
+  if (isMarried && spouseBirthYear !== undefined && spouseAge! >= 65) {
+    eligibleSpouses.push(spouseBirthYear);
+  }
+
+  eligibleSpouses.forEach((by) => {
+    let deduction = deductionConfig.maxDeduction;
+    if (by <= 1939) {
+      // Full deduction, no phase-out
+      totalDeduction += deduction;
+    } else if (by > 1939 && by <= 1960) {
+      // Phase-out applies
+      const threshold = isMarried ? deductionConfig.phaseOut.marriedJoint.incomeThreshold : deductionConfig.phaseOut.single.incomeThreshold;
+      const reduction = agi > threshold ? agi - threshold : 0;
+      deduction = Math.max(0, deduction - reduction);
+      totalDeduction += deduction;
+    }
+    // If not in range, no deduction
+  });
+  return totalDeduction;
+}
+
 function calculateVirginiaRetirementTax(
   stateData: StateTaxData,
   socialSecurityIncome: number,
@@ -3291,12 +3455,10 @@ function calculateVirginiaRetirementTax(
     userInputs,
   });
 
-  // 1. Social Security & Tier 1 Railroad: fully exempt
-  // If any portion was taxed federally, subtract it from VA taxable income
-  // For now, assume all Social Security is exempt
+  // Social Security & Tier 1 Railroad: fully exempt
   const taxableSocialSecurity = 0;
 
-  // 2. Calculate AGI (sum of all income fields)
+  // Calculate AGI (sum of all income fields)
   const vaAGI =
     (userInputs?.annualIncome || 0) +
     (userInputs?.investmentIncome || 0) +
@@ -3313,34 +3475,11 @@ function calculateVirginiaRetirementTax(
     (userInputs?.k401Distributions || 0) +
     (userInputs?.annuityIncome || 0);
 
-  // 3. Military retirement subtraction
+  // Military retirement subtraction
   const militaryRetirement = userInputs?.militaryRetirementPay || 0;
   const militarySubtraction = Math.min(40000, militaryRetirement);
 
-  // 4. Pensions/IRAs/401k/Annuities: taxable, but age-based deduction
-  // Determine birth year (assume current year is 2024)
-  const birthYear = 2024 - age;
-  let ageDeduction = 0;
-  let deductionPhaseout = 0;
-  let deductionLimit = 0;
-  let phaseoutThreshold = 0;
-  let isMarried = filingStatus.toLowerCase().includes("married");
-
-  if (birthYear <= 1939) {
-    // Born Jan 1, 1939 or earlier: flat $12,000 deduction
-    ageDeduction = 12000;
-  } else if (birthYear > 1939 && birthYear <= 1960 && age >= 65) {
-    // Born Jan 2, 1939–Jan 1, 1960: up to $12,000, phased out if AGI > $50k/$75k
-    ageDeduction = 12000;
-    phaseoutThreshold = isMarried ? 75000 : 50000;
-    if (vaAGI > phaseoutThreshold) {
-      deductionPhaseout = vaAGI - phaseoutThreshold;
-      ageDeduction = Math.max(0, ageDeduction - deductionPhaseout);
-    }
-  }
-  // If not 65+ or not in birth year range, no deduction
-
-  // 5. Calculate total retirement income (excluding Social Security)
+  // Calculate total retirement income (excluding Social Security)
   let totalRetirementIncome = 0;
   totalRetirementIncome += privatePensionIncome;
   totalRetirementIncome += publicPensionIncome;
@@ -3355,17 +3494,38 @@ function calculateVirginiaRetirementTax(
   totalRetirementIncome -= militaryRetirement;
   totalRetirementIncome = Math.max(0, totalRetirementIncome);
 
-  // 6. Apply age-based deduction (cannot exceed total retirement income)
-  const ageDeductionApplied = Math.min(ageDeduction, totalRetirementIncome);
+  // Apply age-based deduction (cannot exceed total retirement income)
+  const ageDeductionApplied = Math.min(
+    typeof userInputs?.spouseAge === "number"
+      ? calculateVirginiaAge65PlusDeduction(stateData, filingStatus, age, vaAGI, userInputs.spouseAge)
+      : calculateVirginiaAge65PlusDeduction(stateData, filingStatus, age, vaAGI),
+    totalRetirementIncome
+  );
 
-  // 7. Calculate taxable retirement income
+  // Calculate taxable retirement income
   let taxableRetirementIncome = 0;
   taxableRetirementIncome += totalRetirementIncome - ageDeductionApplied;
   // Add back military retirement minus $40,000 subtraction
   taxableRetirementIncome += Math.max(0, militaryRetirement - militarySubtraction);
 
-  // 8. Calculate tax using Virginia income tax brackets
-  return calculateIncomeTax(taxableRetirementIncome, stateData.incomeTax.brackets, filingStatus);
+  // Virginia additional exemptions: $800 for age 65+ (taxpayer and spouse), $800 for blindness (taxpayer and spouse)
+  let additionalExemptions = 0;
+  if (age >= 65) {
+    additionalExemptions += 800;
+  }
+  if (userInputs?.spouseAge && userInputs.spouseAge >= 65 && filingStatus.toLowerCase().includes("married")) {
+    additionalExemptions += 800;
+  }
+  // if (userInputs?.isBlind) {
+  //   additionalExemptions += 800;
+  // }
+  // if (userInputs?.spouseIsBlind && filingStatus.toLowerCase().includes("married")) {
+  //   additionalExemptions += 800;
+  // }
+  // Subtract additional exemptions from taxable retirement income
+  const taxableRetirementIncomeWithExemptions = Math.max(0, taxableRetirementIncome - additionalExemptions);
+  // Calculate tax using Virginia income tax brackets
+  return calculateIncomeTax(taxableRetirementIncomeWithExemptions, stateData.incomeTax.brackets, filingStatus);
 }
 
 // West Virginia-specific retirement income tax calculation
@@ -3767,21 +3927,61 @@ export async function calculateStateTaxBurden(
 
     console.log(`Total income: ${adjustedIncome}`)
 
-    // Georgia, Hawaii, Idaho, Illinois, Iowa, Kansas, Kentucky, and Louisiana-specific: Use federal AGI as starting point instead of total income
+    // Georgia, Hawaii, Idaho, Illinois, Iowa, Kansas, Kentucky, Louisiana, New York, North Carolina: Use federal AGI as starting point
+    // North Dakota: Use federal taxable income as starting point, no state standard deduction
     let incomeForDeduction = adjustedIncome;
-    if (stateCode === "GA" || stateCode === "HI" || stateCode === "ID" || stateCode === "IL" || stateCode === "IA" || stateCode === "KS" || stateCode === "KY" || stateCode === "LA") {
-      // Calculate federal AGI using a similar approach
+    // Expanded list: All states that should start with Federal AGI per spreadsheet
+    const statesStartWithFederalAGI = [
+      "AZ", "CA", "CT", "DC", "DE", "GA", "HI", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MI", "MO", "MT", "NE", "NM", "NY", "NC", "OH", "OK", "RI", "UT", "VT", "VA", "WV", "WI"
+    ];
+    if (statesStartWithFederalAGI.includes(stateCode)) {
       const federalAGI = calculateFederalAGI(userInputs);
       incomeForDeduction = federalAGI;
       console.log(`${stateCode}: Using federal AGI of ${federalAGI} instead of total income ${adjustedIncome}`);
+    } else if (stateCode === "ND") {
+      // Assume userInputs.federalTaxableIncome is available, otherwise fallback to adjustedIncome
+      let fedTaxable = userInputs.federalTaxableIncome;
+      if (typeof fedTaxable === "string") {
+        fedTaxable = Number(fedTaxable.replace(/,/g, ""));
+      }
+      if (typeof fedTaxable !== "number" || isNaN(fedTaxable)) {
+        fedTaxable = adjustedIncome;
+      }
+      incomeForDeduction = fedTaxable;
+      console.log(`ND: Using federal taxable income of ${incomeForDeduction} as starting point (no state standard deduction)`);
     }
 
+
     // Apply state standard deduction (supports flat or bracketed values)
-    let stdDeduction = getStandardDeductionForState(
-      stateData as any,
-      userInputs.filingStatus,
-      incomeForDeduction,
-    )
+    let stdDeduction = 0;
+    if (stateCode !== "ND") {
+      stdDeduction = getStandardDeductionForState(
+        stateData as any,
+        userInputs.filingStatus,
+        incomeForDeduction,
+      );
+    }
+
+    // Rhode Island: apply phase-out to standard deduction and exemptions
+    if (stateCode === "RI") {
+      // Get base standard deduction
+      const baseStdDeduction = stdDeduction;
+      // Calculate number of exemptions: taxpayer + spouse (if MFJ) + dependents
+      const filingStatus = userInputs.filingStatus || "";
+      const isMarried = filingStatus.toLowerCase().includes("married");
+      const numDependents = Number(userInputs.dependents) || 0;
+      let numExemptions = 1 + numDependents;
+      if (isMarried) numExemptions += 1;
+      // Get exemption amount per person from state data (fallback $5100)
+      const exemptionPerPerson = (stateData?.incomeTax?.personalExemptionAmount) || 5100;
+      const baseExemptions = numExemptions * exemptionPerPerson;
+      // Combine for phase-out: apply phase-out to both std deduction and total exemptions
+      const agi = incomeForDeduction;
+      const reducedStdDeduction = applyRhodeIslandPhaseOut(agi, filingStatus, baseStdDeduction);
+      const reducedExemptions = applyRhodeIslandPhaseOut(agi, filingStatus, baseExemptions);
+      stdDeduction = reducedStdDeduction + reducedExemptions;
+      console.log(`RI: stdDeduction base $${baseStdDeduction} → $${reducedStdDeduction}, exemptions base $${baseExemptions} → $${reducedExemptions}, total deduction $${stdDeduction}`);
+    }
 
     // Apply Connecticut personal exemption if applicable
     if (stateCode === "CT") {
@@ -3807,9 +4007,10 @@ export async function calculateStateTaxBurden(
       stdDeduction += hiPersonalExemptions;
     }
 
+
     // Apply Indiana personal exemptions if applicable
     if (stateCode === "IN") {
-       const numQualifyingChildren = Number.parseInt(userInputs.qualifyingChildren || "0") || 0;
+      const numQualifyingChildren = Number.parseInt(userInputs.qualifyingChildren || "0") || 0;
       const inPersonalExemptions = calculateIndianaPersonalExemptions(
         stateData,
         userInputs.filingStatus,
@@ -3819,6 +4020,37 @@ export async function calculateStateTaxBurden(
       );
       console.log(`Indiana personal exemptions: $${inPersonalExemptions}`);
       stdDeduction += inPersonalExemptions;
+    }
+
+    // Apply Wisconsin personal exemptions if applicable
+    if (stateCode === "WI") {
+      // Pull exemption values from WI state data
+      const personalExemption = stateData.incomeTax?.personalExemption || 0;
+      const additional65Plus = stateData.incomeTax?.additionalPersonalExemption65Plus || 0;
+      let numTaxpayers = 1;
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus);
+      if (filingKey === "married") numTaxpayers = 2;
+      const numDependentsWI = Number(userInputs.dependents) || 0;
+      let exemption = personalExemption * (numTaxpayers + numDependentsWI);
+      let age65Count = 0;
+      if ((userInputs.age || 0) >= 65) age65Count++;
+      if (filingKey === "married" && (userInputs.spouseAge || 0) >= 65) age65Count++;
+      exemption += additional65Plus * age65Count;
+      console.log(`Wisconsin personal exemptions: $${exemption} (${personalExemption} x ${numTaxpayers + numDependentsWI} + ${additional65Plus} x ${age65Count} age 65+)`);
+      stdDeduction += exemption;
+    }
+
+    // Apply Vermont personal exemptions with phase-out if applicable
+    if (stateCode === "VT" && stateData.incomeTax?.personalExemption) {
+      const agi = incomeForDeduction;
+      const vtPersonalExemptions = calculateVermontPersonalExemptions(
+        stateData,
+        userInputs.filingStatus,
+        numDependents,
+        agi
+      );
+      console.log(`Vermont personal exemptions (after phase-out): $${vtPersonalExemptions}`);
+      stdDeduction += vtPersonalExemptions;
     }
 
     // Apply Illinois personal exemptions if applicable
@@ -3992,12 +4224,64 @@ export async function calculateStateTaxBurden(
     }
     console.log(`Total tax burden: ${totalTaxBurden}`)
 
-    // Apply California Senior Head of Household Credit if applicable
+    // Apply Oregon Personal Exemption Credit if applicable
     let finalTaxBurden = totalTaxBurden;
+    if (stateCode === "OR") {
+      // Oregon allows a personal exemption credit for taxpayer, spouse (if married), and each dependent
+      const creditAmount = (stateData.incomeTax && stateData.incomeTax.personalExemptionCredit) || 0;
+      let eligiblePersons = 1; // taxpayer
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus);
+      if (filingKey === "married" || filingKey === "marriedSeparate") {
+        eligiblePersons += 1; // spouse
+      }
+      // Dependents: try to use userInputs.dependents (string or number), fallback to numDependents
+      let dependentsCount = 0;
+      if (userInputs.dependents !== undefined && userInputs.dependents !== null) {
+        if (typeof userInputs.dependents === "string") {
+          dependentsCount = parseInt(userInputs.dependents, 10) || 0;
+        } else if (typeof userInputs.dependents === "number") {
+          dependentsCount = userInputs.dependents;
+        }
+      } else {
+        dependentsCount = numDependents || 0;
+      }
+      eligiblePersons += dependentsCount;
+      const totalCredit = creditAmount * eligiblePersons;
+      if (totalCredit > 0) {
+        finalTaxBurden = Math.max(0, totalTaxBurden - totalCredit);
+        console.log(`Oregon Personal Exemption Credit applied: $${totalCredit} (${eligiblePersons} x $${creditAmount})`);
+        console.log(`Final tax burden after Oregon credit: $${finalTaxBurden}`);
+      }
+    }
+    // Apply California personal and dependent exemption credits (non-refundable, after tax is calculated)
     if (stateCode === "CA") {
-      const seniorCredit = calculateCaliforniaSeniorCredit(userInputs, totalTaxBurden);
+      // Get credit amounts from state data
+      const filingKey = normalizeFilingStatus(userInputs.filingStatus);
+      const caPersonalCredit = (stateData.incomeTax?.personalExemptionCredit as Record<'single' | 'married' | 'headOfHousehold' | 'marriedSeparate', number> | undefined)?.[filingKey] || 0;
+      const caDependentCredit = stateData.incomeTax?.dependentExemptionCredit || 0;
+      // Calculate number of dependents
+      let dependentsCount = 0;
+      if (userInputs.dependents !== undefined && userInputs.dependents !== null) {
+        if (typeof userInputs.dependents === "string") {
+          dependentsCount = parseInt(userInputs.dependents, 10) || 0;
+        } else if (typeof userInputs.dependents === "number") {
+          dependentsCount = userInputs.dependents;
+        }
+      } else {
+        dependentsCount = numDependents || 0;
+      }
+      // Apply both personal and dependent exemption credits
+      const totalCAExemptionCredits = caPersonalCredit + (caDependentCredit * dependentsCount);
+      if (totalCAExemptionCredits > 0) {
+        finalTaxBurden = Math.max(0, finalTaxBurden - totalCAExemptionCredits);
+        console.log(`California Personal Exemption Credit applied: $${caPersonalCredit}`);
+        console.log(`California Dependent Exemption Credit applied: $${caDependentCredit * dependentsCount} (${dependentsCount} x $${caDependentCredit} dependent)`);
+        console.log(`Final tax burden after CA exemption credits: $${finalTaxBurden}`);
+      }
+      // Apply California Senior Head of Household Credit if applicable (after exemption credits)
+      const seniorCredit = calculateCaliforniaSeniorCredit(userInputs, finalTaxBurden);
       if (seniorCredit > 0) {
-        finalTaxBurden = Math.max(0, totalTaxBurden - seniorCredit);
+        finalTaxBurden = Math.max(0, finalTaxBurden - seniorCredit);
         console.log(`California Senior Head of Household Credit applied: $${seniorCredit.toFixed(2)}`);
         console.log(`Final tax burden after credit: $${finalTaxBurden.toFixed(2)}`);
       }
@@ -5115,7 +5399,63 @@ export function calculateNJIncomeTax(
   return njIncomeTax;
 }
 
-export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number): number {
+/**
+ * Returns the standard deduction for a given state, filing status, and AGI.
+ * For NY, if filingStatus is single and canBeClaimedAsDependent is true, uses 'singleDependent'.
+ */
+export function getStandardDeductionForState(stateData: any, filingStatus: string, agi: number, userInputs?: { canBeClaimedAsDependent?: boolean }): number {
+    // Wisconsin sliding-scale standard deduction logic
+    if (stateData?.abbreviation === "WI") {
+      const key = normalizeFilingStatus(filingStatus);
+      const brackets = stateData?.incomeTax?.standardDeduction?.[key] as StandardDeductionBracket[] | undefined;
+      if (Array.isArray(brackets)) {
+        // Find the bracket
+        for (const b of brackets) {
+          const min = b.agiMin ?? 0;
+          const max = b.agiMax == null ? Number.POSITIVE_INFINITY : b.agiMax;
+          if (agi >= min && agi <= max) {
+            if (typeof b.deduction === "string" && b.deduction === "sliding") {
+              // Apply Wisconsin sliding-scale formula
+              // See: https://www.revenue.wi.gov/Pages/FAQS/ise-ind.aspx
+              // The actual phase-out formula is:
+              // deduction = maxDeduction - ((WAGI - phaseOutStart) * phaseOutRate)
+              // For each status, use the correct maxDeduction, phaseOutStart, phaseOutEnd, and phaseOutRate
+              let maxDeduction = 0, phaseOutStart = 0, phaseOutEnd = 0, phaseOutRate = 0;
+              if (key === "single") {
+                maxDeduction = 13560;
+                phaseOutStart = 19550;
+                phaseOutEnd = 132549;
+                phaseOutRate = (maxDeduction) / (phaseOutEnd - phaseOutStart);
+              } else if (key === "headOfHousehold") {
+                maxDeduction = 17520;
+                phaseOutStart = 19550;
+                phaseOutEnd = 132549;
+                phaseOutRate = (maxDeduction) / (phaseOutEnd - phaseOutStart);
+              } else if (key === "marriedSeparate") {
+                maxDeduction = 11930;
+                phaseOutStart = 13390;
+                phaseOutEnd = 73709;
+                phaseOutRate = (maxDeduction) / (phaseOutEnd - phaseOutStart);
+              } else if (key === "married") {
+                maxDeduction = 25110;
+                phaseOutStart = 28210;
+                phaseOutEnd = 155169;
+                phaseOutRate = (maxDeduction) / (phaseOutEnd - phaseOutStart);
+              }
+              if (agi > phaseOutEnd) return 0;
+              if (agi < phaseOutStart) return maxDeduction;
+              const deduction = Math.max(0, Math.round(maxDeduction - ((agi - phaseOutStart) * phaseOutRate)));
+              return deduction;
+            } else {
+              return b.deduction || 0;
+            }
+          }
+        }
+        return 0;
+      }
+      // If not an array, fallback to default logic
+      return resolveStandardDeduction(brackets, agi);
+    }
   // Handle Maine's special standard deduction calculation
   if (stateData?.abbreviation === "ME") {
     // Check if Maine data has the new structure with base/threshold/reductionDivisor
@@ -5157,9 +5497,17 @@ export function getStandardDeductionForState(stateData: any, filingStatus: strin
 }
 
  
-  const key = normalizeFilingStatus(filingStatus);
-  const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
-  const stdTopLevel = (stateData as any)?.standardDeduction?.[key] as number | StandardDeductionBracket[] | undefined;
+  const filingKey = normalizeFilingStatus(filingStatus);
+  // NY-specific logic: if single and can be claimed as dependent, use 'singleDependent' for lookup only
+  const deductionKey =
+    (stateData?.abbreviation === 'NY' || stateData?.name === 'New York') &&
+    filingKey === 'single' &&
+    userInputs?.canBeClaimedAsDependent
+      ? 'singleDependent'
+      : filingKey;
+  // Use string index to allow 'singleDependent' and other special keys
+  const stdInIncomeTax = stateData?.incomeTax?.standardDeduction?.[deductionKey as string] as number | StandardDeductionBracket[] | undefined;
+  const stdTopLevel = (stateData as any)?.standardDeduction?.[deductionKey as string] as number | StandardDeductionBracket[] | undefined;
   const std = (stdInIncomeTax ?? stdTopLevel) as number | StandardDeductionBracket[] | undefined;
   return resolveStandardDeduction(std, agi);
 }

@@ -87,9 +87,9 @@
   "lifestyleTags": [],
   "incomeTax": {
     "metadata": {
-      "source": "https://taxfoundation.org/...",
-      "last_verified": "2025-12-26",
-      "verified_by": "manual"
+      "source": "https://www.ncdor.gov/taxes-forms/individual-income-tax/filing-topics/north-carolina-standard-deduction-or-north-carolina-itemized-deductions",
+      "last_verified": "2025-12-28",
+      "verified_by": "jdd"
     },
     "brackets": {
       "single": [
@@ -125,10 +125,11 @@
     "personalExemption": 0,
     "dependentExemption": 0,
     "standardDeduction": {
-      "single": 15000,
-      "marriedSeparate": 15000,
-      "married": 30000,
-      "headOfHousehold": 22500
+      "single": 12750,
+      "married": 25500,
+      "qualifyingSurvivingSpouse": 25500,
+      "headOfHousehold": 19125,
+      "marriedSeparate": 12750
     },
     "taxCredits": {
        "taxCreditsMetadata": {

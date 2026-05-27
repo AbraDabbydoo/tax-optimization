@@ -650,3 +650,13 @@ VeteranExemption for states like NJ
 - [ ] Review and add other state-specific exemption fields as needed (e.g., foster child, student, etc.)
 - [ ] Update `UserTaxInputs` interface and backend logic to support these new fields
 - [ ] Update calculation logic in `tax-calculator.ts` to use these fields for exemption calculations
+
+Finalize tax data and calculations (4–8 hours)
+Polish UI/UX and mobile responsiveness (4–6 hours)
+Implement authentication and security (if needed) (3–6 hours)
+Set up production build and deployment (2–4 hours)
+Write and review documentation (2–3 hours)
+Perform final QA and bug fixes (3–5 hours)
+
+Drake Tax - States Generally: Standard or Itemized Deduction
+https://kb.drakesoftware.com/kb/Drake-Tax/16450.htm

@@ -202,12 +202,30 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
+    "personalExemption": 700,
+    "additionalPersonalExemption65Plus": 250,
     "dependentExemption": 0,
     "standardDeduction": {
-      "single": 0,
-      "married": 0,
-      "headOfHousehold": 0
+      "single": [
+        { "agiMin": 0, "agiMax": 19549, "deduction": 13560 },
+        { "agiMin": 19550, "agiMax": 132549, "deduction": "sliding" },
+        { "agiMin": 132550, "agiMax": null, "deduction": 0 }
+      ],
+      "married": [
+        { "agiMin": 0, "agiMax": 28209, "deduction": 25110 },
+        { "agiMin": 28210, "agiMax": 155169, "deduction": "sliding" },
+        { "agiMin": 155170, "agiMax": null, "deduction": 0 }
+      ],
+      "marriedSeparate": [
+        { "agiMin": 0, "agiMax": 13389, "deduction": 11930 },
+        { "agiMin": 13390, "agiMax": 73709, "deduction": "sliding" },
+        { "agiMin": 73710, "agiMax": null, "deduction": 0 }
+      ],
+      "headOfHousehold": [
+        { "agiMin": 0, "agiMax": 19549, "deduction": 17520 },
+        { "agiMin": 19550, "agiMax": 132549, "deduction": "sliding" },
+        { "agiMin": 132550, "agiMax": null, "deduction": 0 }
+      ]
     },
     "taxCredits": {
       "taxCreditsMetadata": {

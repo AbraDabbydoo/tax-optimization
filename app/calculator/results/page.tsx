@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowLeft, CheckCircle, Download } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -86,6 +87,9 @@ const stateNames: Record<string, string> = {
 }
 
 export default function ResultsPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const loadId = searchParams.get('loadId')
   const [results, setResults] = useState<TaxCalculationResult[]>([])
   const [currentStateTax, setCurrentStateTax] = useState(0)
   const [currentStateCode, setCurrentStateCode] = useState("")
@@ -93,6 +97,7 @@ export default function ResultsPage() {
   const [error, setError] = useState<string | null>(null)
   const [userLifestyle, setUserLifestyle] = useState<string>("")
   const [userRegion, setUserRegion] = useState<string>("")
+  const [loadedSavedResults, setLoadedSavedResults] = useState(false)
 
   // Add state for current state tax breakdown
   const [currentStateTaxBreakdown, setCurrentStateTaxBreakdown] = useState({
@@ -107,6 +112,66 @@ export default function ResultsPage() {
   const [selectedStateIndex, setSelectedStateIndex] = useState<number>(0)
 
   useEffect(() => {
+    async function loadSavedCalculation() {
+      if (!loadId) return
+
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/calculations/${loadId}`)
+        if (!response.ok) {
+          return
+        }
+
+        const calculation = await response.json()
+        const savedResults = calculation?.results
+        const savedData = calculation?.data
+
+        if (savedResults && Array.isArray(savedResults) && savedResults.length > 0) {
+          setResults(savedResults)
+          setUserLifestyle(savedData?.preferredLifestyle || "")
+          setUserRegion(savedData?.regionPreference || "")
+          setCurrentStateCode(savedData?.residenceState || "")
+
+          try {
+            if (savedData) {
+              localStorage.setItem('taxCalculator_basicInfo', JSON.stringify(savedData))
+            }
+          } catch (err) {
+            console.warn('Unable to set saved calculation data to localStorage:', err)
+          }
+
+          const currentState = savedResults.find((state) => state.stateCode === (savedData?.residenceState || "")) || savedResults[0]
+          if (currentState) {
+            setCurrentStateTax(currentState.totalTaxBurden)
+            setCurrentStateTaxBreakdown({
+              incomeTaxBurden: currentState.incomeTaxBurden || 0,
+              retirementTaxBurden: currentState.retirementTaxBurden || 0,
+              propertyTaxBurden: currentState.propertyTaxBurden || 0,
+              salesTaxBurden: currentState.salesTaxBurden || 0,
+              vehicleTaxBurden: currentState.vehicleTaxBurden || 0,
+            })
+          }
+
+          setLoadedSavedResults(true)
+          setLoading(false)
+          return
+        }
+
+        // If there are no saved results, redirect back to calculator to resume
+        router.replace(`/calculator?loadId=${loadId}`)
+      } catch (err) {
+        console.error('Error loading saved calculation:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadSavedCalculation()
+  }, [loadId, router])
+
+  useEffect(() => {
+    if (loadedSavedResults) return
+
     async function processResults() {
       try {
         // Get all form data from localStorage
@@ -118,15 +183,8 @@ export default function ResultsPage() {
         // Store the user's preferences for display
         setUserLifestyle(basicInfo.preferredLifestyle || "")
         setUserRegion(assetsInfo.regionPreference || "")
-
-        // Store the current state code
         setCurrentStateCode(basicInfo.residenceState || "")
 
-        console.log("Basic info:", basicInfo)
-        console.log("Current state:", basicInfo.residenceState)
-        console.log("Income info:", incomeInfo)
-
-        // Combine all form data
         const formData = new FormData()
 
         // Add basic info
@@ -258,6 +316,25 @@ export default function ResultsPage() {
         }
 
         setLoading(false)
+
+        const calculationIdToUpdate = loadId || localStorage.getItem('taxCalculator_savedCalculationId')
+        if (calculationIdToUpdate) {
+          const savedName = localStorage.getItem('taxCalculator_name')
+          const savedDescription = localStorage.getItem('taxCalculator_description')
+          try {
+            await fetch(`/api/calculations/${calculationIdToUpdate}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                results: result.recommendations || [],
+                name: savedName || undefined,
+                description: savedDescription || undefined,
+              }),
+            })
+          } catch (err) {
+            console.warn('Unable to persist completed results:', err)
+          }
+        }
       } catch (err) {
         console.error("Error calculating results:", err)
         setError("There was an error calculating your results. Please try again.")
@@ -321,10 +398,13 @@ export default function ResultsPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center justify-between">
         <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
+        </Link>
+        <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+          Go to Dashboard
         </Link>
       </div>
 

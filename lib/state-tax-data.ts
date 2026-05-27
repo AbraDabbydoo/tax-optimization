@@ -11,6 +11,7 @@ export interface FilingStatusBrackets {
   single: StateTaxBracket[]
   married: StateTaxBracket[]
   headOfHousehold: StateTaxBracket[]
+  marriedSeparate?: StateTaxBracket[]
 }
 
 export interface SalesTaxCategories {
@@ -40,16 +41,20 @@ export interface StateTaxData {
       dependentThreshold: number
       description: string
     }
+    personalExemptionCredit?: number
     standardDeduction: {
       single: number
       married: number
       headOfHousehold: number
+      marriedSeparate?: number
+      additional65Plus: number
     }
     taxCredits: {
       childTaxCredit: number
       childCareTaxCredit: number
       earnedIncomeTaxCredit: boolean
     }
+    [key: string]: any
   }
   salesTax: {
     stateRate: number

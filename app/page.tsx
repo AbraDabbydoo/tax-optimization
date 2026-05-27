@@ -1,10 +1,15 @@
+'use client'
+
 import Link from "next/link"
 import { ArrowRight, BarChart3, Calendar, CheckCircle2, DollarSign } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function Home() {
+  const { user } = useAuth()
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -21,9 +26,25 @@ export default function Home() {
             <Link href="/about" className="text-sm font-medium">
               About
             </Link>
-            <Button asChild>
-              <a href="#choose-your-path">Get Started</a>
-            </Button>
+            {user ? (
+              <>
+                <Button asChild variant="outline">
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/calculator">Calculator</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button asChild variant="ghost">
+                  <Link href="/auth/login">Sign In</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </nav>
         </div>
       </header>

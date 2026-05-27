@@ -182,12 +182,16 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
-    "dependentExemption": 0,
+    "personalExemption": 930,
+    "dependentExemption": 930,
+    "additionalExemptions": {
+      "age65OrOlder": 800,
+      "blind": 800
+    },
     "standardDeduction": {
-      "single": 0,
-      "married": 0,
-      "headOfHousehold": 0
+      "single": 8750,
+      "married": 17500,
+      "headOfHousehold": 8750
     },
     "taxCredits": {
       "taxCreditsMetadata": {
@@ -199,5 +203,33 @@
       "childCareTaxCredit": 0,
       "earnedIncomeTaxCredit": false
     }
+      ,
+      "age65PlusDeduction": {
+        "maxDeduction": 12000,
+        "perSpouse": true,
+        "fullDeductionBirthdate": "1939-01-01",
+        "phaseOutStartBirthdate": "1939-01-02",
+        "phaseOutEndBirthdate": "1961-01-01",
+        "phaseOut": {
+          "single": {
+            "incomeThreshold": 50000,
+            "reductionPerDollar": 1
+          },
+          "marriedJoint": {
+            "incomeThreshold": 75000,
+            "reductionPerDollar": 1
+          },
+          "marriedSeparate": {
+            "incomeThreshold": 75000,
+            "reductionPerDollar": 1
+          }
+        },
+        "afagiDefinition": "Federal adjusted gross income adjusted for Virginia conformity items and reduced by taxable Social Security/Tier 1 railroad benefits.",
+        "notes": [
+          "Cannot claim if taking Virginia disability income subtraction.",
+          "May interact with credits like the low-income credit.",
+          "Distinct from federal senior standard deduction or bonus deduction."
+        ]
+      }
   }
 }

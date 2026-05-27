@@ -10,7 +10,7 @@
     "married": 11400,
     "marriedSeparate": 5700,
     "headOfHousehold": 5700,
-    "seniorBenefitAmount": 2500
+    "additional65Plus": 2500
   },
   "salesTax": {
     "stateRate": 0,

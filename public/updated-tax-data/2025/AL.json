@@ -205,6 +205,18 @@
       "single": 2410,
       "headOfHousehold": 2410
     },
+      "additional65Plus": {
+          "seniorDeduction": {
+            "description": "Senior Deduction (age 65+)",
+            "amount": {"single": 6000, "joint": 12000},
+            "notes": "New deduction through 2025–2028; phases out by income. Source: Alabama Society of CPAs."
+          },
+          "retirementIncomeExemption": {
+            "description": "Retirement Income Exemption (age 65+)",
+            "amount": 6000,
+            "notes": "Exempts retirement income for seniors (separate). Source: TaxSlayer Support."
+          }
+      },
     "taxCredits": {
           "taxCreditsMetadata": {
             "source": "https://taxfoundation.org/...",

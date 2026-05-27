@@ -160,10 +160,11 @@
             "last_verified": "2025-12-15",
             "verified_by": "manual"
           },
-      "single": 3605,
-      "married": 8240,
-      "headOfHousehold": 6180,
-      "marriedSeparate": 4120
+          "single": 3605,
+          "married": 8240,
+          "headOfHousehold": 6180,
+          "marriedSeparate": 4120,
+          "additional65Plus": 700
     },
     "taxCredits": {
           "taxCreditsMetadata": {

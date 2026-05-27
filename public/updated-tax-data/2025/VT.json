@@ -202,12 +202,32 @@
       ]
     },
     "hasIncomeTax": true,
-    "personalExemption": 0,
-    "dependentExemption": 0,
+    "personalExemption": 4450,
+    "dependentExemption": 4450,
+    "personalExemptionPhaseOut": {
+      "single": {
+        "thresholdAGI": 250000,
+        "reductionPer1000": 0.02
+      },
+      "married": {
+        "thresholdAGI": 500000,
+        "reductionPer1000": 0.02
+      },
+      "headOfHousehold": {
+        "thresholdAGI": 250000,
+        "reductionPer1000": 0.02
+      },
+      "marriedSeparate": {
+        "thresholdAGI": 250000,
+        "reductionPer1000": 0.02
+      }
+    },
     "standardDeduction": {
-      "single": 0,
-      "married": 0,
-      "headOfHousehold": 0
+      "single": 15000,
+      "married": 30000,
+      "headOfHousehold": 22500,
+      "marriedSeparate": 15000,
+      "additional65Plus": 1500
     },
     "taxCredits": {
       "taxCreditsMetadata": {

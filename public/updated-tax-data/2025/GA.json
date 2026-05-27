@@ -243,7 +243,8 @@
       "single": 12000,
       "married": 24000,
       "headOfHousehold": 12000,
-      "marriedSeparate": 12000
+      "marriedSeparate": 12000,
+      "additional65Plus": 1300
     },
     "taxCredits": {
           "taxCreditsMetadata": {

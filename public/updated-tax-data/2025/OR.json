@@ -204,11 +204,14 @@
     "hasIncomeTax": true,
     "personalExemption": 0,
     "dependentExemption": 0,
+    "personalExemptionCredit": 250,
+    "personalExemptionCreditNotes": "Oregon allows a personal exemption credit of about $250 per person (taxpayer, spouse if filing jointly, and each dependent). The amount is indexed for inflation and may change each year.",
     "standardDeduction": {
-      "single": 2800,
-      "marriedSeparate": 2800,
-      "married": 5600,
-      "headOfHousehold": 4500
+      "single": 2835,
+      "marriedSeparate": 2835,
+      "married": 5670,
+      "headOfHousehold": 4560,
+      "additional65Plus": 0
     },
     "taxCredits": {
       "taxCreditsMetadata": {

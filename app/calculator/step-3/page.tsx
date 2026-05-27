@@ -110,6 +110,7 @@ export default function AssetsPage() {
       nextHomeValue,
     }
     localStorage.setItem("taxCalculator_assetsInfo", JSON.stringify(formData))
+    localStorage.setItem("taxCalculator_assetsInfoVisited", "true")
   }, [
     housingStatus,
     homeValue,
@@ -160,10 +161,13 @@ export default function AssetsPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center justify-between">
         <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
+        </Link>
+        <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+          Go to Dashboard
         </Link>
       </div>
 

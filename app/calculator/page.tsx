@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useSearchParams, useRouter } from "next/navigation"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -11,6 +12,20 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { DollarSign } from "lucide-react"
+import { AutoSave } from "@/lib/auto-save"
+import { SaveCalculationDialog } from "@/lib/save-calculation-example"
+import { useAuth } from "@/lib/auth-context"
+import { supabase } from "@/lib/supabase"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 const states = [
   { value: "AL", label: "Alabama" },
@@ -67,6 +82,9 @@ const states = [
 ]
 
 export default function CalculatorPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
   const [residenceState, setResidenceState] = useState<string>("")
   const [employmentState, setEmploymentState] = useState<string>("")
   const [filingStatus, setFilingStatus] = useState<string>("")
@@ -76,7 +94,10 @@ export default function CalculatorPage() {
   const [age, setAge] = useState<string>("")
   const [spouseAge, setSpouseAge] = useState<string>("")
   const [residencyStatus, setResidencyStatus] = useState<string>("full-year")
+  const [canBeClaimedAsDependent, setCanBeClaimedAsDependent] = useState<boolean>(false)
+  const [calculationName, setCalculationName] = useState<string>("")
   const [errors, setErrors] = useState({
+    calculationName: false,
     residenceState: false,
     employmentState: false,
     filingStatus: false,
@@ -84,10 +105,16 @@ export default function CalculatorPage() {
     spouseAge: false,
   })
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [loadedSavedCalculation, setLoadedSavedCalculation] = useState(false)
+  const [resumePrompt, setResumePrompt] = useState(false)
+  const [latestCalc, setLatestCalc] = useState<{ id: string; name?: string } | null>(null)
+  const [calculationCount, setCalculationCount] = useState<number>(0)
+  const [confirmStartNewOpen, setConfirmStartNewOpen] = useState(false)
   // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
 
   // Add to state
   const [itemizedDeductionsLastYear, setItemizedDeductionsLastYear] = useState<string>("no");
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false)
 
   // Load saved form data when component mounts
   useEffect(() => {
@@ -104,8 +131,13 @@ export default function CalculatorPage() {
         setAge(parsedData.age || "")
         setSpouseAge(parsedData.spouseAge || "")
         setResidencyStatus(parsedData.residencyStatus || "full-year")
-        setItemizedDeductionsLastYear(parsedData.itemizedDeductionsLastYear || "");
-        // Remove Short Term Capital Gains and Long Term Capital Gains from here
+        setItemizedDeductionsLastYear(parsedData.itemizedDeductionsLastYear || "")
+        setCanBeClaimedAsDependent(!!parsedData.canBeClaimedAsDependent)
+      }
+
+      const savedName = localStorage.getItem("taxCalculator_name")
+      if (savedName) {
+        setCalculationName(savedName)
       }
     } catch (error) {
       console.error("Error loading saved data:", error)
@@ -113,10 +145,103 @@ export default function CalculatorPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const savedCalcId = searchParams.get("loadId")
+    if (!savedCalcId || authLoading || loadedSavedCalculation) return
+
+    const loadSavedCalculation = async () => {
+      if (!user) {
+        setLoadError("Please sign in to continue your saved calculation.")
+        return
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("calculations")
+          .select("id, name, data")
+          .eq("id", savedCalcId)
+          .eq("user_id", user.id)
+          .single()
+
+        if (error) {
+          throw error
+        }
+
+        if (!data?.data) {
+          setLoadError("Saved calculation data could not be loaded.")
+          return
+        }
+
+        const calcData = data.data
+        localStorage.setItem("taxCalculator_basicInfo", JSON.stringify(calcData))
+        localStorage.setItem("taxCalculator_savedCalculationId", savedCalcId)
+        localStorage.setItem("taxCalculator_name", data.name || "")
+
+        setCalculationName(data.name || "")
+        setResidenceState(calcData.residenceState || "")
+        setEmploymentState(calcData.employmentState || "")
+        setFilingStatus(calcData.filingStatus || "")
+        setPreferredLifestyle(calcData.preferredLifestyle || "")
+        setDependents(calcData.dependents || "")
+        setQualifyingChildren(calcData.qualifyingChildren || "")
+        setAge(calcData.age || "")
+        setSpouseAge(calcData.spouseAge || "")
+        setResidencyStatus(calcData.residencyStatus || "full-year")
+        setItemizedDeductionsLastYear(calcData.itemizedDeductionsLastYear || "")
+        setCanBeClaimedAsDependent(!!calcData.canBeClaimedAsDependent)
+
+        setLoadedSavedCalculation(true)
+        router.replace("/calculator")
+      } catch (error) {
+        console.error("Error loading saved calculation:", error)
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Failed to load saved calculation."
+        )
+      }
+    }
+
+    loadSavedCalculation()
+  }, [searchParams, authLoading, loadedSavedCalculation, router, user])
+
+  // If the user visits the calculator and didn't explicitly request a saved calc,
+  // prompt them to continue the most recent saved calculation (if any).
+  useEffect(() => {
+    const explicitLoadId = searchParams.get("loadId")
+    if (explicitLoadId || authLoading) return
+
+    const checkLatest = async () => {
+      if (!user) return
+      try {
+        const { data, error, count } = await supabase
+          .from("calculations")
+          .select("id, name, created_at", { count: "exact" })
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error) return
+        if (data) {
+          setLatestCalc({ id: data.id, name: data.name })
+          setResumePrompt(true)
+        }
+
+        setCalculationCount(count ?? 0)
+      } catch (err) {
+        console.error("Error checking latest saved calculation:", err)
+      }
+    }
+
+    checkLatest()
+  }, [searchParams, authLoading, user])
+
   // Save form data when values change
   useEffect(() => {
     try {
       const formData = {
+        calculationName,
         residenceState,
         employmentState,
         filingStatus,
@@ -127,13 +252,15 @@ export default function CalculatorPage() {
         spouseAge,
         residencyStatus,
         itemizedDeductionsLastYear,
+        canBeClaimedAsDependent,
         // Remove Short Term Capital Gains and Long Term Capital Gains from here
       }
       localStorage.setItem("taxCalculator_basicInfo", JSON.stringify(formData))
+      localStorage.setItem("taxCalculator_name", calculationName)
     } catch (error) {
       console.error("Error saving form data:", error)
     }
-  }, [residenceState, employmentState, filingStatus, preferredLifestyle, dependents, qualifyingChildren, age, spouseAge, residencyStatus, itemizedDeductionsLastYear])
+  }, [calculationName, residenceState, employmentState, filingStatus, preferredLifestyle, dependents, qualifyingChildren, age, spouseAge, residencyStatus, itemizedDeductionsLastYear, canBeClaimedAsDependent])
 
   // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
   // Update navigation after this page to go to step-2 (income)
@@ -141,6 +268,7 @@ export default function CalculatorPage() {
     // Validate form
     const isMarried = filingStatus.toLowerCase().includes("married");
     const newErrors = {
+      calculationName: !calculationName.trim(),
       residenceState: !residenceState,
       employmentState: !employmentState,
       filingStatus: !filingStatus,
@@ -161,12 +289,66 @@ export default function CalculatorPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center justify-between">
         <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
         </Link>
+        <Link href="/dashboard" className="flex items-center text-sm font-medium text-blue-600 hover:text-blue-700">
+          Go to Dashboard
+        </Link>
       </div>
+
+      {resumePrompt && latestCalc && (
+        <>
+          <div className="mb-6 rounded-md bg-blue-50 p-4 flex items-center justify-between">
+            <div>
+              <p className="font-medium">You have a saved calculation: <span className="font-semibold">{latestCalc.name || 'Recent Draft'}</span></p>
+              <p className="text-sm text-gray-600">Would you like to continue where you left off or view all saved calculations?</p>
+            </div>
+            <div className="flex gap-2">
+              <Button asChild size="sm"><Link href={`/calculator?loadId=${latestCalc.id}`}>Continue</Link></Button>
+              <Button asChild variant="outline" size="sm"><Link href="/dashboard">See All</Link></Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (calculationCount >= 2) {
+                    setConfirmStartNewOpen(true)
+                  } else {
+                    localStorage.removeItem('taxCalculator_basicInfo')
+                    setResumePrompt(false)
+                  }
+                }}
+              >
+                Start New
+              </Button>
+            </div>
+          </div>
+
+          <AlertDialog open={confirmStartNewOpen} onOpenChange={setConfirmStartNewOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Start a new calculation?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You already have two saved calculations. Starting a new one may overwrite the oldest saved scenario when the draft is saved.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    localStorage.removeItem('taxCalculator_basicInfo')
+                    setConfirmStartNewOpen(false)
+                    setResumePrompt(false)
+                  }}
+                >
+                  Confirm and Start New
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      )}
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Tax Optimization Analysis</h1>
@@ -174,6 +356,46 @@ export default function CalculatorPage() {
           Let's start by understanding your current situation to prepare for your future one.
         </p>
       </div>
+
+      <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6">
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="calculationName">Calculation Name</Label>
+            <Input
+              id="calculationName"
+              value={calculationName}
+              onChange={(e) => setCalculationName(e.target.value)}
+              placeholder="e.g. Maryland 2025 Tax Plan"
+              className={errors.calculationName ? 'border-red-500' : ''}
+            />
+            {errors.calculationName && (
+              <p className="text-sm text-red-500">Please name this calculation before continuing.</p>
+            )}
+          </div>
+          <p className="text-sm text-gray-600">
+            Give your calculation a clear name so your dashboard stays easy to use and you can see when it is complete.
+          </p>
+        </div>
+      </div>
+
+      <AutoSave
+        calculationData={{
+          residenceState,
+          employmentState,
+          filingStatus,
+          preferredLifestyle,
+          dependents,
+          qualifyingChildren,
+          age,
+          spouseAge,
+          residencyStatus,
+          itemizedDeductionsLastYear,
+          canBeClaimedAsDependent,
+        }}
+        results={null} // No results yet on this page
+        calculationName={calculationName}
+        enabled={true}
+      />
 
       <div className="mb-8">
         <div className="flex justify-between">
@@ -504,7 +726,13 @@ export default function CalculatorPage() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Cancel
             </Link>
           </Button>
-          <div className="flex flex-col items-end">
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setSaveDialogOpen(true)}
+            >
+              Save Calculation
+            </Button>
             <Button
               onClick={handleNextStep}
               disabled={residencyStatus === "part-year" || itemizedDeductionsLastYear === "yes"}
@@ -514,6 +742,25 @@ export default function CalculatorPage() {
           </div>
         </CardFooter>
       </Card>
+
+      <SaveCalculationDialog
+        open={saveDialogOpen}
+        onOpenChange={setSaveDialogOpen}
+        calculationData={{
+          residenceState,
+          employmentState,
+          filingStatus,
+          preferredLifestyle,
+          dependents,
+          qualifyingChildren,
+          age,
+          spouseAge,
+          residencyStatus,
+          itemizedDeductionsLastYear,
+          canBeClaimedAsDependent,
+        }}
+        results={null}
+      />
     </div>
   )
 }

@@ -77,6 +77,7 @@ export default function CreditsDeductionsPage() {
           educationExpenses,
         })
       );
+      localStorage.setItem("taxCalculator_creditsDeductionsVisited", "true")
     } catch (e) {}
   }, [selfEmploymentExpenses, k401Contributions, hsaContributions, iraContributions, educatorExpenses, militaryMovingExpenses, isSelfEmployed, selfEmployedHealthInsurance, hasEarlyWithdrawal, earlyWithdrawalAmount, hasStudentLoan, studentLoanInterest, hasEducationCredits, educationCreditType, educationExpenses]);
 

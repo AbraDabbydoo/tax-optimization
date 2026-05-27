@@ -1,6 +1,6 @@
 // This is a modified version of the tax calculator with extra logging
 
-import { stateTaxDataPromise, type StateTaxBracket, type FilingStatusBrackets, type StateTaxData, type SalesTaxCategory } from "./state-tax-data"
+import { getStateTaxData, type StateTaxBracket, type FilingStatusBrackets, type StateTaxData, type SalesTaxCategory } from "./state-tax-data"
 
 // Define regions for states
 const stateRegions: Record<string, string> = {
@@ -609,9 +609,9 @@ export async function calculateStateTaxBurden(
   try {
     console.log(`DEBUG: Calculating tax burden for state: ${stateCode}`)
 
+
     // Ensure state tax data is loaded
-    const taxData = await stateTaxDataPromise
-    const stateData = taxData[stateCode]
+    const stateData = await getStateTaxData(stateCode, "2025");
 
     if (!stateData) {
       console.log(`DEBUG: No tax data available for state code: ${stateCode}`)
@@ -646,79 +646,23 @@ export async function calculateStateTaxBurden(
       console.log(`${stateCode}: Using federal AGI of ${federalAGI} instead of total income ${totalIncome}`);
     }
 
-    // Arizona: additional standard deduction for age 65+
-    if (stateCode === "AZ") {
-      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
-      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
-      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
-
-      let azAdditional = 0
-      if (filingKey === "married") {
-        if (taxpayerIs65Plus) azAdditional += 1600
-        if (spouseIs65Plus) azAdditional += 1600
-      } else if (filingKey === "marriedSeparate") {
-        if (taxpayerIs65Plus) azAdditional += 1600
-      } else {
-        if (taxpayerIs65Plus) azAdditional += 2000
-      }
-
-      console.log('DEBUG: AZ additional standard deduction for age 65+/blind:', azAdditional)
-      stdDeduction += azAdditional
+    // Standardized: apply additional65Plus from state data for age 65+ filers
+    const filingKey = normalizeFilingStatus(userInputs.filingStatus);
+    const taxpayerIs65Plus = (userInputs.age || 0) >= 65;
+    const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65;
+    const additional65Plus = (stateData?.incomeTax?.standardDeduction?.additional65Plus ?? 0);
+    let ageAdditional = 0;
+    if (filingKey === "married") {
+      if (taxpayerIs65Plus) ageAdditional += additional65Plus;
+      if (spouseIs65Plus) ageAdditional += additional65Plus;
+    } else if (filingKey === "marriedSeparate") {
+      if (taxpayerIs65Plus) ageAdditional += additional65Plus;
+    } else {
+      if (taxpayerIs65Plus) ageAdditional += additional65Plus;
     }
-
-    // Delaware: additional standard deduction for age 65+ (ignore blind per requirements)
-    if (stateCode === "DE") {
-      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
-      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
-      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
-
-      const seniorBenefitAmount: number =
-        ((stateData as any)?.standardDeduction?.seniorBenefitAmount) ??
-        ((stateData as any)?.incomeTax?.standardDeduction?.seniorBenefitAmount) ??
-        2500
-
-      let deAdditional = 0
-      if (filingKey === "married") {
-        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
-        if (spouseIs65Plus) deAdditional += seniorBenefitAmount
-      } else if (filingKey === "marriedSeparate") {
-        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
-      } else {
-        if (taxpayerIs65Plus) deAdditional += seniorBenefitAmount
-      }
-
-      console.log('DEBUG: DE additional standard deduction for age 65+:', deAdditional)
-      stdDeduction += deAdditional
-    }
-
-    // Kansas: additional standard deduction for age 65+ and/or blind
-    if (stateCode === "KS") {
-      const filingKey = normalizeFilingStatus(userInputs.filingStatus)
-      const taxpayerIs65Plus = (userInputs.age || 0) >= 65
-      const spouseIs65Plus = (userInputs.spouseAge || 0) >= 65
-      // Note: blindness fields are not yet available in userInputs, defaulting to false
-      const taxpayerIsBlind = false  // userInputs.isBlind || false
-      const spouseIsBlind = false    // userInputs.spouseIsBlind || false
-
-      let ksAdditional = 0
-      if (filingKey === "married") {
-        // Married Filing Jointly: $700 per spouse for 65+ and/or blind
-        if (taxpayerIs65Plus) ksAdditional += 700
-        if (taxpayerIsBlind) ksAdditional += 700
-        if (spouseIs65Plus) ksAdditional += 700
-        if (spouseIsBlind) ksAdditional += 700
-      } else if (filingKey === "marriedSeparate") {
-        // Married Filing Separately: $700 per taxpayer for 65+ and/or blind
-        if (taxpayerIs65Plus) ksAdditional += 700
-        if (taxpayerIsBlind) ksAdditional += 700
-      } else {
-        // Single or Head of Household: $850 for 65+ and/or $850 for blind
-        if (taxpayerIs65Plus) ksAdditional += 850
-        if (taxpayerIsBlind) ksAdditional += 850
-      }
-
-      console.log('DEBUG: KS additional standard deduction for age 65+/blind:', ksAdditional)
-      stdDeduction += ksAdditional
+    if (ageAdditional > 0) {
+      console.log('DEBUG: Standardized additional65Plus deduction applied:', ageAdditional);
+      stdDeduction += ageAdditional;
     }
 
     // Use federal AGI for income calculation if applicable, otherwise use total income
