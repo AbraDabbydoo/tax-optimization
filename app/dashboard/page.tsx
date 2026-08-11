@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { LogOut, Plus, Trash2, Download } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { buildReportContent, downloadReportPdf } from '@/lib/report-pdf'
 
 interface Calculation {
   id: string
@@ -27,6 +28,7 @@ interface Calculation {
   created_at: string
   updated_at: string
   results: any
+  data: any
 }
 
 export default function Dashboard() {
@@ -37,9 +39,24 @@ export default function Dashboard() {
   const [error, setError] = useState('')
   const [confirmNewCalcOpen, setConfirmNewCalcOpen] = useState(false)
 
+  const clearCalculatorStorage = () => {
+    localStorage.removeItem('taxCalculator_basicInfo')
+    localStorage.removeItem('taxCalculator_name')
+    localStorage.removeItem('taxCalculator_description')
+    localStorage.removeItem('taxCalculator_savedCalculationId')
+    localStorage.removeItem('taxCalculator_incomeInfo')
+    localStorage.removeItem('taxCalculator_assetsInfo')
+    localStorage.removeItem('taxCalculator_assetsInfoVisited')
+    localStorage.removeItem('taxCalculator_expensesInfo')
+    localStorage.removeItem('taxCalculator_expensesInfoVisited')
+    localStorage.removeItem('taxCalculator_creditsDeductions')
+    localStorage.removeItem('taxCalculator_creditsDeductionsVisited')
+    localStorage.removeItem('taxCalculator_paid')
+  }
+
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/auth/login')
+      router.replace('/auth/login?next=/dashboard')
     }
   }, [user, authLoading, router])
 
@@ -91,6 +108,7 @@ export default function Dashboard() {
       return
     }
 
+    clearCalculatorStorage()
     router.push('/calculator')
   }
 
@@ -109,9 +127,51 @@ export default function Dashboard() {
 
       setCalculations((current) => current.filter((calc) => !toRemove.some((removed) => removed.id === calc.id)))
       setConfirmNewCalcOpen(false)
+      clearCalculatorStorage()
       router.push('/calculator')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to remove oldest calculation')
+    }
+  }
+
+  const handleDownloadReport = async (calculation: Calculation) => {
+    try {
+      const reportContent = buildReportContent({
+        results: Array.isArray(calculation.results) ? calculation.results : [],
+        currentStateCode: calculation.data?.residenceState || '',
+        currentStateTax: 0,
+        currentStateTaxBreakdown: {},
+        userLifestyle: calculation.data?.preferredLifestyle || '',
+        userRegion: calculation.data?.regionPreference || '',
+        data: calculation.data || {},
+      })
+
+      const { fileName, base64 } = await downloadReportPdf(reportContent, {
+        fileName: `${calculation.data?.residenceState || 'report'}-tax-report.pdf`,
+      })
+
+      const response = await fetch(`/api/calculations/${calculation.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: {
+            ...(calculation.data || {}),
+            reportPdf: {
+              fileName,
+              generatedAt: reportContent.generatedAt,
+              contentType: 'application/pdf',
+              base64,
+            },
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Unable to save the report to your account')
+      }
+    } catch (err) {
+      console.error('Unable to download report:', err)
+      setError(err instanceof Error ? err.message : 'Failed to download report')
     }
   }
 
@@ -231,8 +291,8 @@ export default function Dashboard() {
                             <Button
                               variant="outline"
                               size="sm"
-                              title="Download PDF (coming soon)"
-                              disabled
+                              title="Download PDF"
+                              onClick={() => handleDownloadReport(calc)}
                             >
                               <Download className="h-4 w-4" />
                             </Button>

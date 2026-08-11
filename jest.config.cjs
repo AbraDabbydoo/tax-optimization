@@ -10,6 +10,7 @@ module.exports = {
   },
   transform: {},
   moduleNameMapper: {
-    '^(\.{1,2}/.*)\.js$': '$1',
+    '^@/(.*)$': '<rootDir>/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
 };

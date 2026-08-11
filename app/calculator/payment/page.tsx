@@ -4,12 +4,14 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { ArrowLeft, ArrowRight, CheckCircle, Loader2, CreditCard, Shield, XCircle } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
 export default function PaymentPage() {
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [paid, setPaid] = useState(false)
@@ -20,6 +22,7 @@ export default function PaymentPage() {
   const wasCanceled = searchParams.get('canceled') === 'true'
   const sessionId = searchParams.get('session_id')
   const success = searchParams.get('success') === 'true'
+  const dashboardHref = user ? "/dashboard" : "/auth/login?next=/dashboard"
 
   useEffect(() => {
     const storedPaid = localStorage.getItem('taxCalculator_paid') === 'true'
@@ -198,7 +201,7 @@ export default function PaymentPage() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
         </Link>
-        <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+        <Link href={dashboardHref} className="text-sm font-medium text-muted-foreground hover:text-foreground">
           Go to Dashboard
         </Link>
       </div>
@@ -317,8 +320,8 @@ export default function PaymentPage() {
                       View Your Report
                     </Link>
                   )}
-                  <Link href="/dashboard" className="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                    Go to Dashboard
+                  <Link href={dashboardHref} className="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    {user ? "Go to Dashboard" : "Sign in to Dashboard"}
                   </Link>
                 </div>
               </div>

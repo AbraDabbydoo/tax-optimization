@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { calculateOptimalTaxStates } from "@/app/actions"
 import type { TaxCalculationResult } from "@/lib/tax-calculator"
+import { buildReportContent, downloadReportPdf } from "@/lib/report-pdf"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -95,6 +96,7 @@ export default function ResultsPage() {
   const [currentStateCode, setCurrentStateCode] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
   const [userLifestyle, setUserLifestyle] = useState<string>("")
   const [userRegion, setUserRegion] = useState<string>("")
   const [loadedSavedResults, setLoadedSavedResults] = useState(false)
@@ -125,12 +127,14 @@ export default function ResultsPage() {
         const calculation = await response.json()
         const savedResults = calculation?.results
         const savedData = calculation?.data
+        const cachedBasicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+        const currentStateFromSavedData = savedData?.residenceState || cachedBasicInfo.residenceState || ""
 
         if (savedResults && Array.isArray(savedResults) && savedResults.length > 0) {
           setResults(savedResults)
           setUserLifestyle(savedData?.preferredLifestyle || "")
           setUserRegion(savedData?.regionPreference || "")
-          setCurrentStateCode(savedData?.residenceState || "")
+          setCurrentStateCode(currentStateFromSavedData)
 
           try {
             if (savedData) {
@@ -140,7 +144,7 @@ export default function ResultsPage() {
             console.warn('Unable to set saved calculation data to localStorage:', err)
           }
 
-          const currentState = savedResults.find((state) => state.stateCode === (savedData?.residenceState || "")) || savedResults[0]
+          const currentState = savedResults.find((state) => state.stateCode === currentStateFromSavedData) || savedResults[0]
           if (currentState) {
             setCurrentStateTax(currentState.totalTaxBurden)
             setCurrentStateTaxBreakdown({
@@ -344,6 +348,50 @@ export default function ResultsPage() {
 
     processResults()
   }, [])
+
+  const handleDownloadReport = async () => {
+    try {
+      setIsExporting(true)
+      const basicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+      const reportContent = buildReportContent({
+        results,
+        currentStateCode,
+        currentStateTax,
+        currentStateTaxBreakdown,
+        userLifestyle,
+        userRegion,
+        data: basicInfo,
+      })
+
+      const { fileName, base64 } = await downloadReportPdf(reportContent, {
+        fileName: `${basicInfo.residenceState || 'report'}-tax-report.pdf`,
+      })
+
+      const calculationId = loadId || localStorage.getItem('taxCalculator_savedCalculationId')
+      if (calculationId) {
+        await fetch(`/api/calculations/${calculationId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            data: {
+              ...(basicInfo || {}),
+              reportPdf: {
+                fileName,
+                generatedAt: reportContent.generatedAt,
+                contentType: 'application/pdf',
+                base64,
+              },
+            },
+          }),
+        })
+      }
+    } catch (err) {
+      console.error('Unable to export report:', err)
+      setError('Unable to export your report right now.')
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   // Format lifestyle for display
   const formatLifestyle = (lifestyle: string) => {
@@ -699,8 +747,8 @@ export default function ResultsPage() {
             </ul>
           </CardContent>
           <CardFooter className="flex justify-center space-x-4">
-            <Button>
-              <Download className="mr-2 h-4 w-4" /> Download Full Report
+            <Button onClick={handleDownloadReport} disabled={isExporting}>
+              <Download className="mr-2 h-4 w-4" /> {isExporting ? 'Preparing PDF...' : 'Download Full Report'}
             </Button>
             <Button variant="outline" asChild>
               <Link href="/consultation">Book a CPA Consultation</Link>
@@ -719,9 +767,17 @@ export default function ResultsPage() {
               onClick={() => {
                 // Clear all localStorage items for your application
                 localStorage.removeItem("taxCalculator_basicInfo")
+                localStorage.removeItem("taxCalculator_name")
+                localStorage.removeItem("taxCalculator_description")
+                localStorage.removeItem("taxCalculator_savedCalculationId")
                 localStorage.removeItem("taxCalculator_incomeInfo")
                 localStorage.removeItem("taxCalculator_assetsInfo")
+                localStorage.removeItem("taxCalculator_assetsInfoVisited")
                 localStorage.removeItem("taxCalculator_expensesInfo")
+                localStorage.removeItem("taxCalculator_expensesInfoVisited")
+                localStorage.removeItem("taxCalculator_creditsDeductions")
+                localStorage.removeItem("taxCalculator_creditsDeductionsVisited")
+                localStorage.removeItem("taxCalculator_paid")
                 // Redirect to home page
                 window.location.href = "/"
               }}

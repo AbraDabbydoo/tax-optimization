@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Tooltip } from "@/components/ui/tooltip"
+import { supabase } from "@/lib/supabase"
 
 export default function IncomePage() {
   const [annualIncome, setAnnualIncome] = useState("")
@@ -226,7 +227,66 @@ export default function IncomePage() {
 
     // If no errors, proceed to next step
     if (!Object.values(newErrors).some(Boolean)) {
-      // Form data is already saved in localStorage via the useEffect
+      localStorage.setItem("taxCalculator_incomeInfo", JSON.stringify({
+        annualIncome,
+        federalTaxableIncome,
+        socialSecurityIncome,
+        investmentIncome,
+        interestIncome,
+        dividendsIncome,
+        rentalIncome,
+        royaltyIncome,
+        trustIncome,
+        iraDistributions,
+        hasRetirementIncome,
+        hasInvestmentIncome,
+        hasPublicPension,
+        privatePensionIncome,
+        teacherPension,
+        policePension,
+        firefighterPension,
+        otherGovernmentPension,
+        militaryRetirementPay,
+        spouse1QualifyingJob,
+        spouse2QualifyingJob,
+        privatePensionEmployeeContributionPortion,
+        kyMilitaryRetiredBefore1998,
+        kyTeacherPoliceFirePre1998Percent,
+        ncBaileyExemption,
+        selfEmploymentIncome,
+        shortTermCapitalGains,
+        longTermCapitalGains,
+        unemploymentIncome,
+        alimonyPaid,
+        alimonyReceived,
+        alimonyDivorceDate,
+        gamblingWinnings,
+        alimonyStatus,
+      }))
+
+      const savedCalculationId = localStorage.getItem("taxCalculator_savedCalculationId")
+      if (savedCalculationId) {
+        const basicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+        const incomeInfo = JSON.parse(localStorage.getItem("taxCalculator_incomeInfo") || "{}")
+        const assetsInfo = JSON.parse(localStorage.getItem("taxCalculator_assetsInfo") || "{}")
+        const expensesInfo = JSON.parse(localStorage.getItem("taxCalculator_expensesInfo") || "{}")
+        const creditsDeductionsInfo = JSON.parse(localStorage.getItem("taxCalculator_creditsDeductions") || "{}")
+
+        void supabase
+          .from("calculations")
+          .update({
+            name: localStorage.getItem("taxCalculator_name") || basicInfo.calculationName || "Tax Calculation",
+            data: {
+              ...basicInfo,
+              ...incomeInfo,
+              ...assetsInfo,
+              ...expensesInfo,
+              ...creditsDeductionsInfo,
+            },
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", savedCalculationId)
+      }
       console.log("USER INPUTS:", {
         annualIncome,
         socialSecurityIncome,

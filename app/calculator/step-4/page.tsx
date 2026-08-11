@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { supabase } from "@/lib/supabase"
 
 export default function ExpensesPage() {
   const [groceries, setGroceries] = useState("");
@@ -49,6 +50,35 @@ export default function ExpensesPage() {
   const handleContinue = () => {
     // No required fields for now, but you could add validation here
     setError("");
+    localStorage.setItem(
+      "taxCalculator_expensesInfo",
+      JSON.stringify({ groceries, preparedFood, utilities, services, digitalGoods, medicine, streamingSubscriptions })
+    )
+    localStorage.setItem("taxCalculator_expensesInfoVisited", "true")
+
+    const savedCalculationId = localStorage.getItem("taxCalculator_savedCalculationId")
+    if (savedCalculationId) {
+      const basicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+      const incomeInfo = JSON.parse(localStorage.getItem("taxCalculator_incomeInfo") || "{}")
+      const assetsInfo = JSON.parse(localStorage.getItem("taxCalculator_assetsInfo") || "{}")
+      const expensesInfo = JSON.parse(localStorage.getItem("taxCalculator_expensesInfo") || "{}")
+      const creditsDeductionsInfo = JSON.parse(localStorage.getItem("taxCalculator_creditsDeductions") || "{}")
+
+      void supabase
+        .from("calculations")
+        .update({
+          name: localStorage.getItem("taxCalculator_name") || basicInfo.calculationName || "Tax Calculation",
+          data: {
+            ...basicInfo,
+            ...incomeInfo,
+            ...assetsInfo,
+            ...expensesInfo,
+            ...creditsDeductionsInfo,
+          },
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", savedCalculationId)
+    }
     window.location.href = "/calculator/step-5";
   };
 

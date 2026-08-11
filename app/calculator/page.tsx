@@ -263,6 +263,21 @@ export default function CalculatorPage() {
   }, [calculationName, residenceState, employmentState, filingStatus, preferredLifestyle, dependents, qualifyingChildren, age, spouseAge, residencyStatus, itemizedDeductionsLastYear, canBeClaimedAsDependent])
 
   // Remove Short Term Capital Gains and Long Term Capital Gains fields from here
+  const clearCalculatorStorage = () => {
+    localStorage.removeItem('taxCalculator_basicInfo')
+    localStorage.removeItem('taxCalculator_name')
+    localStorage.removeItem('taxCalculator_description')
+    localStorage.removeItem('taxCalculator_savedCalculationId')
+    localStorage.removeItem('taxCalculator_incomeInfo')
+    localStorage.removeItem('taxCalculator_assetsInfo')
+    localStorage.removeItem('taxCalculator_assetsInfoVisited')
+    localStorage.removeItem('taxCalculator_expensesInfo')
+    localStorage.removeItem('taxCalculator_expensesInfoVisited')
+    localStorage.removeItem('taxCalculator_creditsDeductions')
+    localStorage.removeItem('taxCalculator_creditsDeductionsVisited')
+    localStorage.removeItem('taxCalculator_paid')
+  }
+
   // Update navigation after this page to go to step-2 (income)
   const handleNextStep = () => {
     // Validate form
@@ -282,7 +297,21 @@ export default function CalculatorPage() {
 
     // If no errors, proceed to next step
     if (!Object.values(newErrors).some(Boolean) && residencyStatus === "full-year") {
-      // Form data is already saved in localStorage via the useEffect
+      localStorage.setItem("taxCalculator_basicInfo", JSON.stringify({
+        calculationName,
+        residenceState,
+        employmentState,
+        filingStatus,
+        preferredLifestyle,
+        dependents,
+        qualifyingChildren,
+        age,
+        spouseAge,
+        residencyStatus,
+        itemizedDeductionsLastYear,
+        canBeClaimedAsDependent,
+      }))
+      localStorage.setItem("taxCalculator_name", calculationName)
       window.location.href = "/calculator/step-2" // route to income page next
     }
   }
@@ -315,7 +344,7 @@ export default function CalculatorPage() {
                   if (calculationCount >= 2) {
                     setConfirmStartNewOpen(true)
                   } else {
-                    localStorage.removeItem('taxCalculator_basicInfo')
+                    clearCalculatorStorage()
                     setResumePrompt(false)
                   }
                 }}
@@ -337,7 +366,7 @@ export default function CalculatorPage() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => {
-                    localStorage.removeItem('taxCalculator_basicInfo')
+                    clearCalculatorStorage()
                     setConfirmStartNewOpen(false)
                     setResumePrompt(false)
                   }}

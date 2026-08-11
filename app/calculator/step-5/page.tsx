@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { supabase } from "@/lib/supabase"
 
 export default function CreditsDeductionsPage() {
   const [selfEmploymentExpenses, setSelfEmploymentExpenses] = useState("");
@@ -83,6 +84,51 @@ export default function CreditsDeductionsPage() {
 
   const handleContinue = () => {
     setError("");
+    localStorage.setItem(
+      "taxCalculator_creditsDeductions",
+      JSON.stringify({
+        selfEmploymentExpenses,
+        k401Contributions,
+        hsaContributions,
+        iraContributions,
+        educatorExpenses,
+        militaryMovingExpenses,
+        isSelfEmployed,
+        selfEmployedHealthInsurance,
+        hasEarlyWithdrawal,
+        earlyWithdrawalAmount,
+        hasStudentLoan,
+        studentLoanInterest,
+        hasEducationCredits,
+        educationCreditType,
+        educationExpenses,
+      })
+    )
+    localStorage.setItem("taxCalculator_creditsDeductionsVisited", "true")
+
+    const savedCalculationId = localStorage.getItem("taxCalculator_savedCalculationId")
+    if (savedCalculationId) {
+      const basicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+      const incomeInfo = JSON.parse(localStorage.getItem("taxCalculator_incomeInfo") || "{}")
+      const assetsInfo = JSON.parse(localStorage.getItem("taxCalculator_assetsInfo") || "{}")
+      const expensesInfo = JSON.parse(localStorage.getItem("taxCalculator_expensesInfo") || "{}")
+      const creditsDeductionsInfo = JSON.parse(localStorage.getItem("taxCalculator_creditsDeductions") || "{}")
+
+      void supabase
+        .from("calculations")
+        .update({
+          name: localStorage.getItem("taxCalculator_name") || basicInfo.calculationName || "Tax Calculation",
+          data: {
+            ...basicInfo,
+            ...incomeInfo,
+            ...assetsInfo,
+            ...expensesInfo,
+            ...creditsDeductionsInfo,
+          },
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", savedCalculationId)
+    }
     window.location.href = "/calculator/results";
   };
 

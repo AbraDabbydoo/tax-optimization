@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { supabase } from "@/lib/supabase"
 
 interface VehicleInput {
   value: string
@@ -156,6 +157,45 @@ export default function AssetsPage() {
       return;
     }
     setNextHomeValueError("");
+    localStorage.setItem("taxCalculator_assetsInfo", JSON.stringify({
+      housingStatus,
+      homeValue,
+      propertyTax,
+      currentRent,
+      futurePlans,
+      housingBudget,
+      regionPreference,
+      vehicleCount,
+      vehicleValue,
+      vehicleInputs,
+      movePlan,
+      nextHomeValue,
+    }))
+    localStorage.setItem("taxCalculator_assetsInfoVisited", "true")
+
+    const savedCalculationId = localStorage.getItem("taxCalculator_savedCalculationId")
+    if (savedCalculationId) {
+      const basicInfo = JSON.parse(localStorage.getItem("taxCalculator_basicInfo") || "{}")
+      const incomeInfo = JSON.parse(localStorage.getItem("taxCalculator_incomeInfo") || "{}")
+      const assetsInfo = JSON.parse(localStorage.getItem("taxCalculator_assetsInfo") || "{}")
+      const expensesInfo = JSON.parse(localStorage.getItem("taxCalculator_expensesInfo") || "{}")
+      const creditsDeductionsInfo = JSON.parse(localStorage.getItem("taxCalculator_creditsDeductions") || "{}")
+
+      void supabase
+        .from("calculations")
+        .update({
+          name: localStorage.getItem("taxCalculator_name") || basicInfo.calculationName || "Tax Calculation",
+          data: {
+            ...basicInfo,
+            ...incomeInfo,
+            ...assetsInfo,
+            ...expensesInfo,
+            ...creditsDeductionsInfo,
+          },
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", savedCalculationId)
+    }
     window.location.href = "/calculator/step-4" // route to expenses page next
   }
 
